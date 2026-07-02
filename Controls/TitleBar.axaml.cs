@@ -1,9 +1,7 @@
 using IconPacks.Avalonia.Material;
 using Avalonia.Interactivity;
-using System.Diagnostics;
 using Avalonia.Controls;
 using Avalonia.Input;
-using System.IO;
 using Avalonia;
 using System;
 
@@ -75,16 +73,8 @@ public partial class TitleBar : UserControl
 
     private static string? GetDefaultVersionText()
     {
-        string exePath = Environment.ProcessPath
-            ?? Path.Combine(AppContext.BaseDirectory, $"{Path.GetFileNameWithoutExtension(Environment.GetCommandLineArgs()[0])}.exe");
-
-        FileVersionInfo versionInfo = FileVersionInfo.GetVersionInfo(exePath);
-#if DEBUG
-        string? version = versionInfo.FileVersion ?? versionInfo.ProductVersion;
-#else
-        string? version = versionInfo.ProductVersion ?? versionInfo.FileVersion;
-#endif
-        return string.IsNullOrEmpty(version) ? null : version;
+        string version = Utility.GetDisplayVersion();
+        return version is "N/A" ? null : version;
     }
 
     public TitleBar()

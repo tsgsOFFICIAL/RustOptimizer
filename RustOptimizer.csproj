@@ -7,7 +7,9 @@
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
         <ApplicationIcon>Assets\App\logo.ico</ApplicationIcon>
         <DefaultItemExcludes>$(DefaultItemExcludes);externals/**</DefaultItemExcludes>
-        <AssemblyVersion>0.4.0</AssemblyVersion>
+        <FileVersion>0.4.0</FileVersion>
+        <InformationalVersion>$(FileVersion)</InformationalVersion>
+        <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
         <IsPackable>false</IsPackable>
     </PropertyGroup>
 
@@ -35,6 +37,38 @@
       <EmbeddedResource Include="Lang\da-DK.json" />
       <None Remove="Lang\ru-RU.json" />
       <EmbeddedResource Include="Lang\ru-RU.json" />
+      <None Remove="publish\test-fixed\IconPacks.Avalonia.FontAwesome.xml" />
+      <None Remove="publish\test-fixed\IconPacks.Avalonia.RadixIcons.dll" />
+      <None Remove="publish\test-nightly\IconPacks.Avalonia.Fontisto.xml" />
+      <None Remove="publish\test-nightly\IconPacks.Avalonia.Material.dll" />
+      <None Remove="publish\test-nightly\RustOptimizer.runtimeconfig.json" />
+      <None Remove="publish\test-no-hash\Avalonia.Win32.dll" />
+      <None Remove="publish\test-no-hash\IconPacks.Avalonia.Codicons.xml" />
+      <None Remove="publish\test-no-hash\IconPacks.Avalonia.Coolicons.xml" />
+      <None Remove="publish\test-no-hash\IconPacks.Avalonia.FontAwesome5.dll" />
+      <None Remove="publish\test-no-hash\IconPacks.Avalonia.Octicons.dll" />
+      <None Remove="publish\test-no-hash\Tmds.DBus.Protocol.dll" />
+      <None Remove="publish\test-release-clean\IconPacks.Avalonia.Coolicons.dll" />
+      <None Remove="publish\test-release-clean\IconPacks.Avalonia.Fontaudio.xml" />
+      <None Remove="publish\test-release-clean\Microsoft.Extensions.DependencyInjection.dll" />
+      <None Remove="publish\test-release\Avalonia.FreeDesktop.dll" />
+      <None Remove="publish\test-release\IconPacks.Avalonia.BootstrapIcons.xml" />
+      <None Remove="publish\test-release\IconPacks.Avalonia.Fontaudio.dll" />
+      <None Remove="publish\test-release\IconPacks.Avalonia.Lucide.dll" />
+      <None Remove="publish\test-release\IconPacks.Avalonia.Material.dll" />
+      <None Remove="publish\test-release\IconPacks.Avalonia.Material.xml" />
+      <None Remove="publish\test-release\IconPacks.Avalonia.RemixIcon.xml" />
+      <None Remove="publish\test-release\IconPacks.Avalonia.Typicons.xml" />
+      <None Remove="publish\test-release\IconPacks.Avalonia.WeatherIcons.dll" />
+      <None Remove="publish\test-release\RustOptimizer.pdb" />
+      <None Remove="publish\test-release\RustOptimizer.runtimeconfig.json" />
+      <None Remove="publish\test-sdc-style\Avalonia.HarfBuzz.dll" />
+      <None Remove="publish\test-sdc-style\Avalonia.Metal.dll" />
+      <None Remove="publish\test-sdc-style\IconPacks.Avalonia.RPGAwesome.xml" />
+      <None Remove="publish\test-sdc-style\IconPacks.Avalonia.RemixIcon.xml" />
+      <None Remove="publish\test-sdc-style\IconPacks.Avalonia.xml" />
+      <None Remove="publish\test-sdc-style\Microsoft.Extensions.DependencyInjection.Abstractions.dll" />
+      <None Remove="publish\test-sdc-style\libHarfBuzzSharp.dll" />
     </ItemGroup>
 
     <ItemGroup>
