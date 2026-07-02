@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>IconPacks.Avalonia.Entypo</name>
+    </assembly>
+    <members>
+        <member name="T:IconPacks.Avalonia.Entypo.PackIconEntypo">
+            <summary>
+            All icons sourced from Entypo+ Icons Font <see><cref>http://www.entypo.com</cref></see> by Daniel Bruce <see><cref>https://www.danielbruce.se/</cref></see>
+            Licensed under [CC BY 4.0](<see><cref>http://creativecommons.org/licenses/by-sa/4.0/</cref></see>).
+            </summary>
+        </member>
+        <member name="P:IconPacks.Avalonia.Entypo.PackIconEntypo.Kind">
+            <summary>
+            Gets or sets the icon to display.
+            </summary>
+        </member>
+        <member name="T:IconPacks.Avalonia.Entypo.PackIconEntypoKind">
+            ******************************************
+            This code is auto generated. Do not amend.
+            ******************************************
+            <summary>
+            List of available icons for use with <see cref="T:IconPacks.Avalonia.Entypo.PackIconEntypo" />.
+            </summary>
+            <remarks>
+            All icons sourced from Entypo+ Icons Font <see><cref>http://www.entypo.com</cref></see> by Daniel Bruce <see><cref>https://www.danielbruce.se/</cref></see>
+            Licensed under [CC BY 4.0](<see><cref>http://creativecommons.org/licenses/by-sa/4.0/</cref></see>).
+            </remarks>
+        </member>
+    </members>
+</doc>

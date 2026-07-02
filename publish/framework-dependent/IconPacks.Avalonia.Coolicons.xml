@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>IconPacks.Avalonia.Coolicons</name>
+    </assembly>
+    <members>
+        <member name="T:IconPacks.Avalonia.Coolicons.PackIconCoolicons">
+            <summary>
+            Coolicons icons are licensed under [CC 4.0](<see><cref>https://github.com/krystonschwarze/coolicons/blob/master/README.md#license</cref></see>).
+            Contributions, corrections and requests can be made on GitHub <see><cref>https://github.com/krystonschwarze/coolicons</cref></see>.
+            </summary>
+        </member>
+        <member name="P:IconPacks.Avalonia.Coolicons.PackIconCoolicons.Kind">
+            <summary>
+            Gets or sets the icon to display.
+            </summary>
+        </member>
+        <member name="T:IconPacks.Avalonia.Coolicons.PackIconCooliconsKind">
+            ******************************************
+            This code is auto generated. Do not amend.
+            ******************************************
+            <summary>
+            List of available icons for use with <see cref="T:IconPacks.Avalonia.Coolicons.PackIconCoolicons" />.
+            </summary>
+            <remarks>
+            Coolicons icons are licensed under [CC 4.0](<see><cref>https://github.com/krystonschwarze/coolicons/blob/master/README.md#license</cref></see>).
+            Contributions, corrections and requests can be made on GitHub <see><cref>https://github.com/krystonschwarze/coolicons</cref></see>.
+            </remarks>
+        </member>
+    </members>
+</doc>

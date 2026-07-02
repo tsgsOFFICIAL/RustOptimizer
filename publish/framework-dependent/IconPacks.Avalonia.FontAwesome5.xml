@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>IconPacks.Avalonia.FontAwesome5</name>
+    </assembly>
+    <members>
+        <member name="T:IconPacks.Avalonia.FontAwesome5.PackIconFontAwesome5">
+            <summary>
+            All icons sourced from Font Awesome Free <see><cref>https://fontawesome.com/</cref></see> - License <see><cref>https://fontawesome.com/license/free</cref></see>
+            GitHub <see><cref>https://fontawesome.com/</cref></see>
+            </summary>
+        </member>
+        <member name="P:IconPacks.Avalonia.FontAwesome5.PackIconFontAwesome5.Kind">
+            <summary>
+            Gets or sets the icon to display.
+            </summary>
+        </member>
+        <member name="T:IconPacks.Avalonia.FontAwesome5.PackIconFontAwesome5Kind">
+            ******************************************
+            This code is auto generated. Do not amend.
+            ******************************************
+            <summary>
+            List of available icons for use with <see cref="T:IconPacks.Avalonia.FontAwesome5.PackIconFontAwesome5" />.
+            </summary>
+            <remarks>
+            All icons sourced from Font Awesome Free <see><cref>https://fontawesome.com/</cref></see> - License <see><cref>https://fontawesome.com/license/free</cref></see>
+            GitHub <see><cref>https://fontawesome.com/</cref></see>
+            </remarks>
+        </member>
+    </members>
+</doc>

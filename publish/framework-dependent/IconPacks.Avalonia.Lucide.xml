@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>IconPacks.Avalonia.Lucide</name>
+    </assembly>
+    <members>
+        <member name="T:IconPacks.Avalonia.Lucide.PackIconLucide">
+            <summary>
+            Lucide Icons are licensed under [ISC License](<see><cref>https://github.com/lucide-icons/lucide?tab=ISC-1-ov-file#readme</cref></see>).
+            Contributions, corrections and requests can be made on GitHub <see><cref>https://github.com/lucide-icons/lucide</cref></see>.
+            </summary>
+        </member>
+        <member name="P:IconPacks.Avalonia.Lucide.PackIconLucide.Kind">
+            <summary>
+            Gets or sets the icon to display.
+            </summary>
+        </member>
+        <member name="T:IconPacks.Avalonia.Lucide.PackIconLucideKind">
+            ******************************************
+            This code is auto generated. Do not amend.
+            ******************************************
+            <summary>
+            List of available icons for use with <see cref="T:IconPacks.Avalonia.Lucide.PackIconLucide" />.
+            </summary>
+            <remarks>
+            Lucide Icons are licensed under [ISC License](<see><cref>https://github.com/lucide-icons/lucide?tab=ISC-1-ov-file#readme</cref></see>).
+            Contributions, corrections and requests can be made on GitHub <see><cref>https://github.com/lucide-icons/lucide</cref></see>.
+            </remarks>
+        </member>
+    </members>
+</doc>

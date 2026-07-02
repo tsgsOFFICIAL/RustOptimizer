@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>IconPacks.Avalonia.BoxIcons</name>
+    </assembly>
+    <members>
+        <member name="T:IconPacks.Avalonia.BoxIcons.PackIconBoxIcons">
+            <summary>
+            BoxIcons v3 licensed under [CC 4.0 License](<see><cref>https://docs.boxicons.com/license/free</cref></see>)
+            Project web site <see><cref>https://boxicons.com/</cref></see>.
+            </summary>
+        </member>
+        <member name="P:IconPacks.Avalonia.BoxIcons.PackIconBoxIcons.Kind">
+            <summary>
+            Gets or sets the icon to display.
+            </summary>
+        </member>
+        <member name="T:IconPacks.Avalonia.BoxIcons.PackIconBoxIconsKind">
+            ******************************************
+            This code is auto generated. Do not amend.
+            ******************************************
+            <summary>
+            List of available icons for use with <see cref="T:IconPacks.Avalonia.BoxIcons.PackIconBoxIcons" />.
+            </summary>
+            <remarks>
+            BoxIcons v3 licensed under [CC 4.0 License](<see><cref>https://docs.boxicons.com/license/free</cref></see>)
+            Project web site <see><cref>https://boxicons.com/</cref></see>.
+            </remarks>
+        </member>
+    </members>
+</doc>

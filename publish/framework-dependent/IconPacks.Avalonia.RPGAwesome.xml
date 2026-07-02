@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>IconPacks.Avalonia.RPGAwesome</name>
+    </assembly>
+    <members>
+        <member name="T:IconPacks.Avalonia.RPGAwesome.PackIconRPGAwesome">
+            <summary>
+            The RPG Awesome font is licensed under the [SIL OFL 1.1](<see><cref>http://scripts.sil.org/OFL</cref></see>)
+            Contributions, corrections and requests can be made on GitHub <see><cref>https://github.com/nagoshiashumari/Rpg-Awesome</cref></see>.
+            </summary>
+        </member>
+        <member name="P:IconPacks.Avalonia.RPGAwesome.PackIconRPGAwesome.Kind">
+            <summary>
+            Gets or sets the icon to display.
+            </summary>
+        </member>
+        <member name="T:IconPacks.Avalonia.RPGAwesome.PackIconRPGAwesomeKind">
+            ******************************************
+            This code is auto generated. Do not amend.
+            ******************************************
+            <summary>
+            List of available icons for use with <see cref="T:IconPacks.Avalonia.RPGAwesome.PackIconRPGAwesome" />.
+            </summary>
+            <remarks>
+            The RPG Awesome font is licensed under the [SIL OFL 1.1](<see><cref>http://scripts.sil.org/OFL</cref></see>)
+            Contributions, corrections and requests can be made on GitHub <see><cref>https://github.com/nagoshiashumari/Rpg-Awesome</cref></see>.
+            </remarks>
+        </member>
+    </members>
+</doc>
