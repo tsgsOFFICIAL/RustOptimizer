@@ -4,5 +4,7 @@
   "Subtitle": "Subtitle",
   "CardContent": "Card content",
   "AccentButton": "Accent",
-  "ToggleTheme": "Toggle theme"
+  "ToggleTheme": "Toggle theme",
+  "By": "By",
+  "Version": "Version"
 }

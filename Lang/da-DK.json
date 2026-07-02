@@ -4,5 +4,7 @@
   "Subtitle": "Undertitel",
   "CardContent": "Kortindhold",
   "AccentButton": "Accent",
-  "ToggleTheme": "Skift tema"
+  "ToggleTheme": "Skift tema",
+  "By": "Af",
+  "Version": "Version"
 }

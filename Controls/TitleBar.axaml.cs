@@ -63,7 +63,8 @@ public partial class TitleBar : UserControl
     }
 
     /// <summary>
-    /// The version text shown next to the title. Defaults to the entry assembly's version.
+    /// The version number shown next to the title (e.g. "0.4.0"), without a "Version" prefix so
+    /// the caller can localize that word separately. Defaults to the entry assembly's version.
     /// </summary>
     public string? VersionText
     {
@@ -76,7 +77,7 @@ public partial class TitleBar : UserControl
         // GetEntryAssembly() can resolve to a hosting/diagnostics assembly (e.g. Avalonia's own
         // version) under some debug hosts, so read the version of this assembly directly instead.
         Version? version = Assembly.GetExecutingAssembly().GetName().Version;
-        return version is null ? null : $"Version {version.Major}.{version.Minor}.{version.Build}";
+        return version is null ? null : $"{version.Major}.{version.Minor}.{version.Build}";
     }
 
     public TitleBar()

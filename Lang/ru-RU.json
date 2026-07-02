@@ -4,5 +4,7 @@
   "Subtitle": "Подзаголовок",
   "CardContent": "Содержимое карточки",
   "AccentButton": "Акцент",
-  "ToggleTheme": "Сменить тему"
+  "ToggleTheme": "Сменить тему",
+  "By": "Автор:",
+  "Version": "Версия"
 }
