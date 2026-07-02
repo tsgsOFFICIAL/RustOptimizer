@@ -1,8 +1,9 @@
 using IconPacks.Avalonia.Material;
 using Avalonia.Interactivity;
-using System.Reflection;
+using System.Diagnostics;
 using Avalonia.Controls;
 using Avalonia.Input;
+using System.IO;
 using Avalonia;
 using System;
 
@@ -74,10 +75,16 @@ public partial class TitleBar : UserControl
 
     private static string? GetDefaultVersionText()
     {
-        // GetEntryAssembly() can resolve to a hosting/diagnostics assembly (e.g. Avalonia's own
-        // version) under some debug hosts, so read the version of this assembly directly instead.
-        Version? version = Assembly.GetExecutingAssembly().GetName().Version;
-        return version is null ? null : $"{version.Major}.{version.Minor}.{version.Build}";
+        string exePath = Environment.ProcessPath
+            ?? Path.Combine(AppContext.BaseDirectory, $"{Path.GetFileNameWithoutExtension(Environment.GetCommandLineArgs()[0])}.exe");
+
+        FileVersionInfo versionInfo = FileVersionInfo.GetVersionInfo(exePath);
+#if DEBUG
+        string? version = versionInfo.FileVersion ?? versionInfo.ProductVersion;
+#else
+        string? version = versionInfo.ProductVersion ?? versionInfo.FileVersion;
+#endif
+        return string.IsNullOrEmpty(version) ? null : version;
     }
 
     public TitleBar()
