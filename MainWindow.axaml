@@ -10,7 +10,7 @@
         x:DataType="iface:ILocalizationService"
         Title="{Binding [AppTitle]}"
         Icon="/Assets/App/logo.ico"
-        Width="480" Height="360"
+        Width="481" Height="360"
         MinWidth="400" MinHeight="300"
         Background="{DynamicResource BgColor}"
         WindowStartupLocation="CenterScreen">
