@@ -1,4 +1,4 @@
-﻿[submodule "externals/IconPacks.Avalonia"]
+[submodule "externals/IconPacks.Avalonia"]
 	path = externals/IconPacks.Avalonia
 	url = https://github.com/timunie/IconPacks.Avalonia.git
 	branch = Update-Avalonia
