@@ -3,6 +3,7 @@
   <component name="AvaloniaProject">
     <option name="projectPerEditor">
       <map>
+        <entry key="App.axaml" value="RustOptimizer.csproj" />
         <entry key="MainWindow.axaml" value="RustOptimizer.csproj" />
       </map>
     </option>
