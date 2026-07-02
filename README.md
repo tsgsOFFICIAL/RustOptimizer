@@ -6,6 +6,8 @@
 
 [![Issues](https://img.shields.io/github/issues/tsgsOFFICIAL/RustOptimizer)](https://github.com/tsgsOFFICIAL/RustOptimizer/issues)
 [![Last Commit](https://img.shields.io/github/last-commit/tsgsOFFICIAL/RustOptimizer)](https://github.com/tsgsOFFICIAL/RustOptimizer/commits/master)
+[![Nightly Build](https://github.com/tsgsOFFICIAL/RustOptimizer/actions/workflows/nightly.yml/badge.svg)](https://github.com/tsgsOFFICIAL/RustOptimizer/actions/workflows/nightly.yml)
+[![Release Build](https://github.com/tsgsOFFICIAL/RustOptimizer/actions/workflows/release.yml/badge.svg)](https://github.com/tsgsOFFICIAL/RustOptimizer/actions/workflows/release.yml)
 [![GitHub license](https://img.shields.io/github/license/tsgsOFFICIAL/RustOptimizer)](https://github.com/tsgsOFFICIAL/RustOptimizer/blob/master/LICENSE)
 [![.NET](https://img.shields.io/badge/.NET-10.0-blueviolet)](https://dotnet.microsoft.com/download)
 [![Avalonia](https://img.shields.io/badge/Avalonia-12-blue?logo=avaloniaui&logoColor=f5f5f5)](https://avaloniaui.net/)
