@@ -1,23 +1,41 @@
-using Avalonia;
+using Microsoft.Extensions.DependencyInjection;
 using Avalonia.Controls.ApplicationLifetimes;
+using RustOptimizer.Interface;
 using Avalonia.Markup.Xaml;
+using Avalonia.Controls;
+using Avalonia;
+using System;
 
-namespace RustOptimizer;
-
-public partial class App : Application
+namespace RustOptimizer
 {
-    public override void Initialize()
+    public partial class App : Application
     {
-        AvaloniaXamlLoader.Load(this);
-    }
-
-    public override void OnFrameworkInitializationCompleted()
-    {
-        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        public override void Initialize()
         {
-            desktop.MainWindow = new MainWindow();
+            AvaloniaXamlLoader.Load(this);
         }
 
-        base.OnFrameworkInitializationCompleted();
+        public override void OnFrameworkInitializationCompleted()
+        {
+            if (Design.IsDesignMode)
+            {
+                base.OnFrameworkInitializationCompleted();
+                return;
+            }
+
+            IServiceProvider services = Program.Services
+                ?? throw new InvalidOperationException("ServiceProvider not initialized");
+
+            IThemeService theme = services.GetRequiredService<IThemeService>();
+            ILocalizationService localization = services.GetRequiredService<ILocalizationService>();
+
+            theme.Initialize();
+            localization.Initialize();
+
+            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+                desktop.MainWindow = new MainWindow(theme, localization);
+
+            base.OnFrameworkInitializationCompleted();
+        }
     }
 }

@@ -1,0 +1,13 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <ResourceDictionary.MergedDictionaries>
+        <MergeResourceInclude Source="/Theme/Colors.Shared.axaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
+    <ResourceDictionary.ThemeDictionaries>
+        <ResourceInclude Source="avares://RustOptimizer/Theme/Colors.Light.axaml" x:Key="Light"/>
+        <ResourceInclude Source="avares://RustOptimizer/Theme/Colors.Dark.axaml" x:Key="Dark"/>
+    </ResourceDictionary.ThemeDictionaries>
+
+</ResourceDictionary>

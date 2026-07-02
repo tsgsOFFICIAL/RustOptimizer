@@ -2,8 +2,35 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:iface="using:RustOptimizer.Interface"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="RustOptimizer.MainWindow"
-        Title="RustOptimizer">
-    Welcome to Avalonia!
+        x:DataType="iface:ILocalizationService"
+        Title="{Binding [AppTitle]}"
+        Width="480" Height="360"
+        Background="{DynamicResource BgColor}"
+        WindowStartupLocation="CenterScreen">
+
+    <StackPanel Margin="24" Spacing="12">
+
+        <TextBlock Text="{Binding [Hello]}" Classes="title"/>
+
+        <StackPanel Orientation="Horizontal" Spacing="8">
+            <Button Content="EN" Click="OnEnglish"/>
+            <Button Content="DK" Click="OnDanish"/>
+            <Button Content="RU" Click="OnRussian"/>
+        </StackPanel>
+
+        <TextBlock Text="{Binding [Subtitle]}" Classes="muted"/>
+
+        <Border Classes="card">
+            <TextBlock Text="{Binding [CardContent]}"
+                       Foreground="{DynamicResource TextColor}"/>
+        </Border>
+
+        <Button Content="{Binding [AccentButton]}" Classes="accent"/>
+        <Button Content="{Binding [ToggleTheme]}" Click="OnThemeToggle"/>
+
+    </StackPanel>
+
 </Window>

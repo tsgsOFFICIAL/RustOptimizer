@@ -1,24 +1,33 @@
-﻿using Avalonia;
+﻿using Microsoft.Extensions.DependencyInjection;
+using RustOptimizer.Interface;
+using RustOptimizer.Service;
+using Avalonia;
 using System;
 
-namespace RustOptimizer;
-
-class Program
+namespace RustOptimizer
 {
-    // Initialization code. Don't use any Avalonia, third-party APIs or any
-    // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
-    // yet and stuff might break.
-    [STAThread]
-    public static void Main(string[] args) => BuildAvaloniaApp()
-        .StartWithClassicDesktopLifetime(args);
+    internal class Program
+    {
+        public static IServiceProvider Services { get; private set; } = null!;
 
-    // Avalonia configuration, don't remove; also used by visual designer.
-    public static AppBuilder BuildAvaloniaApp()
-        => AppBuilder.Configure<App>()
-            .UsePlatformDetect()
+        [STAThread]
+        public static void Main(string[] args)
+        {
+            Services = new ServiceCollection()
+                .AddSingleton<IThemeService, ThemeService>()
+                .AddSingleton<ILocalizationService, LocalizationService>()
+                .BuildServiceProvider();
+
+            BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+        }
+
+        public static AppBuilder BuildAvaloniaApp()
+            => AppBuilder.Configure<App>()
+                .UsePlatformDetect()
 #if DEBUG
-            .WithDeveloperTools()
+                .WithDeveloperTools()
 #endif
-            .WithInterFont()
-            .LogToTrace();
+                .WithInterFont()
+                .LogToTrace();
+    }
 }

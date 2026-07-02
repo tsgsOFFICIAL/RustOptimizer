@@ -1,0 +1,7 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <SolidColorBrush x:Key="TextColor"       Color="#F0F2F7"/>
+    <SolidColorBrush x:Key="TextMutedColor"  Color="#8B92A5"/>
+    <SolidColorBrush x:Key="BgColor"         Color="#111318"/>
+    <SolidColorBrush x:Key="BorderColor"     Color="#2E3340"/>
+</ResourceDictionary>
