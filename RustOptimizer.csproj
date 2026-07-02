@@ -11,7 +11,7 @@
 
     <ItemGroup>
         <!-- TODO: revert to official IconPacks.Avalonia NuGet once Avalonia 12 support is released -->
-        <ProjectReference Include="externals\IconPacks.Avalonia\src\IconPacks.Avalonia.SimpleIcons\IconPacks.Avalonia.SimpleIcons.csproj" />
+        <ProjectReference Include="externals\IconPacks.Avalonia\src\IconPacks.Avalonia\IconPacks.Avalonia.csproj" />
     </ItemGroup>
 
     <ItemGroup>
