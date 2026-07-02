@@ -6,7 +6,13 @@
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
         <ApplicationIcon>Assets\App\logo.ico</ApplicationIcon>
+        <DefaultItemExcludes>$(DefaultItemExcludes);externals/**</DefaultItemExcludes>
     </PropertyGroup>
+
+    <ItemGroup>
+        <!-- TODO: revert to official IconPacks.Avalonia NuGet once Avalonia 12 support is released -->
+        <ProjectReference Include="externals\IconPacks.Avalonia\src\IconPacks.Avalonia.SimpleIcons\IconPacks.Avalonia.SimpleIcons.csproj" />
+    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Avalonia" Version="12.0.4"/>
