@@ -1,1 +1,85 @@
+name: Release Build
 
+on:
+    push:
+        tags: ["v*"]
+
+jobs:
+    build:
+        runs-on: windows-latest
+        permissions:
+            contents: write
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - name: Setup .NET
+              uses: actions/setup-dotnet@v4
+              with:
+                  dotnet-version: "10.0.x"
+
+            - name: Publish (Self-Contained)
+              run: |
+                  Remove-Item -Recurse -Force publish/self-contained/ -ErrorAction SilentlyContinue
+                  dotnet publish RustOptimizer.csproj -c Release -r win-x64 -p:SelfContained=true -o publish/self-contained/
+
+            - name: Publish (Framework-Dependent)
+              run: |
+                  Remove-Item -Recurse -Force publish/framework-dependent/ -ErrorAction SilentlyContinue
+                  dotnet publish RustOptimizer.csproj -c Release -r win-x64 -p:SelfContained=false -o publish/framework-dependent/
+
+            - name: Zip (Self-Contained)
+              run: Compress-Archive -Path publish/self-contained/* -DestinationPath RustOptimizer-${{ github.ref_name }}-self-contained.zip
+
+            - name: Zip (Framework-Dependent)
+              run: Compress-Archive -Path publish/framework-dependent/* -DestinationPath RustOptimizer-${{ github.ref_name }}-framework-dependent.zip
+
+            - name: Commit published output to master
+              shell: pwsh
+              run: |
+                  # Save built output before switching branches
+                  Copy-Item -Recurse "publish/self-contained/" "$env:TEMP/publish-output/"
+
+                  git config user.name "github-actions[bot]"
+                  git config user.email "github-actions[bot]@users.noreply.github.com"
+                  git fetch origin master
+                  git checkout master
+
+                  # Restore built output
+                  New-Item -ItemType Directory -Force -Path "publish/framework-dependent/"
+                  Copy-Item -Recurse -Force "$env:TEMP/publish-output/*" "publish/framework-dependent/"
+
+                  git add -f publish/framework-dependent/
+                  git commit -m "chore: publish ${{ github.ref_name }} binaries [skip ci]"
+                  git push origin master
+
+            - name: Get previous tag
+              id: prev_tag
+              shell: pwsh
+              run: |
+                  $prev = git tag --sort=-creatordate | Where-Object { $_ -ne "${{ github.ref_name }}" -and $_ -ne "nightly" } | Select-Object -First 1
+                  echo "tag=$prev" >> $env:GITHUB_OUTPUT
+
+            - name: Create release
+              shell: pwsh
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: |
+                  $notes = @"
+                  [Download it here](https://download-directory.github.io/?url=https://github.com/tsgsOFFICIAL/RustOptimizer/tree/master/publish/framework-dependent)
+
+                  [Installation guide](https://github.com/tsgsOFFICIAL/RustOptimizer?tab=readme-ov-file#quick-start)
+
+                  Drop your comments on my [Discord](https://discord.gg/Cddu5aJ), or create an issue on GitHub.
+
+                  **Full Changelog**: https://github.com/tsgsOFFICIAL/RustOptimizer/compare/${{ steps.prev_tag.outputs.tag }}...${{ github.ref_name }}
+                  "@
+                  gh release create "${{ github.ref_name }}" `
+                    "RustOptimizer-${{ github.ref_name }}-self-contained.zip" `
+                    "RustOptimizer-${{ github.ref_name }}-framework-dependent.zip" `
+                    --title "RustOptimizer ${{ github.ref_name }}" `
+                    --verify-tag `
+                    --notes $notes
