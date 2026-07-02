@@ -35,26 +35,28 @@ jobs:
           echo "nightly_version=$nightlyVersion" >> $env:GITHUB_OUTPUT
 
       - name: Publish (Self-Contained)
-        run: >
-          dotnet publish RustOptimizer.csproj
-          -c Release
-          -r win-x64
-          -p:SelfContained=true
-          -p:FileVersion=${{ steps.vars.outputs.base_version }}
-          -p:InformationalVersion=${{ steps.vars.outputs.nightly_version }}
-          -p:IncludeSourceRevisionInInformationalVersion=false
-          -o publish/self-contained/
+        run: |
+          Remove-Item -Recurse -Force publish/self-contained/ -ErrorAction SilentlyContinue
+          dotnet publish RustOptimizer.csproj `
+            -c Release `
+            -r win-x64 `
+            -p:SelfContained=true `
+            -p:FileVersion=${{ steps.vars.outputs.base_version }} `
+            -p:InformationalVersion=${{ steps.vars.outputs.nightly_version }} `
+            -p:IncludeSourceRevisionInInformationalVersion=false `
+            -o publish/self-contained/
 
       - name: Publish (Framework-Dependent)
-        run: >
-          dotnet publish RustOptimizer.csproj
-          -c Release
-          -r win-x64
-          -p:SelfContained=false
-          -p:FileVersion=${{ steps.vars.outputs.base_version }}
-          -p:InformationalVersion=${{ steps.vars.outputs.nightly_version }}
-          -p:IncludeSourceRevisionInInformationalVersion=false
-          -o publish/framework-dependent/
+        run: |
+          Remove-Item -Recurse -Force publish/framework-dependent/ -ErrorAction SilentlyContinue
+          dotnet publish RustOptimizer.csproj `
+            -c Release `
+            -r win-x64 `
+            -p:SelfContained=false `
+            -p:FileVersion=${{ steps.vars.outputs.base_version }} `
+            -p:InformationalVersion=${{ steps.vars.outputs.nightly_version }} `
+            -p:IncludeSourceRevisionInInformationalVersion=false `
+            -o publish/framework-dependent/
 
       - name: Zip (Self-Contained)
         run: Compress-Archive -Path publish/self-contained/* -DestinationPath RustOptimizer-nightly-self-contained.zip -Force
