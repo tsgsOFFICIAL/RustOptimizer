@@ -8,7 +8,7 @@
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
         <ApplicationIcon>Assets\App\logo.ico</ApplicationIcon>
         <DefaultItemExcludes>$(DefaultItemExcludes);externals/**</DefaultItemExcludes>
-        <FileVersion>0.4.0</FileVersion>
+        <FileVersion>0.5.0</FileVersion>
         <InformationalVersion>$(FileVersion)</InformationalVersion>
         <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
         <IsPackable>false</IsPackable>
@@ -38,6 +38,20 @@
       <EmbeddedResource Include="Lang\da-DK.json" />
       <None Remove="Lang\ru-RU.json" />
       <EmbeddedResource Include="Lang\ru-RU.json" />
+      <None Remove="CHANGELOG.md" />
+      <EmbeddedResource Include="CHANGELOG.md" />
+      <!-- WithCulture=false is required here: MSBuild's default culture detection treats
+           "CHANGELOG.da-DK.md"/"CHANGELOG.ru-RU.md" as satellite-assembly resources (since
+           "da-DK"/"ru-RU" parse as valid CultureInfo names), routing them into a separate
+           da-DK/ru-RU satellite assembly instead of embedding them in the main one. -->
+      <None Remove="CHANGELOG.da-DK.md" />
+      <EmbeddedResource Include="CHANGELOG.da-DK.md">
+        <WithCulture>false</WithCulture>
+      </EmbeddedResource>
+      <None Remove="CHANGELOG.ru-RU.md" />
+      <EmbeddedResource Include="CHANGELOG.ru-RU.md">
+        <WithCulture>false</WithCulture>
+      </EmbeddedResource>
       <None Remove="publish\test-fixed\IconPacks.Avalonia.FontAwesome.xml" />
       <None Remove="publish\test-fixed\IconPacks.Avalonia.RadixIcons.dll" />
       <None Remove="publish\test-nightly\IconPacks.Avalonia.Fontisto.xml" />
