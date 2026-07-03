@@ -48,6 +48,7 @@
 
             <Button Content="{Binding [AccentButton]}" Classes="accent"/>
             <Button Content="{Binding [ToggleTheme]}" Click="OnThemeToggle"/>
+            <Button Content="{Binding [ViewChangelog]}" Click="OnViewChangelog"/>
 
         </StackPanel>
 

@@ -6,5 +6,8 @@
   "AccentButton": "Accent",
   "ToggleTheme": "Skift tema",
   "By": "Af",
-  "Version": "Version"
+  "Version": "Version",
+  "ViewChangelog": "Se ændringslog",
+  "ChangelogTitle": "Nyheder",
+  "Close": "Luk"
 }

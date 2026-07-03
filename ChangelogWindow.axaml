@@ -1,0 +1,42 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:iface="using:RustOptimizer.Interface"
+        xmlns:controls="using:RustOptimizer.Controls"
+        mc:Ignorable="d" d:DesignWidth="520" d:DesignHeight="600"
+        x:Class="RustOptimizer.ChangelogWindow"
+        x:DataType="iface:ILocalizationService"
+        Title="{Binding [ChangelogTitle]}"
+        Icon="/Assets/App/logo.ico"
+        Width="520" Height="600"
+        MinWidth="380" MinHeight="320"
+        Background="{DynamicResource BgColor}"
+        WindowStartupLocation="CenterOwner">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <controls:TitleBar Grid.Row="0"
+                            Title="{Binding [ChangelogTitle]}"
+                            Author="tsgsOFFICIAL"
+                            ShowMaximizeButton="False">
+            <controls:TitleBar.Icon>
+                <Image Source="/Assets/App/logo.ico"/>
+            </controls:TitleBar.Icon>
+        </controls:TitleBar>
+
+        <ContentControl Grid.Row="1" x:Name="ContentHost" Margin="24"/>
+
+        <Border Grid.Row="2"
+                Padding="16"
+                BorderBrush="{DynamicResource BorderColor}"
+                BorderThickness="0,1,0,0">
+            <Button Content="{Binding [Close]}"
+                    Classes="accent"
+                    HorizontalAlignment="Right"
+                    Click="OnCloseClick"/>
+        </Border>
+
+    </Grid>
+
+</Window>

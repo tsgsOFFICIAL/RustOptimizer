@@ -3,6 +3,7 @@ using Avalonia.Interactivity;
 using RustOptimizer.Service;
 using Avalonia.Controls;
 using Avalonia;
+using System;
 
 namespace RustOptimizer
 {
@@ -39,10 +40,44 @@ namespace RustOptimizer
             _localization = localization;
             DataContext = localization;
             InitializeComponent();
+
+            Opened += OnMainWindowOpened;
+        }
+
+        /// <summary>
+        /// Checks for a newer changelog on GitHub once the window is shown, and displays the
+        /// cumulative "what's new" view if the installed version is behind. Runs once per launch and
+        /// fails silently (e.g. offline) so it never blocks or interrupts startup.
+        /// </summary>
+        private async void OnMainWindowOpened(object? sender, EventArgs e)
+        {
+            Opened -= OnMainWindowOpened;
+
+            string changes;
+            try
+            {
+                changes = await RemoteChangelog.GetChangesSinceAsync(_localization.Current, Utility.GetDisplayVersion());
+            }
+            catch
+            {
+                return;
+            }
+
+            if (changes.Length == 0)
+                return;
+
+            ChangelogWindow changelog = new(_localization, changes);
+            await changelog.ShowDialog(this);
         }
 
         private void OnThemeToggle(object? sender, RoutedEventArgs e)
             => _theme.ToggleLightDark();
+
+        private async void OnViewChangelog(object? sender, RoutedEventArgs e)
+        {
+            ChangelogWindow changelog = new(_localization, ChangelogWindow.LoadBundledChangelog(_localization.Current));
+            await changelog.ShowDialog(this);
+        }
 
         private void OnEnglish(object? sender, RoutedEventArgs e)
             => SetLanguage(AppLanguage.English);

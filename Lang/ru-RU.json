@@ -6,5 +6,8 @@
   "AccentButton": "Акцент",
   "ToggleTheme": "Сменить тему",
   "By": "Автор:",
-  "Version": "Версия"
+  "Version": "Версия",
+  "ViewChangelog": "Список изменений",
+  "ChangelogTitle": "Что нового",
+  "Close": "Закрыть"
 }

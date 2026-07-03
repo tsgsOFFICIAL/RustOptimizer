@@ -8,7 +8,7 @@
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
         <ApplicationIcon>Assets\App\logo.ico</ApplicationIcon>
         <DefaultItemExcludes>$(DefaultItemExcludes);externals/**</DefaultItemExcludes>
-        <FileVersion>0.5.0</FileVersion>
+        <FileVersion>0.6.0</FileVersion>
         <InformationalVersion>$(FileVersion)</InformationalVersion>
         <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
         <IsPackable>false</IsPackable>
@@ -29,6 +29,7 @@
             <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.9" />
+        <PackageReference Include="SkiaSharp" Version="3.119.4" />
     </ItemGroup>
 
     <ItemGroup>
@@ -87,6 +88,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Assets\Changelog\" />
       <Folder Include="Assets\Github\" />
     </ItemGroup>
 
