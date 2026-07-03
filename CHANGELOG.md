@@ -4,7 +4,14 @@ All notable changes to Rust Optimizer are documented here.
 
 ## Unreleased
 
+## 0.6.0
+
 - Added an in-app changelog viewer, so updates can explain *why* they happened instead of just announcing a version bump.
+- Added support for images and animated GIFs inside the changelog, decoded frame-by-frame with no extra dependency.
+
+![Changelog viewer](https://raw.githubusercontent.com/tsgsOFFICIAL/RustOptimizer/master/Assets/Changelog/screenshot-0.6.0.png)
+
+![Language switching demo](https://raw.githubusercontent.com/tsgsOFFICIAL/RustOptimizer/master/Assets/Changelog/demo-0.6.0.gif)
 
 ## 0.5.0
 

@@ -4,7 +4,14 @@
 
 ## Unreleased
 
+## 0.6.0
+
 - Добавлен встроенный просмотрщик списка изменений, чтобы обновления объясняли *почему* они произошли, а не просто сообщали о новом номере версии.
+- Добавлена поддержка изображений и анимированных GIF в списке изменений, декодируемых покадрово без дополнительных зависимостей.
+
+![Просмотр списка изменений](https://raw.githubusercontent.com/tsgsOFFICIAL/RustOptimizer/master/Assets/Changelog/screenshot-0.6.0.png)
+
+![Демонстрация переключения языка](https://raw.githubusercontent.com/tsgsOFFICIAL/RustOptimizer/master/Assets/Changelog/demo-0.6.0.gif)
 
 ## 0.5.0
 
