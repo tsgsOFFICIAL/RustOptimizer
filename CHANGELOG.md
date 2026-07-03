@@ -4,6 +4,10 @@ All notable changes to Rust Optimizer are documented here.
 
 ## Unreleased
 
+## 0.6.1
+
+- Fixed changelog images and GIFs growing oversized as the window got wider, by capping their display size instead of letting them stretch to fill the available width.
+
 ## 0.6.0
 
 - Added an in-app changelog viewer, so updates can explain *why* they happened instead of just announcing a version bump.

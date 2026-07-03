@@ -24,6 +24,14 @@ public static class AnimatedImage
     private static readonly HttpClient Client = new() { Timeout = TimeSpan.FromSeconds(15) };
 
     /// <summary>
+    /// The largest size (in device-independent pixels) a changelog image is allowed to render at.
+    /// Without this cap, <see cref="Stretch.Uniform"/> scales the image up to fill whatever width
+    /// the window happens to have, so a wide window turns a small screenshot into a giant one.
+    /// </summary>
+    private const double MaxDisplayWidth = 440;
+    private const double MaxDisplayHeight = 320;
+
+    /// <summary>
     /// Creates a placeholder showing <paramref name="altText"/> and begins loading the image in the
     /// background, swapping in the decoded (and, for multi-frame GIFs, animating) image once ready.
     /// Falls back to showing the alt text if the source can't be fetched or decoded.
@@ -99,7 +107,9 @@ public static class AnimatedImage
         {
             Source = bitmap,
             Stretch = Stretch.Uniform,
-            HorizontalAlignment = HorizontalAlignment.Left
+            HorizontalAlignment = HorizontalAlignment.Left,
+            MaxWidth = Math.Min(targetInfo.Width, MaxDisplayWidth),
+            MaxHeight = Math.Min(targetInfo.Height, MaxDisplayHeight)
         };
 
         int frameCount = codec.FrameCount;
