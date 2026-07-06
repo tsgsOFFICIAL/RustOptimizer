@@ -53,11 +53,12 @@
 
 ## Quick Start
 
-1. **Download** the latest release from [Releases](https://github.com/tsgsOFFICIAL/RustOptimizer/releases/latest) (recommended) — run `Setup.exe` for a guided install, or extract one of the zips for a portable copy
-2. Run `Rust Optimizer.exe` **as Administrator**
-3. Review your system info and click **Run Smart Optimization**
-4. Choose a preset profile or customize
-5. Click **Launch Rust** and dominate
+1. **Download** the latest release from [Releases](https://github.com/tsgsOFFICIAL/RustOptimizer/releases/latest) (recommended). Run `Setup.exe` for a guided install, or extract one of the zips for a portable copy.
+2. Run `Rust Optimizer.exe`.
+3. Ensure Rust is not running, or close it down before optimizing.
+3. Review your system info and click **Run Smart Optimization**.
+4. Choose a preset profile or customize.
+5. Click **Launch Rust** and dominate.
 
 > **Nightly Builds:** Want the latest code before it gets a tagged release? Every push to `master` automatically rebuilds and republishes the [nightly release](https://github.com/tsgsOFFICIAL/RustOptimizer/releases/tag/nightly), both self-contained and framework-dependent. The version number includes the short commit hash it was built from, so you always know exactly what you're running. It's untested beyond CI passing, so expect the occasional rough edge, grab a regular [Release](https://github.com/tsgsOFFICIAL/RustOptimizer/releases/latest) instead if you want something stable.
 
