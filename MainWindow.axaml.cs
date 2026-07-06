@@ -41,7 +41,8 @@ namespace RustOptimizer
             DataContext = localization;
             InitializeComponent();
 
-            Opened += OnMainWindowOpened;
+            if (!Design.IsDesignMode)
+                Opened += OnMainWindowOpened;
         }
 
         /// <summary>
