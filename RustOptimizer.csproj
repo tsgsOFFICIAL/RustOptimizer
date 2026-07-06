@@ -12,6 +12,12 @@
         <InformationalVersion>$(FileVersion)</InformationalVersion>
         <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
         <IsPackable>false</IsPackable>
+        <Company>tsgsOFFICIAL</Company>
+        <Copyright>tsgsOFFICIAL</Copyright>
+        <Authors>tsgsOFFICIAL</Authors>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <DebugType>none</DebugType>
     </PropertyGroup>
 
     <ItemGroup>
