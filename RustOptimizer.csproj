@@ -96,6 +96,7 @@
     <ItemGroup>
       <Folder Include="Assets\Changelog\" />
       <Folder Include="Assets\Github\" />
+      <Folder Include="Service\Updates\Markdown\" />
     </ItemGroup>
 
     <ItemGroup>

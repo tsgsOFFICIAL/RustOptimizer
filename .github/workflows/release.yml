@@ -38,25 +38,11 @@ jobs:
             - name: Zip (Framework-Dependent)
               run: Compress-Archive -Path publish/framework-dependent/* -DestinationPath RustOptimizer-${{ github.ref_name }}-framework-dependent.zip
 
-            - name: Commit published output to master
-              shell: pwsh
-              run: |
-                  # Save framework-dependent output before switching branches
-                  Copy-Item -Recurse "publish/framework-dependent/" "$env:TEMP/publish-output/"
+            - name: Install Inno Setup
+              run: choco install innosetup -y --no-progress
 
-                  git config user.name "github-actions[bot]"
-                  git config user.email "github-actions[bot]@users.noreply.github.com"
-                  git fetch origin master
-                  git checkout master
-
-                  # Restore built output
-                  Remove-Item -Recurse -Force "publish/framework-dependent/" -ErrorAction SilentlyContinue
-                  New-Item -ItemType Directory -Force -Path "publish/framework-dependent/"
-                  Copy-Item -Recurse -Force "$env:TEMP/publish-output/*" "publish/framework-dependent/"
-
-                  git add -f publish/framework-dependent/
-                  git commit -m "chore: publish ${{ github.ref_name }} binaries [skip ci]"
-                  git push origin master
+            - name: Build installer
+              run: '& "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer\RustOptimizer.iss'
 
             - name: Get previous tag
               id: prev_tag
@@ -71,7 +57,7 @@ jobs:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: |
                   $notes = @"
-                  [Download it here](https://download-directory.github.io/?url=https://github.com/tsgsOFFICIAL/RustOptimizer/tree/master/publish/framework-dependent)
+                  Grab `Setup.exe` below for a guided install, or extract one of the zips instead if you prefer a portable copy.
 
                   [Installation guide](https://github.com/tsgsOFFICIAL/RustOptimizer?tab=readme-ov-file#quick-start)
 
@@ -79,9 +65,11 @@ jobs:
 
                   **Full Changelog**: https://github.com/tsgsOFFICIAL/RustOptimizer/compare/${{ steps.prev_tag.outputs.tag }}...${{ github.ref_name }}
                   "@
+                  $installer = Get-ChildItem "publish/installer/*.exe" | Select-Object -First 1 -ExpandProperty FullName
                   gh release create "${{ github.ref_name }}" `
                     "RustOptimizer-${{ github.ref_name }}-self-contained.zip" `
                     "RustOptimizer-${{ github.ref_name }}-framework-dependent.zip" `
+                    "$installer" `
                     --title "RustOptimizer ${{ github.ref_name }}" `
                     --verify-tag `
                     --notes $notes
