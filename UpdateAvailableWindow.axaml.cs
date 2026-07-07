@@ -7,15 +7,14 @@ using System;
 namespace RustOptimizer;
 
 /// <summary>
-/// Prompts the user that a newer version is available, with the option to view what changed before
-/// deciding, or to update immediately.
+/// Prompts the user that a newer version is available, with the changelog rendered inline so they can
+/// see what changed without opening a separate window before deciding to update.
 /// </summary>
 public partial class UpdateAvailableWindow : Window
 {
     private readonly ILocalizationService _localization;
     private readonly IUpdateService _updates;
     private readonly UpdateInfo _update;
-    private readonly string _changelog;
 
     public UpdateAvailableWindow() : this(
         CreateDesignLocalization(),
@@ -46,26 +45,23 @@ public partial class UpdateAvailableWindow : Window
         _localization = localization;
         _updates = updates;
         _update = update;
-        _changelog = changelog;
 
         DataContext = localization;
         InitializeComponent();
 
         VersionText.Text = update.Version;
-        ChangelogButton.IsEnabled = changelog.Length > 0;
-    }
 
-    private async void OnViewChangelogClick(object? sender, RoutedEventArgs e)
-    {
-        ChangelogWindow changelog = new(_localization, _changelog);
-        await changelog.ShowDialog(this);
+        bool hasChangelog = changelog.Length > 0;
+        ChangelogHeader.IsVisible = hasChangelog;
+        ChangelogHost.IsVisible = hasChangelog;
+        if (hasChangelog)
+            ChangelogHost.Content = MarkdownRenderer.Render(changelog);
     }
 
     private void OnLaterClick(object? sender, RoutedEventArgs e) => Close();
 
     private async void OnUpdateNowClick(object? sender, RoutedEventArgs e)
     {
-        ChangelogButton.IsEnabled = false;
         LaterButton.IsEnabled = false;
         UpdateButton.IsEnabled = false;
         StatusText.Text = _localization["Updating"];
@@ -79,7 +75,6 @@ public partial class UpdateAvailableWindow : Window
         catch (Exception ex)
         {
             StatusText.Text = $"{_localization["UpdateFailed"]} {ex.Message}";
-            ChangelogButton.IsEnabled = _changelog.Length > 0;
             LaterButton.IsEnabled = true;
             UpdateButton.IsEnabled = true;
         }

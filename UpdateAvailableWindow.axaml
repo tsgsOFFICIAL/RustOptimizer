@@ -4,18 +4,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:iface="using:RustOptimizer.Interface"
         xmlns:controls="using:RustOptimizer.Controls"
-        mc:Ignorable="d" d:DesignWidth="420" d:DesignHeight="220"
+        mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="520"
         x:Class="RustOptimizer.UpdateAvailableWindow"
         x:DataType="iface:ILocalizationService"
         Title="{Binding [UpdateAvailableTitle]}"
         Icon="/Assets/App/logo.ico"
-        Width="420" Height="220"
-        MinWidth="380" MinHeight="200"
-        CanResize="False"
+        Width="480" Height="520"
+        MinWidth="420" MinHeight="360"
         Background="{DynamicResource BgColor}"
         WindowStartupLocation="CenterOwner">
 
-    <Grid RowDefinitions="Auto,*,Auto">
+    <Grid RowDefinitions="Auto,Auto,*,Auto">
 
         <controls:TitleBar Grid.Row="0"
                             Title="{Binding [UpdateAvailableTitle]}"
@@ -26,34 +25,43 @@
             </controls:TitleBar.Icon>
         </controls:TitleBar>
 
-        <StackPanel Grid.Row="1" Margin="24" Spacing="8" VerticalAlignment="Center">
-            <StackPanel Orientation="Horizontal" Spacing="4">
-                <TextBlock Text="{Binding [UpdateAvailableMessage]}"/>
-                <TextBlock x:Name="VersionText" FontWeight="Bold"/>
+        <StackPanel Grid.Row="1" Margin="24,20,24,8" Spacing="14">
+            <StackPanel Orientation="Horizontal" Spacing="6">
+                <TextBlock Text="{Binding [UpdateAvailableMessage]}"
+                           FontSize="20"
+                           FontWeight="Bold"
+                           TextWrapping="Wrap"/>
+                <TextBlock x:Name="VersionText"
+                           FontSize="20"
+                           FontWeight="Bold"
+                           Foreground="{DynamicResource AccentColor}"/>
             </StackPanel>
-            <TextBlock x:Name="StatusText" Classes="muted" IsVisible="False"/>
+            <TextBlock x:Name="ChangelogHeader"
+                       Text="{Binding [ChangelogTitle]}"
+                       FontSize="15"
+                       FontWeight="SemiBold"/>
         </StackPanel>
 
-        <Border Grid.Row="2"
+        <ContentControl Grid.Row="2" x:Name="ChangelogHost" Margin="24,0,24,16"/>
+
+        <Border Grid.Row="3"
                 Padding="16"
                 BorderBrush="{DynamicResource BorderColor}"
                 BorderThickness="0,1,0,0">
-            <Grid ColumnDefinitions="Auto,*,Auto,Auto">
-                <Button x:Name="ChangelogButton"
-                        Grid.Column="0"
-                        Content="{Binding [ViewChangelog]}"
-                        Click="OnViewChangelogClick"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+                <TextBlock x:Name="StatusText"
+                           Classes="muted"
+                           IsVisible="False"
+                           VerticalAlignment="Center"
+                           Margin="0,0,8,0"/>
                 <Button x:Name="LaterButton"
-                        Grid.Column="2"
                         Content="{Binding [Later]}"
-                        Margin="0,0,8,0"
                         Click="OnLaterClick"/>
                 <Button x:Name="UpdateButton"
-                        Grid.Column="3"
                         Content="{Binding [UpdateNow]}"
                         Classes="accent"
                         Click="OnUpdateNowClick"/>
-            </Grid>
+            </StackPanel>
         </Border>
 
     </Grid>
