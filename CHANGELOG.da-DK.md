@@ -4,6 +4,12 @@ Alle væsentlige ændringer i Rust Optimizer er dokumenteret her.
 
 ## Unreleased
 
+## 0.7.0
+
+- Tilføjet en Windows-installer (`Setup.exe`) som alternativ til de bærbare zip-filer, der installeres pr. bruger med genveje i startmenuen og en valgfri skrivebordsgenvej.
+- Tilføjet automatisk opdateringstjek: ved opstart tjekkes GitHub for en nyere udgivelse, og hvis der findes en, vises versionen og den viste ændringslog direkte i vinduet, før du beslutter dig for at opdatere.
+- Tilføjet opdatering med et enkelt klik, der downloader og anvender den nye version (genkører installationsprogrammet for installerede kopier, udskifter filer for bærbare kopier) og genstarter automatisk.
+
 ## 0.6.1
 
 - Rettet at billeder og GIF'er i ændringsloggen blev for store, når vinduet blev bredere, ved at begrænse deres visningsstørrelse i stedet for at lade dem strække sig til den tilgængelige bredde.

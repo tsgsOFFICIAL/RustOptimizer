@@ -4,6 +4,12 @@ All notable changes to Rust Optimizer are documented here.
 
 ## Unreleased
 
+## 0.7.0
+
+- Added a Windows installer (`Setup.exe`) as an alternative to the portable zips, installing per-user with Start Menu and optional desktop shortcuts.
+- Added automatic update checking: on launch, checks GitHub for a newer release and, if one exists, shows the version and rendered changelog inline before you decide to update.
+- Added one-click updating that downloads and applies the new version in place (re-running the installer for installed copies, swapping files for portable copies) and relaunches automatically.
+
 ## 0.6.1
 
 - Fixed changelog images and GIFs growing oversized as the window got wider, by capping their display size instead of letting them stretch to fill the available width.
