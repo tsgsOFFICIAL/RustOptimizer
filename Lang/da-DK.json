@@ -9,5 +9,11 @@
   "Version": "Version",
   "ViewChangelog": "Se ændringslog",
   "ChangelogTitle": "Nyheder",
-  "Close": "Luk"
+  "Close": "Luk",
+  "UpdateAvailableTitle": "Opdatering tilgængelig",
+  "UpdateAvailableMessage": "En ny version er tilgængelig:",
+  "UpdateNow": "Opdater nu",
+  "Later": "Senere",
+  "Updating": "Opdaterer...",
+  "UpdateFailed": "Opdatering mislykkedes:"
 }

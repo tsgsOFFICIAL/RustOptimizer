@@ -13,9 +13,10 @@ using System;
 namespace RustOptimizer.Service;
 
 /// <summary>
-/// Checks GitHub Releases for a newer version and swaps it in over the current install once downloaded.
-/// Only supports portable (zip) installs: it overwrites files in the running app's own directory, which
-/// requires no elevation for a portable copy but will fail against a Program Files installer deployment.
+/// Checks GitHub Releases for a newer version and applies it once downloaded. Installer-managed
+/// installs (detected via the uninstaller Inno Setup always drops next to the exe) are updated by
+/// silently re-running the new Setup.exe, which keeps the registered Add/Remove Programs version in
+/// sync. Portable zip installs are updated by swapping the extracted files in over the running app.
 /// </summary>
 public sealed class UpdateService : IUpdateService
 {
@@ -43,7 +44,10 @@ public sealed class UpdateService : IUpdateService
             return null;
         }
 
-        string assetSuffix = IsSelfContained() ? "-self-contained.zip" : "-framework-dependent.zip";
+        string assetSuffix = IsInstallerInstall()
+            ? "-Setup.exe"
+            : IsSelfContained() ? "-self-contained.zip" : "-framework-dependent.zip";
+
         foreach (JsonElement asset in doc.RootElement.GetProperty("assets").EnumerateArray())
         {
             string name = asset.GetProperty("name").GetString() ?? "";
@@ -58,7 +62,37 @@ public sealed class UpdateService : IUpdateService
         return null;
     }
 
-    public async Task ApplyUpdateAsync(UpdateInfo update, CancellationToken ct = default)
+    public Task ApplyUpdateAsync(UpdateInfo update, CancellationToken ct = default)
+        => update.AssetName.EndsWith(".exe", StringComparison.OrdinalIgnoreCase)
+            ? ApplyInstallerUpdateAsync(update, ct)
+            : ApplyPortableUpdateAsync(update, ct);
+
+    /// <summary>
+    /// Downloads the new Setup.exe and re-runs it silently. Inno Setup's Restart Manager integration
+    /// (CloseApplications/RestartApplications) closes the running app, replaces its files, updates the
+    /// registered uninstall entry's version, and relaunches - all without a UAC prompt since the install
+    /// itself is per-user.
+    /// </summary>
+    private async Task ApplyInstallerUpdateAsync(UpdateInfo update, CancellationToken ct)
+    {
+        string installerPath = Path.Combine(Path.GetTempPath(), update.AssetName);
+        await DownloadToFileAsync(update.DownloadUrl, installerPath, ct);
+
+        Process.Start(new ProcessStartInfo(installerPath,
+            "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /CLOSEAPPLICATIONS /RESTARTAPPLICATIONS")
+        {
+            UseShellExecute = false
+        });
+
+        Environment.Exit(0);
+    }
+
+    /// <summary>
+    /// Downloads the matching zip, extracts it to a staging folder, then hands off to a short PowerShell
+    /// script that waits for this process to exit, copies the new files over the install directory, and
+    /// relaunches - a separate process is required since the running exe holds its own files locked.
+    /// </summary>
+    private async Task ApplyPortableUpdateAsync(UpdateInfo update, CancellationToken ct)
     {
         string exePath = Utility.GetExePath();
         string installDir = Path.GetDirectoryName(exePath)
@@ -68,17 +102,11 @@ public sealed class UpdateService : IUpdateService
         Directory.CreateDirectory(stagingDir);
 
         string zipPath = Path.Combine(Path.GetTempPath(), update.AssetName);
-        await using (Stream download = await Client.GetStreamAsync(update.DownloadUrl, ct))
-        await using (FileStream file = File.Create(zipPath))
-        {
-            await download.CopyToAsync(file, ct);
-        }
+        await DownloadToFileAsync(update.DownloadUrl, zipPath, ct);
 
         ZipFile.ExtractToDirectory(zipPath, stagingDir, overwriteFiles: true);
         File.Delete(zipPath);
 
-        // The running exe holds its own files locked, so the copy-over-and-relaunch has to happen from a
-        // separate process that outlives this one - a short PowerShell script is enough, no helper exe needed.
         string scriptPath = Path.Combine(Path.GetTempPath(), $"RustOptimizer-Update-{update.Version}.ps1");
         string script = $"""
             Wait-Process -Id {Environment.ProcessId} -ErrorAction SilentlyContinue
@@ -97,6 +125,20 @@ public sealed class UpdateService : IUpdateService
 
         Environment.Exit(0);
     }
+
+    private static async Task DownloadToFileAsync(string url, string path, CancellationToken ct)
+    {
+        await using Stream download = await Client.GetStreamAsync(url, ct);
+        await using FileStream file = File.Create(path);
+        await download.CopyToAsync(file, ct);
+    }
+
+    /// <summary>
+    /// Inno Setup always drops its uninstaller next to the exe, regardless of install location -
+    /// portable zip extracts never have one, so its presence tells the two deployment forms apart.
+    /// </summary>
+    private static bool IsInstallerInstall()
+        => File.Exists(Path.Combine(AppContext.BaseDirectory, "unins000.exe"));
 
     /// <summary>
     /// Self-contained publishes bundle the runtime (including this assembly) next to the exe;

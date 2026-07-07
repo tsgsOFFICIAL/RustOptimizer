@@ -9,5 +9,11 @@
   "Version": "Version",
   "ViewChangelog": "View changelog",
   "ChangelogTitle": "What's New",
-  "Close": "Close"
+  "Close": "Close",
+  "UpdateAvailableTitle": "Update Available",
+  "UpdateAvailableMessage": "A new version is available:",
+  "UpdateNow": "Update Now",
+  "Later": "Later",
+  "Updating": "Updating...",
+  "UpdateFailed": "Update failed:"
 }

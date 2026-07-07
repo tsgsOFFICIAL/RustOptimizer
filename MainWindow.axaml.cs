@@ -11,8 +11,9 @@ namespace RustOptimizer
     {
         private readonly IThemeService _theme;
         private readonly ILocalizationService _localization;
+        private readonly IUpdateService _updates;
 
-        public MainWindow() : this(CreateDesignTheme(), CreateDesignLocalization()) { }
+        public MainWindow() : this(CreateDesignTheme(), CreateDesignLocalization(), CreateDesignUpdates()) { }
 
         /// <summary>
         /// Creates an initialized theme service for the Avalonia previewer.
@@ -34,10 +35,17 @@ namespace RustOptimizer
             return localization;
         }
 
-        public MainWindow(IThemeService theme, ILocalizationService localization)
+        /// <summary>
+        /// Creates an update service for the Avalonia previewer. Never actually invoked there, since
+        /// the update check only runs outside design mode.
+        /// </summary>
+        private static UpdateService CreateDesignUpdates() => new();
+
+        public MainWindow(IThemeService theme, ILocalizationService localization, IUpdateService updates)
         {
             _theme = theme;
             _localization = localization;
+            _updates = updates;
             DataContext = localization;
             InitializeComponent();
 
@@ -46,13 +54,27 @@ namespace RustOptimizer
         }
 
         /// <summary>
-        /// Checks for a newer changelog on GitHub once the window is shown, and displays the
-        /// cumulative "what's new" view if the installed version is behind. Runs once per launch and
-        /// fails silently (e.g. offline) so it never blocks or interrupts startup.
+        /// Checks for a newer release on GitHub once the window is shown, and prompts the user with the
+        /// available version (and a link to the changelog) if the installed version is behind. Shows
+        /// nothing when already up to date. Runs once per launch and fails silently (e.g. offline) so it
+        /// never blocks startup.
         /// </summary>
         private async void OnMainWindowOpened(object? sender, EventArgs e)
         {
             Opened -= OnMainWindowOpened;
+
+            UpdateInfo? update;
+            try
+            {
+                update = await _updates.CheckForUpdateAsync();
+            }
+            catch
+            {
+                return;
+            }
+
+            if (update is null)
+                return;
 
             string changes;
             try
@@ -61,14 +83,11 @@ namespace RustOptimizer
             }
             catch
             {
-                return;
+                changes = "";
             }
 
-            if (changes.Length == 0)
-                return;
-
-            ChangelogWindow changelog = new(_localization, changes);
-            await changelog.ShowDialog(this);
+            UpdateAvailableWindow prompt = new(_localization, _updates, update, changes);
+            await prompt.ShowDialog(this);
         }
 
         private void OnThemeToggle(object? sender, RoutedEventArgs e)

@@ -9,5 +9,11 @@
   "Version": "Версия",
   "ViewChangelog": "Список изменений",
   "ChangelogTitle": "Что нового",
-  "Close": "Закрыть"
+  "Close": "Закрыть",
+  "UpdateAvailableTitle": "Доступно обновление",
+  "UpdateAvailableMessage": "Доступна новая версия:",
+  "UpdateNow": "Обновить",
+  "Later": "Позже",
+  "Updating": "Обновление...",
+  "UpdateFailed": "Ошибка обновления:"
 }

@@ -28,12 +28,13 @@ namespace RustOptimizer
 
             IThemeService theme = services.GetRequiredService<IThemeService>();
             ILocalizationService localization = services.GetRequiredService<ILocalizationService>();
+            IUpdateService updates = services.GetRequiredService<IUpdateService>();
 
             theme.Initialize();
             localization.Initialize();
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-                desktop.MainWindow = new MainWindow(theme, localization);
+                desktop.MainWindow = new MainWindow(theme, localization, updates);
 
             base.OnFrameworkInitializationCompleted();
         }
