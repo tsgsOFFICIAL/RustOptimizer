@@ -24,12 +24,14 @@ public static class Utility
     /// <summary>
     /// Gets the user-facing application version string, including nightly or prerelease suffixes when present.
     /// </summary>
-    /// <returns>The file version in debug builds; otherwise the product version with a file-version fallback.</returns>
+    /// <returns>The product version (includes nightly/prerelease suffixes), falling back to the plain file version.</returns>
     public static string GetDisplayVersion()
     {
         string assemblyPath = Assembly.GetExecutingAssembly().Location;
         FileVersionInfo versionInfo = FileVersionInfo.GetVersionInfo(assemblyPath);
-        return versionInfo.FileVersion ?? versionInfo.ProductVersion ?? "N/A";
+        // ProductVersion (InformationalVersion) carries the nightly commit-hash suffix; FileVersion
+        // is strictly numeric and never has it. See .github/workflows/nightly.yml.
+        return versionInfo.ProductVersion ?? versionInfo.FileVersion ?? "N/A";
     }
 
     /// <summary>
