@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System;
 
 namespace RustOptimizer;
@@ -26,12 +27,9 @@ public static class Utility
     /// <returns>The file version in debug builds; otherwise the product version with a file-version fallback.</returns>
     public static string GetDisplayVersion()
     {
-        FileVersionInfo versionInfo = FileVersionInfo.GetVersionInfo(GetExePath());
-#if DEBUG
+        string assemblyPath = Assembly.GetExecutingAssembly().Location;
+        FileVersionInfo versionInfo = FileVersionInfo.GetVersionInfo(assemblyPath);
         return versionInfo.FileVersion ?? versionInfo.ProductVersion ?? "N/A";
-#else
-        return versionInfo.ProductVersion ?? versionInfo.FileVersion ?? "N/A";
-#endif
     }
 
     /// <summary>
