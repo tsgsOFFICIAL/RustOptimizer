@@ -17,6 +17,7 @@ namespace RustOptimizer
                 .AddSingleton<IThemeService, ThemeService>()
                 .AddSingleton<ILocalizationService, LocalizationService>()
                 .AddSingleton<IUpdateService, UpdateService>()
+                .AddSingleton<IRustProcessService, RustProcessService>()
                 .BuildServiceProvider();
 
             BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);

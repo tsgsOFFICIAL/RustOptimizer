@@ -4,6 +4,7 @@ using RustOptimizer.Controls;
 using RustOptimizer.Windows;
 using RustOptimizer.Service;
 using RustOptimizer.Views;
+using Avalonia.Threading;
 using Avalonia.Controls;
 using System;
 
@@ -14,13 +15,16 @@ namespace RustOptimizer
         private readonly IThemeService _theme;
         private readonly ILocalizationService _localization;
         private readonly IUpdateService _updates;
+        private readonly IRustProcessService _rustProcess;
 
         private DashboardView? _dashboard;
         private SettingsView? _settings;
         private AboutView? _about;
         private ComingSoonView? _comingSoon;
+        private DispatcherTimer? _rustPollTimer;
 
-        public MainWindow() : this(CreateDesignTheme(), CreateDesignLocalization(), CreateDesignUpdates()) { }
+        public MainWindow()
+            : this(CreateDesignTheme(), CreateDesignLocalization(), CreateDesignUpdates(), CreateDesignRustProcess()) { }
 
         /// <summary>
         /// Creates an initialized theme service for the Avalonia previewer.
@@ -48,11 +52,19 @@ namespace RustOptimizer
         /// </summary>
         private static UpdateService CreateDesignUpdates() => new();
 
-        public MainWindow(IThemeService theme, ILocalizationService localization, IUpdateService updates)
+        /// <summary>
+        /// Creates a Rust process service for the Avalonia previewer. Never actually invoked there,
+        /// since the poll timer only runs outside design mode.
+        /// </summary>
+        private static RustProcessService CreateDesignRustProcess() => new();
+
+        public MainWindow(IThemeService theme, ILocalizationService localization, IUpdateService updates,
+            IRustProcessService rustProcess)
         {
             _theme = theme;
             _localization = localization;
             _updates = updates;
+            _rustProcess = rustProcess;
             DataContext = localization;
             InitializeComponent();
 
@@ -60,7 +72,15 @@ namespace RustOptimizer
             MainContent.Content = _dashboard = new DashboardView();
 
             if (!Design.IsDesignMode)
+            {
                 Opened += OnMainWindowOpened;
+
+                AppSidebar.SetRustRunning(_rustProcess.IsRunning());
+                _rustPollTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(3) };
+                _rustPollTimer.Tick += (_, _) => AppSidebar.SetRustRunning(_rustProcess.IsRunning());
+                _rustPollTimer.Start();
+                Closed += (_, _) => _rustPollTimer.Stop();
+            }
         }
 
         /// <summary>
@@ -122,10 +142,7 @@ namespace RustOptimizer
             return comingSoon;
         }
 
-        private void OnLaunchRustRequested(object? sender, EventArgs e)
-        {
-            // No real process launch yet - the sidebar already reflects the click visually on its own.
-        }
+        private void OnLaunchRustRequested(object? sender, EventArgs e) => _rustProcess.Launch();
 
         private void OnGitHubClick(object? sender, RoutedEventArgs e) => Utility.OpenUrl(ProjectLinks.GitHub);
 

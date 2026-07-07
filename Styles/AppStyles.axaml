@@ -114,6 +114,14 @@
     <Style Selector="Button.navItem.active:pointerover /template/ ContentPresenter">
         <Setter Property="Background" Value="#26F97316"/>
     </Style>
+    
+    <Style Selector="Ellipse.rustStatusDot">
+        <Setter Property="Fill" Value="{DynamicResource TextMutedColor}"/>
+    </Style>
+
+    <Style Selector="Ellipse.rustStatusDot.running">
+        <Setter Property="Fill" Value="{DynamicResource SuccessColor}"/>
+    </Style>
 
     <Style Selector="Button.listRow">
         <Setter Property="Background" Value="Transparent"/>

@@ -98,15 +98,16 @@
             <StackPanel Grid.Row="2" Margin="16,0,16,16" Spacing="10">
                 <StackPanel Orientation="Horizontal" Spacing="8" Margin="4,0,0,0">
                     <Ellipse x:Name="RustStatusDot"
+                             Classes="rustStatusDot"
                              Width="8" Height="8"
-                             Fill="{DynamicResource TextMutedColor}"
                              VerticalAlignment="Center" />
                     <TextBlock x:Name="RustStatusText"
                                Text="{Binding [RustNotRunning]}"
                                Classes="muted"
                                FontSize="12" />
                 </StackPanel>
-                <Button Classes="accentButton"
+                <Button x:Name="LaunchRustButton"
+                        Classes="accentButton"
                         HorizontalAlignment="Stretch"
                         HorizontalContentAlignment="Center"
                         Click="OnLaunchRustClick">

@@ -1,7 +1,6 @@
 using IconPacks.Avalonia.PhosphorIcons;
 using RustOptimizer.Interface;
 using Avalonia.Interactivity;
-using Avalonia.Media;
 using Avalonia.Controls;
 using System;
 
@@ -95,11 +94,20 @@ public partial class Sidebar : UserControl
 
     private void OnLaunchRustClick(object? sender, RoutedEventArgs e)
     {
-        // No process is actually launched yet - this just reflects the click in the status
-        // indicator so the mock UI has something to show for it.
-        RustStatusDot.Fill = (IBrush)this.FindResource("SuccessColor")!;
-        RustStatusText.Text = ((ILocalizationService)DataContext!)["RustRunning"];
-
+        // Disable immediately so a slow Steam boot can't be spammed into multiple launches; the
+        // next poll re-enables it on its own if Rust never actually starts (e.g. Steam missing).
+        LaunchRustButton.IsEnabled = false;
         LaunchRustRequested?.Invoke(this, EventArgs.Empty);
+    }
+
+    /// <summary>
+    /// Updates the status dot/text and Launch button to reflect whether Rust is currently running.
+    /// Called on a poll timer owned by <see cref="MainWindow"/>.
+    /// </summary>
+    public void SetRustRunning(bool isRunning)
+    {
+        RustStatusDot.Classes.Set("running", isRunning);
+        RustStatusText.Text = ((ILocalizationService)DataContext!)[isRunning ? "RustRunning" : "RustNotRunning"];
+        LaunchRustButton.IsEnabled = !isRunning;
     }
 }
