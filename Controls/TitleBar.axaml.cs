@@ -1,4 +1,4 @@
-using IconPacks.Avalonia.Material;
+using IconPacks.Avalonia.PhosphorIcons;
 using Avalonia.Interactivity;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -126,8 +126,8 @@ public partial class TitleBar : UserControl
 
     private void UpdateMaximizeRestoreIcon(WindowState state)
         => MaximizeRestoreIcon.Kind = state == WindowState.Maximized
-            ? PackIconMaterialKind.WindowRestore
-            : PackIconMaterialKind.WindowMaximize;
+            ? PackIconPhosphorIconsKind.CopySimple
+            : PackIconPhosphorIconsKind.Square;
 
     private void OnHeaderPointerPressed(object? sender, PointerPressedEventArgs e)
     {

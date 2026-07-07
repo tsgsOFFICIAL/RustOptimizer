@@ -5,7 +5,7 @@
         xmlns:iface="using:RustOptimizer.Interface"
         xmlns:controls="using:RustOptimizer.Controls"
         mc:Ignorable="d" d:DesignWidth="520" d:DesignHeight="600"
-        x:Class="RustOptimizer.ChangelogWindow"
+        x:Class="RustOptimizer.Windows.ChangelogWindow"
         x:DataType="iface:ILocalizationService"
         Title="{Binding [ChangelogTitle]}"
         Icon="/Assets/App/logo.ico"
@@ -32,7 +32,7 @@
                 BorderBrush="{DynamicResource BorderColor}"
                 BorderThickness="0,1,0,0">
             <Button Content="{Binding [Close]}"
-                    Classes="accent"
+                    Classes="accentButton"
                     HorizontalAlignment="Right"
                     Click="OnCloseClick"/>
         </Border>

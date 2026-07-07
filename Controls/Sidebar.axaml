@@ -1,0 +1,123 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:iconPacks="https://github.com/MahApps/IconPacks.Avalonia"
+             xmlns:iface="using:RustOptimizer.Interface"
+             mc:Ignorable="d" d:DesignWidth="240" d:DesignHeight="720"
+             x:Class="RustOptimizer.Controls.Sidebar"
+             x:DataType="iface:ILocalizationService"
+             Width="240">
+
+    <Border Background="{DynamicResource BgColor}"
+            BorderBrush="{DynamicResource BorderColor}"
+            BorderThickness="0,0,1,0">
+        <Grid RowDefinitions="Auto, *, Auto">
+
+            <StackPanel Grid.Row="0"
+                        Orientation="Horizontal"
+                        Spacing="10"
+                        Margin="20,20,20,16">
+                <Image Source="/Assets/App/logo.ico" Width="32" Height="32" />
+                <StackPanel Spacing="0" VerticalAlignment="Center">
+                    <TextBlock Text="RUST" FontSize="15" FontWeight="Bold" Foreground="{DynamicResource TextColor}" />
+                    <TextBlock Text="OPTIMIZER" FontSize="15" FontWeight="Bold"
+                               Foreground="{DynamicResource AccentColor}" />
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel Grid.Row="1" Margin="12,0" Spacing="6">
+                <Button x:Name="NavDashboard" Tag="Dashboard" Classes="navItem active" Click="OnNavItemClick">
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <iconPacks:PackIconPhosphorIcons Kind="House" Width="18" Height="18" />
+                        <TextBlock Text="{Binding [NavDashboard]}" />
+                    </StackPanel>
+                </Button>
+                <Button x:Name="NavOptimizer" Tag="Optimizer" Classes="navItem" Click="OnNavItemClick">
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <iconPacks:PackIconPhosphorIcons Kind="Speedometer" Width="18" Height="18" />
+                        <TextBlock Text="{Binding [NavOptimizer]}" />
+                    </StackPanel>
+                </Button>
+                <Button x:Name="NavGraphics" Tag="Graphics" Classes="navItem" Click="OnNavItemClick">
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <iconPacks:PackIconPhosphorIcons Kind="Monitor" Width="18" Height="18" />
+                        <TextBlock Text="{Binding [NavGraphics]}" />
+                    </StackPanel>
+                </Button>
+                <Button x:Name="NavSystem" Tag="System" Classes="navItem" Click="OnNavItemClick">
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <iconPacks:PackIconPhosphorIcons Kind="Cpu" Width="18" Height="18" />
+                        <TextBlock Text="{Binding [NavSystem]}" />
+                    </StackPanel>
+                </Button>
+                <Button x:Name="NavNetwork" Tag="Network" Classes="navItem" Click="OnNavItemClick">
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <iconPacks:PackIconPhosphorIcons Kind="WifiHigh" Width="18" Height="18" />
+                        <TextBlock Text="{Binding [NavNetwork]}" />
+                    </StackPanel>
+                </Button>
+                <Button x:Name="NavGameplay" Tag="Gameplay" Classes="navItem" Click="OnNavItemClick">
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <iconPacks:PackIconPhosphorIcons Kind="CrosshairSimple" Width="18" Height="18" />
+                        <TextBlock Text="{Binding [NavGameplay]}" />
+                    </StackPanel>
+                </Button>
+                <Button x:Name="NavConfigs" Tag="Configs" Classes="navItem" Click="OnNavItemClick">
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <iconPacks:PackIconPhosphorIcons Kind="Folder" Width="18" Height="18" />
+                        <TextBlock Text="{Binding [NavConfigs]}" />
+                    </StackPanel>
+                </Button>
+                <Button x:Name="NavUtilities" Tag="Utilities" Classes="navItem" Click="OnNavItemClick">
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <iconPacks:PackIconPhosphorIcons Kind="Toolbox" Width="18" Height="18" />
+                        <TextBlock Text="{Binding [NavUtilities]}" />
+                    </StackPanel>
+                </Button>
+                <Button x:Name="NavBackupRestore" Tag="BackupRestore" Classes="navItem" Click="OnNavItemClick">
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <iconPacks:PackIconPhosphorIcons Kind="ClockCounterClockwise" Width="18" Height="18" />
+                        <TextBlock Text="{Binding [NavBackupRestore]}" />
+                    </StackPanel>
+                </Button>
+                <Button x:Name="NavSettings" Tag="Settings" Classes="navItem" Click="OnNavItemClick">
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <iconPacks:PackIconPhosphorIcons Kind="Gear" Width="18" Height="18" />
+                        <TextBlock Text="{Binding [NavSettings]}" />
+                    </StackPanel>
+                </Button>
+                <Button x:Name="NavAbout" Tag="About" Classes="navItem" Click="OnNavItemClick">
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <iconPacks:PackIconPhosphorIcons Kind="Info" Width="18" Height="18" />
+                        <TextBlock Text="{Binding [NavAbout]}" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+
+            <StackPanel Grid.Row="2" Margin="16,0,16,16" Spacing="10">
+                <StackPanel Orientation="Horizontal" Spacing="8" Margin="4,0,0,0">
+                    <Ellipse x:Name="RustStatusDot"
+                             Width="8" Height="8"
+                             Fill="{DynamicResource TextMutedColor}"
+                             VerticalAlignment="Center" />
+                    <TextBlock x:Name="RustStatusText"
+                               Text="{Binding [RustNotRunning]}"
+                               Classes="muted"
+                               FontSize="12" />
+                </StackPanel>
+                <Button Classes="accentButton"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center"
+                        Click="OnLaunchRustClick">
+                    <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+                        <iconPacks:PackIconPhosphorIcons Kind="PlayFill" Width="16" Height="16" />
+                        <TextBlock Text="{Binding [LaunchRust]}" FontWeight="Bold" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+
+        </Grid>
+    </Border>
+
+</UserControl>

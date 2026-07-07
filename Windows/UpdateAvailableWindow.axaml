@@ -5,7 +5,7 @@
         xmlns:iface="using:RustOptimizer.Interface"
         xmlns:controls="using:RustOptimizer.Controls"
         mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="520"
-        x:Class="RustOptimizer.UpdateAvailableWindow"
+        x:Class="RustOptimizer.Windows.UpdateAvailableWindow"
         x:DataType="iface:ILocalizationService"
         Title="{Binding [UpdateAvailableTitle]}"
         Icon="/Assets/App/logo.ico"
@@ -59,7 +59,7 @@
                         Click="OnLaterClick"/>
                 <Button x:Name="UpdateButton"
                         Content="{Binding [UpdateNow]}"
-                        Classes="accent"
+                        Classes="accentButton"
                         Click="OnUpdateNowClick"/>
             </StackPanel>
         </Border>

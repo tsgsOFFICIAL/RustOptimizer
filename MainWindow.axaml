@@ -5,52 +5,62 @@
         xmlns:iface="using:RustOptimizer.Interface"
         xmlns:iconPacks="https://github.com/MahApps/IconPacks.Avalonia"
         xmlns:controls="using:RustOptimizer.Controls"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d" d:DesignWidth="1280" d:DesignHeight="800"
         x:Class="RustOptimizer.MainWindow"
         x:DataType="iface:ILocalizationService"
         Title="{Binding [AppTitle]}"
         Icon="/Assets/App/logo.ico"
-        Width="481" Height="360"
-        MinWidth="400" MinHeight="300"
+        Width="1280" Height="800"
+        MinWidth="1000" MinHeight="640"
         Background="{DynamicResource BgColor}"
         WindowStartupLocation="CenterScreen">
 
-    <Grid RowDefinitions="Auto,*">
+    <Grid RowDefinitions="Auto, *, Auto">
+        <controls:TitleBar Grid.Row="0" />
 
-        <controls:TitleBar Grid.Row="0" Title="{Binding [AppTitle]}" Author="tsgsOFFICIAL">
-            <controls:TitleBar.Icon>
-                <Image Source="/Assets/App/logo.ico"/>
-            </controls:TitleBar.Icon>
-        </controls:TitleBar>
+        <Grid Grid.Row="1" ColumnDefinitions="Auto, *">
+            <controls:Sidebar Grid.Column="0"
+                              x:Name="AppSidebar"
+                              NavigationRequested="OnSidebarNavigationRequested"
+                              LaunchRustRequested="OnLaunchRustRequested" />
+            <ContentControl Grid.Column="1" x:Name="MainContent" />
+        </Grid>
 
-        <StackPanel Grid.Row="1" Margin="24" Spacing="12">
+        <Border Grid.Row="2"
+                Padding="16,10"
+                BorderBrush="{DynamicResource BorderColor}"
+                BorderThickness="0,1,0,0">
+            <Grid ColumnDefinitions="*, Auto, *">
+                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding [AppTitle]}" Classes="muted" FontSize="12" />
+                    <TextBlock x:Name="FooterVersionText" Classes="muted" FontSize="12" />
+                    <TextBlock Text="·" Classes="muted" FontSize="12" />
+                    <TextBlock Text="{Binding [By]}" Classes="muted" FontSize="12" />
+                    <TextBlock Text="tsgsOFFICIAL" Classes="muted" FontSize="12" />
+                </StackPanel>
 
-            <StackPanel Orientation="Horizontal" Spacing="8">
-                <iconPacks:PackIconSimpleIcons Kind="Discord"
-                                               Width="32"
-                                               Height="32"
-                                               Foreground="#5865F2"/>
-                <TextBlock Text="{Binding [Hello]}" Classes="title" VerticalAlignment="Center"/>
-            </StackPanel>
 
-            <StackPanel Orientation="Horizontal" Spacing="8">
-                <Button Content="EN" Click="OnEnglish"/>
-                <Button Content="DK" Click="OnDanish"/>
-                <Button Content="RU" Click="OnRussian"/>
-            </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+                    <TextBlock Text="{Binding [FooterJoinCommunity]}" Classes="muted" FontSize="12"
+                               VerticalAlignment="Center" />
 
-            <TextBlock Text="{Binding [Subtitle]}" Classes="muted"/>
+                    <Button Classes="linkIcon" Click="OnGitHubClick" ToolTip.Tip="GitHub">
+                        <iconPacks:PackIconSimpleIcons Kind="GitHub" Width="16" Height="16" />
+                    </Button>
 
-            <Border Classes="card">
-                <TextBlock Text="{Binding [CardContent]}"
-                           Foreground="{DynamicResource TextColor}"/>
-            </Border>
-
-            <Button Content="{Binding [AccentButton]}" Classes="accent"/>
-            <Button Content="{Binding [ToggleTheme]}" Click="OnThemeToggle"/>
-            <Button Content="{Binding [ViewChangelog]}" Click="OnViewChangelog"/>
-
-        </StackPanel>
+                    <Button Classes="linkIcon" Click="OnDiscordClick" ToolTip.Tip="Discord">
+                        <iconPacks:PackIconSimpleIcons Kind="Discord" Width="16" Height="16" Foreground="#5865F2" />
+                    </Button>
+                </StackPanel>
+                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6" HorizontalAlignment="Right"
+                            VerticalAlignment="Center">
+                    <iconPacks:PackIconPhosphorIcons Kind="Heart" Width="14" Height="14"
+                                                   Foreground="{StaticResource SuccessColor}" />
+                    <TextBlock Text="{Binding [FooterOpenSource]}" Classes="muted" FontSize="12" />
+                </StackPanel>
+            </Grid>
+        </Border>
 
     </Grid>
 

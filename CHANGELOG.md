@@ -4,6 +4,15 @@ All notable changes to Rust Optimizer are documented here.
 
 ## Unreleased
 
+## 0.8.0
+
+- Added the sidebar-navigation Dashboard UI: system overview, quick optimization presets, and preset profiles (currently mock data ahead of real system detection).
+- Redesigned the Settings page with icon-based Light/Dark/System and language pickers.
+- Upgraded the About page with a manual "Check for Updates" button, and links to GitHub, Discord, and Ko-fi.
+- Switched the icon set to Phosphor Icons (with Simple Icons for brand logos), significantly shrinking the app's download size.
+
+![Mock UI](https://raw.githubusercontent.com/tsgsOFFICIAL/RustOptimizer/master/Assets/Changelog/0.8.0%20mock%20ui.png)
+
 ## 0.7.0
 
 - Added a Windows installer (`Setup.exe`) as an alternative to the portable zips, installing per-user with Start Menu and optional desktop shortcuts.

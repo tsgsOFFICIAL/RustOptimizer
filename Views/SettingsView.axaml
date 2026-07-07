@@ -1,0 +1,58 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:iconPacks="https://github.com/MahApps/IconPacks.Avalonia"
+             xmlns:iface="using:RustOptimizer.Interface"
+             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="600"
+             x:Class="RustOptimizer.Views.SettingsView"
+             x:DataType="iface:ILocalizationService">
+
+    <StackPanel Margin="24" Spacing="20" MaxWidth="480">
+
+        <TextBlock Text="{Binding [SettingsTitle]}" FontSize="26" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>
+
+        <Border Classes="card">
+            <StackPanel Spacing="14">
+                <TextBlock Text="{Binding [ThemeLabel]}" FontWeight="SemiBold" Foreground="{DynamicResource TextColor}"/>
+                <Border Classes="segmentGroup" HorizontalAlignment="Left">
+                    <StackPanel Orientation="Horizontal" Spacing="2">
+                        <Button x:Name="ThemeLightButton" Classes="segment" Tag="Light" Click="OnThemeSegmentClick">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <iconPacks:PackIconPhosphorIcons Kind="Sun" Width="16" Height="16"/>
+                                <TextBlock Text="Light"/>
+                            </StackPanel>
+                        </Button>
+                        <Button x:Name="ThemeDarkButton" Classes="segment" Tag="Dark" Click="OnThemeSegmentClick">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <iconPacks:PackIconPhosphorIcons Kind="Moon" Width="16" Height="16"/>
+                                <TextBlock Text="Dark"/>
+                            </StackPanel>
+                        </Button>
+                        <Button x:Name="ThemeSystemButton" Classes="segment" Tag="System" Click="OnThemeSegmentClick">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <iconPacks:PackIconPhosphorIcons Kind="Monitor" Width="16" Height="16"/>
+                                <TextBlock Text="System"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Border>
+
+        <Border Classes="card">
+            <StackPanel Spacing="14">
+                <TextBlock Text="{Binding [LanguageLabel]}" FontWeight="SemiBold" Foreground="{DynamicResource TextColor}"/>
+                <Border Classes="segmentGroup" HorizontalAlignment="Left">
+                    <StackPanel Orientation="Horizontal" Spacing="2">
+                        <Button x:Name="LanguageEnglishButton" Classes="segment" Tag="English" Content="English" Click="OnLanguageSegmentClick"/>
+                        <Button x:Name="LanguageDanishButton" Classes="segment" Tag="Danish" Content="Dansk" Click="OnLanguageSegmentClick"/>
+                        <Button x:Name="LanguageRussianButton" Classes="segment" Tag="Russian" Content="Русский" Click="OnLanguageSegmentClick"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Border>
+
+    </StackPanel>
+
+</UserControl>

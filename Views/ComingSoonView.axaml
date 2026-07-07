@@ -1,0 +1,19 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:iface="using:RustOptimizer.Interface"
+             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="600"
+             x:Class="RustOptimizer.Views.ComingSoonView"
+             x:DataType="iface:ILocalizationService">
+
+    <StackPanel Margin="24" Spacing="8" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <TextBlock x:Name="TitleText"
+                   FontSize="22"
+                   FontWeight="Bold"
+                   Foreground="{DynamicResource TextColor}"
+                   HorizontalAlignment="Center"/>
+        <TextBlock Text="{Binding [ComingSoon]}" Classes="muted" HorizontalAlignment="Center"/>
+    </StackPanel>
+
+</UserControl>

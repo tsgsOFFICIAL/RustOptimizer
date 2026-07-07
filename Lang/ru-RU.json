@@ -1,10 +1,5 @@
 {
   "AppTitle": "Rust Optimizer",
-  "Hello": "Привет",
-  "Subtitle": "Подзаголовок",
-  "CardContent": "Содержимое карточки",
-  "AccentButton": "Акцент",
-  "ToggleTheme": "Сменить тему",
   "By": "Автор:",
   "Version": "Версия",
   "ViewChangelog": "Список изменений",

@@ -8,7 +8,7 @@
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
         <ApplicationIcon>Assets\App\logo.ico</ApplicationIcon>
         <DefaultItemExcludes>$(DefaultItemExcludes);externals/**</DefaultItemExcludes>
-        <FileVersion>0.7.0</FileVersion>
+        <FileVersion>0.8.0</FileVersion>
         <InformationalVersion>$(FileVersion)</InformationalVersion>
         <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
         <IsPackable>false</IsPackable>
@@ -21,8 +21,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <!-- TODO: revert to official IconPacks.Avalonia NuGet once Avalonia 12 support is released -->
-        <ProjectReference Include="externals\IconPacks.Avalonia\src\IconPacks.Avalonia\IconPacks.Avalonia.csproj" />
+        <ProjectReference Include="externals\IconPacks.Avalonia\src\IconPacks.Avalonia.PhosphorIcons\IconPacks.Avalonia.PhosphorIcons.csproj" />
+        <ProjectReference Include="externals\IconPacks.Avalonia\src\IconPacks.Avalonia.SimpleIcons\IconPacks.Avalonia.SimpleIcons.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -101,5 +101,16 @@
 
     <ItemGroup>
       <AvaloniaResource Include="Assets\App\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Windows\ChangelogWindow.axaml.cs">
+        <DependentUpon>ChangelogWindow.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Windows\UpdateAvailableWindow.axaml.cs">
+        <DependentUpon>UpdateAvailableWindow.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
     </ItemGroup>
 </Project>

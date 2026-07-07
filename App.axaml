@@ -6,8 +6,9 @@
 
     <Application.Styles>
         <FluentTheme />
-        <StyleInclude Source="avares://RustOptimizer/Style/AppStyles.axaml"/>
-        <StyleInclude Source="avares://IconPacks.Avalonia/Icons.axaml" />
+        <StyleInclude Source="avares://RustOptimizer/Styles/AppStyles.axaml"/>
+        <StyleInclude Source="avares://IconPacks.Avalonia.PhosphorIcons/PhosphorIcons.axaml" />
+        <StyleInclude Source="avares://IconPacks.Avalonia.SimpleIcons/SimpleIcons.axaml" />
     </Application.Styles>
 
     <Application.Resources>

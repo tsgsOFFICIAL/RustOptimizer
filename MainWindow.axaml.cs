@@ -1,8 +1,10 @@
 using RustOptimizer.Interface;
 using Avalonia.Interactivity;
+using RustOptimizer.Controls;
+using RustOptimizer.Windows;
 using RustOptimizer.Service;
+using RustOptimizer.Views;
 using Avalonia.Controls;
-using Avalonia;
 using System;
 
 namespace RustOptimizer
@@ -12,6 +14,11 @@ namespace RustOptimizer
         private readonly IThemeService _theme;
         private readonly ILocalizationService _localization;
         private readonly IUpdateService _updates;
+
+        private DashboardView? _dashboard;
+        private SettingsView? _settings;
+        private AboutView? _about;
+        private ComingSoonView? _comingSoon;
 
         public MainWindow() : this(CreateDesignTheme(), CreateDesignLocalization(), CreateDesignUpdates()) { }
 
@@ -48,6 +55,9 @@ namespace RustOptimizer
             _updates = updates;
             DataContext = localization;
             InitializeComponent();
+
+            FooterVersionText.Text = Utility.GetDisplayVersion();
+            MainContent.Content = _dashboard = new DashboardView();
 
             if (!Design.IsDesignMode)
                 Opened += OnMainWindowOpened;
@@ -90,29 +100,35 @@ namespace RustOptimizer
             await prompt.ShowDialog(this);
         }
 
-        private void OnThemeToggle(object? sender, RoutedEventArgs e)
-            => _theme.ToggleLightDark();
-
-        private async void OnViewChangelog(object? sender, RoutedEventArgs e)
+        /// <summary>
+        /// Swaps the main content area to match the sidebar selection. Dashboard/Settings/About have
+        /// real content; every other page is still a "coming soon" placeholder pending later phases.
+        /// </summary>
+        private void OnSidebarNavigationRequested(object? sender, SidebarPage page)
         {
-            ChangelogWindow changelog = new(_localization, ChangelogWindow.LoadBundledChangelog(_localization.Current));
-            await changelog.ShowDialog(this);
+            MainContent.Content = page switch
+            {
+                SidebarPage.Dashboard => _dashboard ??= new DashboardView(),
+                SidebarPage.Settings => _settings ??= new SettingsView(_theme, _localization),
+                SidebarPage.About => _about ??= new AboutView(_localization, _updates),
+                _ => ShowComingSoon(page)
+            };
         }
 
-        private void OnEnglish(object? sender, RoutedEventArgs e)
-            => SetLanguage(AppLanguage.English);
+        private ComingSoonView ShowComingSoon(SidebarPage page)
+        {
+            ComingSoonView comingSoon = _comingSoon ??= new ComingSoonView();
+            comingSoon.SetTitle(_localization[$"Nav{page}"]);
+            return comingSoon;
+        }
 
-        private void OnDanish(object? sender, RoutedEventArgs e)
-            => SetLanguage(AppLanguage.Danish);
+        private void OnLaunchRustRequested(object? sender, EventArgs e)
+        {
+            // No real process launch yet - the sidebar already reflects the click visually on its own.
+        }
 
-        private void OnRussian(object? sender, RoutedEventArgs e)
-            => SetLanguage(AppLanguage.Russian);
+        private void OnGitHubClick(object? sender, RoutedEventArgs e) => Utility.OpenUrl(ProjectLinks.GitHub);
 
-        /// <summary>
-        /// Sets the application language and skips persistence while running in the Avalonia previewer.
-        /// </summary>
-        /// <param name="language">The language to set.</param>
-        private void SetLanguage(AppLanguage language)
-            => _localization.SetLanguage(language, save: !Design.IsDesignMode);
+        private void OnDiscordClick(object? sender, RoutedEventArgs e) => Utility.OpenUrl(ProjectLinks.Discord);
     }
 }

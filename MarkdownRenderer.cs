@@ -2,7 +2,6 @@ using Avalonia.Markup.Xaml.MarkupExtensions;
 using System.Text.RegularExpressions;
 using Avalonia.Controls.Documents;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
@@ -189,22 +188,8 @@ public static partial class MarkdownRenderer
         };
         link.Bind(TextBlock.ForegroundProperty, new DynamicResourceExtension("AccentColor"));
 
-        link.PointerPressed += (_, _) => OpenUrl(url);
+        link.PointerPressed += (_, _) => Utility.OpenUrl(url);
 
         return new InlineUIContainer { Child = link };
-    }
-
-    /// <summary>
-    /// Opens the given URL using the operating system's default handler.
-    /// </summary>
-    private static void OpenUrl(string url)
-    {
-        try
-        {
-            Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
-        }
-        catch
-        {
-        }
     }
 }

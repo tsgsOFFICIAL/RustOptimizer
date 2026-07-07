@@ -5,7 +5,7 @@ using Avalonia.Controls;
 using System.Reflection;
 using System.IO;
 
-namespace RustOptimizer;
+namespace RustOptimizer.Windows;
 
 /// <summary>
 /// A simple, standalone window that renders a block of Markdown (e.g. a CHANGELOG.md, or release

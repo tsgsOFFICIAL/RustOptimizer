@@ -4,7 +4,7 @@ using RustOptimizer.Service;
 using Avalonia.Controls;
 using System;
 
-namespace RustOptimizer;
+namespace RustOptimizer.Windows;
 
 /// <summary>
 /// Prompts the user that a newer version is available, with the changelog rendered inline so they can
