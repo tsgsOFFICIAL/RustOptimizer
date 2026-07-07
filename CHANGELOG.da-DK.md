@@ -11,6 +11,8 @@ Alle væsentlige ændringer i Rust Optimizer er dokumenteret her.
 - Opgraderet Om-siden med en manuel "Tjek for opdateringer"-knap samt links til GitHub, Discord og Ko-fi.
 - Skiftet ikonsæt til Phosphor Icons (med Simple Icons til brandlogoer), hvilket gør appens downloadstørrelse markant mindre.
 
+![testdata](https://raw.githubusercontent.com/tsgsOFFICIAL/RustOptimizer/master/Assets/Changelog/0.8.0%20mock%20ui.png)
+
 ## 0.7.0
 
 - Tilføjet en Windows-installer (`Setup.exe`) som alternativ til de bærbare zip-filer, der installeres pr. bruger med genveje i startmenuen og en valgfri skrivebordsgenvej.
