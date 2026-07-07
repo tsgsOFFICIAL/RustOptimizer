@@ -54,7 +54,7 @@
                             <StackPanel Spacing="10">
                                 <iconPacks:PackIconPhosphorIcons Kind="Gauge" Width="24" Height="24" Foreground="{StaticResource AccentColor}"/>
                                 <StackPanel Spacing="0">
-                                    <TextBlock Text="{Binding [PerformanceLabel]}" FontWeight="SemiBold" Foreground="{DynamicResource TextColor}"/>
+                                    <TextBlock Text="{Binding [PerformanceLabel]}" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
                                     <TextBlock Text="{Binding [StatusNotOptimized]}" FontSize="12" Foreground="{StaticResource AccentColor}"/>
                                 </StackPanel>
                                 <TextBlock Text="0 / 23 settings" Classes="muted" FontSize="11"/>
@@ -66,7 +66,7 @@
                             <StackPanel Spacing="10">
                                 <iconPacks:PackIconPhosphorIcons Kind="ShieldCheck" Width="24" Height="24" Foreground="{StaticResource SuccessColor}"/>
                                 <StackPanel Spacing="0">
-                                    <TextBlock Text="{Binding [SystemLabel]}" FontWeight="SemiBold" Foreground="{DynamicResource TextColor}"/>
+                                    <TextBlock Text="{Binding [SystemLabel]}" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
                                     <TextBlock Text="{Binding [StatusGood]}" FontSize="12" Foreground="{StaticResource SuccessColor}"/>
                                 </StackPanel>
                                 <TextBlock Text="12 / 16 settings" Classes="muted" FontSize="11"/>
@@ -78,7 +78,7 @@
                             <StackPanel Spacing="10">
                                 <iconPacks:PackIconPhosphorIcons Kind="WifiHigh" Width="24" Height="24" Foreground="{StaticResource NetworkColor}"/>
                                 <StackPanel Spacing="0">
-                                    <TextBlock Text="{Binding [NetworkLabel]}" FontWeight="SemiBold" Foreground="{DynamicResource TextColor}"/>
+                                    <TextBlock Text="{Binding [NetworkLabel]}" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
                                     <TextBlock Text="{Binding [StatusGood]}" FontSize="12" Foreground="{StaticResource SuccessColor}"/>
                                 </StackPanel>
                                 <TextBlock Text="8 / 10 settings" Classes="muted" FontSize="11"/>
@@ -90,7 +90,7 @@
                             <StackPanel Spacing="10">
                                 <iconPacks:PackIconPhosphorIcons Kind="Monitor" Width="24" Height="24" Foreground="{StaticResource GraphicsColor}"/>
                                 <StackPanel Spacing="0">
-                                    <TextBlock Text="{Binding [GraphicsLabel]}" FontWeight="SemiBold" Foreground="{DynamicResource TextColor}"/>
+                                    <TextBlock Text="{Binding [GraphicsLabel]}" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
                                     <TextBlock Text="{Binding [StatusNotOptimized]}" FontSize="12" Foreground="{StaticResource AccentColor}"/>
                                 </StackPanel>
                                 <TextBlock Text="0 / 15 settings" Classes="muted" FontSize="11"/>
@@ -113,7 +113,7 @@
                             <Border Grid.Column="0" Classes="card" Margin="0,0,6,0" Padding="14">
                                 <StackPanel Spacing="8">
                                     <iconPacks:PackIconPhosphorIcons Kind="RocketLaunch" Width="20" Height="20" Foreground="{StaticResource AccentColor}"/>
-                                    <TextBlock Text="{Binding [PresetPerformanceName]}" FontWeight="SemiBold" Foreground="{DynamicResource TextColor}"/>
+                                    <TextBlock Text="{Binding [PresetPerformanceName]}" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
                                     <TextBlock Text="{Binding [PresetPerformanceDesc]}" Classes="muted" FontSize="11"/>
                                 </StackPanel>
                             </Border>
@@ -121,7 +121,7 @@
                             <Border Grid.Column="1" Classes="card" Margin="6,0,6,0" Padding="14">
                                 <StackPanel Spacing="8">
                                     <iconPacks:PackIconPhosphorIcons Kind="Scales" Width="20" Height="20" Foreground="{StaticResource NetworkColor}"/>
-                                    <TextBlock Text="{Binding [PresetBalancedName]}" FontWeight="SemiBold" Foreground="{DynamicResource TextColor}"/>
+                                    <TextBlock Text="{Binding [PresetBalancedName]}" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
                                     <TextBlock Text="{Binding [PresetBalancedDesc]}" Classes="muted" FontSize="11"/>
                                 </StackPanel>
                             </Border>
@@ -129,7 +129,7 @@
                             <Border Grid.Column="2" Classes="card" Margin="6,0,6,0" Padding="14">
                                 <StackPanel Spacing="8">
                                     <iconPacks:PackIconPhosphorIcons Kind="Diamond" Width="20" Height="20" Foreground="{StaticResource GraphicsColor}"/>
-                                    <TextBlock Text="{Binding [PresetQualityName]}" FontWeight="SemiBold" Foreground="{DynamicResource TextColor}"/>
+                                    <TextBlock Text="{Binding [PresetQualityName]}" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
                                     <TextBlock Text="{Binding [PresetQualityDesc]}" Classes="muted" FontSize="11"/>
                                 </StackPanel>
                             </Border>
@@ -137,7 +137,7 @@
                             <Border Grid.Column="3" Classes="card" Margin="6,0,0,0" Padding="14">
                                 <StackPanel Spacing="8">
                                     <iconPacks:PackIconPhosphorIcons Kind="Sliders" Width="20" Height="20" Foreground="{DynamicResource TextMutedColor}"/>
-                                    <TextBlock Text="{Binding [PresetCustomName]}" FontWeight="SemiBold" Foreground="{DynamicResource TextColor}"/>
+                                    <TextBlock Text="{Binding [PresetCustomName]}" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
                                     <TextBlock Text="{Binding [PresetCustomDesc]}" Classes="muted" FontSize="11"/>
                                 </StackPanel>
                             </Border>
@@ -189,10 +189,10 @@
                             </StackPanel>
                         </StackPanel>
 
-                        <Button Classes="listRow" Padding="4,4,0,0">
+                        <Button Classes="listRow">
                             <Grid ColumnDefinitions="*,Auto">
-                                <TextBlock Grid.Column="0" Text="{Binding [MoreDetails]}" FontSize="12" Foreground="{DynamicResource TextColor}"/>
-                                <iconPacks:PackIconPhosphorIcons Grid.Column="1" Kind="CaretRight" Width="16" Height="16" Foreground="{DynamicResource TextMutedColor}"/>
+                                <TextBlock Grid.Column="0" Text="{Binding [MoreDetails]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
+                                <iconPacks:PackIconPhosphorIcons Grid.Column="1" Kind="CaretRight" Width="16" Height="16" Foreground="{DynamicResource TextMutedColor}" VerticalAlignment="Center"/>
                             </Grid>
                         </Button>
                     </StackPanel>
@@ -264,10 +264,10 @@
                             <TextBlock Grid.Column="1" Text="{Binding [TagBestQuality]}" Classes="muted" FontSize="12"/>
                         </Grid>
 
-                        <Button Classes="listRow" Padding="4,4,0,0">
+                        <Button Classes="listRow">
                             <Grid ColumnDefinitions="*,Auto">
-                                <TextBlock Grid.Column="0" Text="{Binding [ManageProfiles]}" FontSize="12" Foreground="{DynamicResource TextColor}"/>
-                                <iconPacks:PackIconPhosphorIcons Grid.Column="1" Kind="CaretRight" Width="16" Height="16" Foreground="{DynamicResource TextMutedColor}"/>
+                                <TextBlock Grid.Column="0" Text="{Binding [ManageProfiles]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
+                                <iconPacks:PackIconPhosphorIcons Grid.Column="1" Kind="CaretRight" Width="16" Height="16" Foreground="{DynamicResource TextMutedColor}" VerticalAlignment="Center"/>
                             </Grid>
                         </Button>
                     </StackPanel>

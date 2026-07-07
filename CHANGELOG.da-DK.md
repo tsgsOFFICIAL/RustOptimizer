@@ -4,6 +4,10 @@ Alle væsentlige ændringer i Rust Optimizer er dokumenteret her.
 
 ## Unreleased
 
+## 0.8.1
+- Tilføjet en rigtig "Launch Rust"-knap, der starter spillet via Steam og automatisk deaktiverer sig selv, mens Rust allerede kører.
+- Tilføjet de manglende danske og russiske oversættelser til dashboard, sidebar og indstillinger, som tidligere faldt tilbage til engelsk.
+
 ## 0.8.0
 
 - Tilføjet dashboardets sidebar-navigation: systemoverblik, hurtige optimeringsprofiler og forudindstillede profiler (i øjeblikket testdata, indtil rigtig systemdetektering er på plads).
