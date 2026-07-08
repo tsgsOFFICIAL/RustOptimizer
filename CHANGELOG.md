@@ -3,6 +3,7 @@
 All notable changes to Rust Optimizer are documented here.
 
 ## Unreleased
+- Added smooth hover and press transitions to buttons, and fixed a color flash that briefly appeared when switching the active sidebar item, most noticeable in dark mode.
 
 ## 0.8.1
 - Added a real "Launch Rust" button that starts the game through Steam and automatically disables itself while Rust is already running.

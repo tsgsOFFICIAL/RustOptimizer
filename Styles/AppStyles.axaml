@@ -15,7 +15,6 @@
             <Transitions>
                 <BrushTransition Property="Foreground" Duration="0:0:0.1" />
                 <BrushTransition Property="Background" Duration="0:0:0.1" />
-                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.1"/>
             </Transitions>
         </Setter>
     </Style>
@@ -57,7 +56,7 @@
     <Style Selector="Button.captionButton">
         <Setter Property="Width" Value="46" />
         <Setter Property="Height" Value="40" />
-        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Background" Value="{DynamicResource BorderColorTransparent}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="CornerRadius" Value="0" />
         <Setter Property="Foreground" Value="{DynamicResource TextMutedColor}" />
@@ -68,6 +67,10 @@
 
     <Style Selector="Button.captionButton:pointerover /template/ ContentPresenter">
         <Setter Property="Background" Value="{DynamicResource BorderColor}" />
+    </Style>
+    
+    <Style Selector="Button.captionButton.close">
+        <Setter Property="Background" Value="{DynamicResource DangerColorTransparent}" />
     </Style>
 
     <Style Selector="Button.captionButton.close:pointerover /template/ ContentPresenter">
@@ -105,7 +108,7 @@
     </Style>
 
     <Style Selector="Button.navItem">
-        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Background" Value="{DynamicResource BorderColorTransparent}" />
         <Setter Property="Foreground" Value="{DynamicResource TextMutedColor}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="CornerRadius" Value="8" />
@@ -121,12 +124,12 @@
     </Style>
 
     <Style Selector="Button.navItem.active">
-        <Setter Property="Background" Value="#26F97316" />
+        <Setter Property="Background" Value="{DynamicResource AccentSurfaceColor}" />
         <Setter Property="Foreground" Value="{DynamicResource AccentColor}" />
     </Style>
 
     <Style Selector="Button.navItem.active:pointerover /template/ ContentPresenter">
-        <Setter Property="Background" Value="#26F97316" />
+        <Setter Property="Background" Value="{DynamicResource AccentSurfaceColor}" />
     </Style>
 
     <Style Selector="Ellipse.rustStatusDot">
@@ -138,7 +141,7 @@
     </Style>
 
     <Style Selector="Button.listRow">
-        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Background" Value="{DynamicResource BorderColorTransparent}" />
         <Setter Property="Foreground" Value="{DynamicResource TextColor}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="CornerRadius" Value="8" />
@@ -181,7 +184,7 @@
     </Style>
 
     <Style Selector="Button.segment">
-        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Background" Value="{DynamicResource BorderColorTransparent}" />
         <Setter Property="Foreground" Value="{DynamicResource TextMutedColor}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="CornerRadius" Value="8" />
@@ -210,7 +213,7 @@
     </Style>
 
     <Style Selector="Button.linkIcon">
-        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Background" Value="{DynamicResource BorderColorTransparent}" />
         <Setter Property="Foreground" Value="{DynamicResource TextMutedColor}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="CornerRadius" Value="6" />
