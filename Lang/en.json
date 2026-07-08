@@ -58,10 +58,13 @@
 
   "SystemInformationTitle": "System Information",
   "CpuLabel": "CPU",
+  "CpuUsageLabel": "CPU Usage",
   "GpuLabel": "GPU",
+  "GpuUsageLabel": "GPU Usage",
   "RamLabel": "RAM",
   "OsLabel": "OS",
   "MoreDetails": "More Details",
+  "UnknownHardware": "Unknown",
 
   "QuickActionsTitle": "Quick Actions",
   "VerifyGameFiles": "Verify Game Files",

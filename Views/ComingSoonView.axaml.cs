@@ -4,7 +4,8 @@ namespace RustOptimizer.Views;
 
 /// <summary>
 /// A reusable placeholder shown for sidebar pages that don't have real content yet. A single
-/// instance is reused across all of them (see MainWindow), with the title swapped per page.
+/// instance is reused across all of them (see <c>MainWindowViewModel</c>), with the title swapped
+/// per page via <c>ComingSoonViewModel.Title</c>.
 /// </summary>
 public partial class ComingSoonView : UserControl
 {
@@ -12,6 +13,4 @@ public partial class ComingSoonView : UserControl
     {
         InitializeComponent();
     }
-
-    public void SetTitle(string title) => TitleText.Text = title;
 }

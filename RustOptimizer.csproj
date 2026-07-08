@@ -8,7 +8,7 @@
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
         <ApplicationIcon>Assets\App\logo.ico</ApplicationIcon>
         <DefaultItemExcludes>$(DefaultItemExcludes);externals/**</DefaultItemExcludes>
-        <FileVersion>0.8.1</FileVersion>
+        <FileVersion>0.8.2</FileVersion>
         <InformationalVersion>$(FileVersion)</InformationalVersion>
         <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
         <IsPackable>false</IsPackable>
@@ -21,58 +21,60 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="externals\IconPacks.Avalonia\src\IconPacks.Avalonia.PhosphorIcons\IconPacks.Avalonia.PhosphorIcons.csproj"/>
-        <ProjectReference Include="externals\IconPacks.Avalonia\src\IconPacks.Avalonia.SimpleIcons\IconPacks.Avalonia.SimpleIcons.csproj"/>
+        <ProjectReference Include="externals\IconPacks.Avalonia\src\IconPacks.Avalonia.PhosphorIcons\IconPacks.Avalonia.PhosphorIcons.csproj" />
+        <ProjectReference Include="externals\IconPacks.Avalonia\src\IconPacks.Avalonia.SimpleIcons\IconPacks.Avalonia.SimpleIcons.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="12.0.4"/>
-        <PackageReference Include="Avalonia.Desktop" Version="12.0.4"/>
-        <PackageReference Include="Avalonia.Themes.Fluent" Version="12.0.4"/>
-        <PackageReference Include="Avalonia.Fonts.Inter" Version="12.0.4"/>
+        <PackageReference Include="Avalonia" Version="12.0.4" />
+        <PackageReference Include="Avalonia.Desktop" Version="12.0.4" />
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="12.0.4" />
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="12.0.4" />
         <PackageReference Include="AvaloniaUI.DiagnosticsSupport" Version="2.2.1">
             <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
             <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.9"/>
-        <PackageReference Include="SkiaSharp" Version="3.119.4"/>
+        <PackageReference Include="LibreHardwareMonitorLib" Version="0.9.6" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.9" />
+        <PackageReference Include="SkiaSharp" Version="3.119.4" />
+        <PackageReference Include="System.Management" Version="10.0.9" />
     </ItemGroup>
 
     <ItemGroup>
-        <None Remove="Lang\en.json"/>
-        <EmbeddedResource Include="Lang\en.json"/>
-        <None Remove="Lang\da-DK.json"/>
-        <EmbeddedResource Include="Lang\da-DK.json"/>
-        <None Remove="Lang\ru-RU.json"/>
-        <EmbeddedResource Include="Lang\ru-RU.json"/>
-        <None Remove="CHANGELOG.md"/>
-        <EmbeddedResource Include="CHANGELOG.md"/>
+        <None Remove="Lang\en.json" />
+        <EmbeddedResource Include="Lang\en.json" />
+        <None Remove="Lang\da-DK.json" />
+        <EmbeddedResource Include="Lang\da-DK.json" />
+        <None Remove="Lang\ru-RU.json" />
+        <EmbeddedResource Include="Lang\ru-RU.json" />
+        <None Remove="CHANGELOG.md" />
+        <EmbeddedResource Include="CHANGELOG.md" />
 
         <!-- WithCulture=false is required here: MSBuild's default culture detection treats
              "CHANGELOG.da-DK.md"/"CHANGELOG.ru-RU.md" as satellite-assembly resources (since
              "da-DK"/"ru-RU" parse as valid CultureInfo names), routing them into a separate
              da-DK/ru-RU satellite assembly instead of embedding them in the main one. -->
-        <None Remove="CHANGELOG.da-DK.md"/>
+        <None Remove="CHANGELOG.da-DK.md" />
         <EmbeddedResource Include="CHANGELOG.da-DK.md">
             <WithCulture>false</WithCulture>
         </EmbeddedResource>
 
 
-        <None Remove="CHANGELOG.ru-RU.md"/>
+        <None Remove="CHANGELOG.ru-RU.md" />
         <EmbeddedResource Include="CHANGELOG.ru-RU.md">
             <WithCulture>false</WithCulture>
         </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Assets\Changelog\"/>
-        <Folder Include="Assets\Fonts\"/>
-        <Folder Include="Assets\Github\"/>
+        <Folder Include="Assets\Changelog\" />
+        <Folder Include="Assets\Fonts\" />
+        <Folder Include="Assets\Github\" />
     </ItemGroup>
 
     <ItemGroup>
-        <AvaloniaResource Include="Assets\App\**"/>
-        <AvaloniaResource Include="Assets\**"/>
+        <AvaloniaResource Include="Assets\App\**" />
+        <AvaloniaResource Include="Assets\**" />
     </ItemGroup>
 
     <ItemGroup>

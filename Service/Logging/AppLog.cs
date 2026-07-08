@@ -63,7 +63,7 @@ public static class AppLog
             PruneOldLogs();
 
             Write(LogLevel.Info, "AppLog",
-                $"Logger initialized. Version={SafeGetVersion()}, OS={Environment.OSVersion.VersionString}, " +
+                $"Logger initialized. Version={SafeGetVersion()}, OS={Utility.GetFriendlyOsName()} ({Environment.OSVersion.Version}), " +
                 $"64-bit process={Environment.Is64BitProcess}");
         }
     }

@@ -45,6 +45,16 @@ public static class Utility
     }
 
     /// <summary>
+    /// Gets a marketing-style Windows name (e.g. "Windows 11"). Windows 11 reports the same major
+    /// version (10) as Windows 10; only the build number (&gt;= 22000) actually distinguishes them.
+    /// </summary>
+    public static string GetFriendlyOsName()
+    {
+        Version v = Environment.OSVersion.Version;
+        return v is { Major: 10, Build: >= 22000 } ? "Windows 11" : v.Major == 10 ? "Windows 10" : $"Windows NT {v}";
+    }
+
+    /// <summary>
     /// Opens the given URL using the operating system's default handler. Fails silently (e.g. no
     /// default browser configured) so a broken link never crashes the app.
     /// </summary>

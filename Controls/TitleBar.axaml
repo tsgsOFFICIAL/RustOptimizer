@@ -3,10 +3,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:iconPacks="https://github.com/MahApps/IconPacks.Avalonia"
-             xmlns:iface="using:RustOptimizer.Interface"
              mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="44"
              x:Class="RustOptimizer.Controls.TitleBar"
-             x:DataType="iface:ILocalizationService"
              x:Name="Root"
              Height="44">
 
@@ -32,7 +30,7 @@
                                FontWeight="Medium"
                                FontSize="12"/>
                     <StackPanel Orientation="Horizontal" Spacing="3">
-                        <TextBlock Text="{Binding [By]}"
+                        <TextBlock Text="{Binding #Root.Localization[By]}"
                                    Classes="muted"
                                    FontSize="10"/>
                         <TextBlock Text="{Binding #Root.Author}"
@@ -41,7 +39,7 @@
                     </StackPanel>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Spacing="3" VerticalAlignment="Center" Margin="6,0,0,0">
-                    <TextBlock Text="{Binding [Version]}"
+                    <TextBlock Text="{Binding #Root.Localization[Version]}"
                                Classes="muted"
                                FontSize="10"/>
                     <TextBlock Text="{Binding #Root.VersionText}"

@@ -1,4 +1,5 @@
 using IconPacks.Avalonia.PhosphorIcons;
+using RustOptimizer.Interface;
 using Avalonia.Interactivity;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -41,6 +42,15 @@ public partial class TitleBar : UserControl
     public static readonly StyledProperty<string?> VersionTextProperty =
         AvaloniaProperty.Register<TitleBar, string?>(nameof(VersionText), defaultValue: GetDefaultVersionText());
 
+    /// <summary>
+    /// The localization service used to resolve the "By"/"Version" label text. Bound explicitly
+    /// (like <see cref="Title"/>/<see cref="Author"/>/<see cref="Icon"/>) rather than relying on
+    /// the ambient <see cref="StyledElement.DataContext"/>, since callers' own DataContext is
+    /// typically a view model, not the localization service itself.
+    /// </summary>
+    public static readonly StyledProperty<ILocalizationService?> LocalizationProperty =
+        AvaloniaProperty.Register<TitleBar, ILocalizationService?>(nameof(Localization));
+
     private Window? _window;
 
     public string? Title
@@ -65,6 +75,12 @@ public partial class TitleBar : UserControl
     {
         get => GetValue(ShowBrandingProperty);
         set => SetValue(ShowBrandingProperty, value);
+    }
+
+    public ILocalizationService? Localization
+    {
+        get => GetValue(LocalizationProperty);
+        set => SetValue(LocalizationProperty, value);
     }
 
     /// <summary>

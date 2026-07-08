@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Avalonia.Controls.ApplicationLifetimes;
+using RustOptimizer.ViewModels;
 using RustOptimizer.Interface;
 using Avalonia.Markup.Xaml;
 using Avalonia.Controls;
@@ -30,12 +31,16 @@ namespace RustOptimizer
             ILocalizationService localization = services.GetRequiredService<ILocalizationService>();
             IUpdateService updates = services.GetRequiredService<IUpdateService>();
             IRustProcessService rustProcess = services.GetRequiredService<IRustProcessService>();
+            ISystemInfoService systemInfo = services.GetRequiredService<ISystemInfoService>();
+            IDialogService dialogs = services.GetRequiredService<IDialogService>();
 
             theme.Initialize();
             localization.Initialize();
 
+            MainWindowViewModel viewModel = new(theme, localization, updates, rustProcess, systemInfo, dialogs);
+
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-                desktop.MainWindow = new MainWindow(theme, localization, updates, rustProcess);
+                desktop.MainWindow = new MainWindow(viewModel);
 
             base.OnFrameworkInitializationCompleted();
         }

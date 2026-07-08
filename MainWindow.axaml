@@ -2,13 +2,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:iface="using:RustOptimizer.Interface"
+        xmlns:vm="using:RustOptimizer.ViewModels"
         xmlns:iconPacks="https://github.com/MahApps/IconPacks.Avalonia"
         xmlns:controls="using:RustOptimizer.Controls"
         mc:Ignorable="d" d:DesignWidth="1280" d:DesignHeight="800"
         x:Class="RustOptimizer.MainWindow"
-        x:DataType="iface:ILocalizationService"
-        Title="{Binding [AppTitle]}"
+        x:DataType="vm:MainWindowViewModel"
+        Title="{Binding Localization[AppTitle]}"
         Icon="/Assets/App/logo.ico"
         Width="1280" Height="800"
         MinWidth="1000" MinHeight="640"
@@ -16,14 +16,11 @@
         WindowStartupLocation="CenterScreen">
 
     <Grid RowDefinitions="Auto, *, Auto">
-        <controls:TitleBar Grid.Row="0" ShowBranding="False" />
+        <controls:TitleBar Grid.Row="0" Localization="{Binding Localization}" ShowBranding="False" />
 
         <Grid Grid.Row="1" ColumnDefinitions="Auto, *">
-            <controls:Sidebar Grid.Column="0"
-                              x:Name="AppSidebar"
-                              NavigationRequested="OnSidebarNavigationRequested"
-                              LaunchRustRequested="OnLaunchRustRequested" />
-            <ContentControl Grid.Column="1" x:Name="MainContent" />
+            <controls:Sidebar Grid.Column="0" ViewModel="{Binding Sidebar}" />
+            <ContentControl Grid.Column="1" Content="{Binding CurrentPage}" />
         </Grid>
 
         <Border Grid.Row="2"
@@ -32,24 +29,24 @@
                 BorderThickness="0,1,0,0">
             <Grid ColumnDefinitions="*, Auto, *">
                 <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
-                    <TextBlock Text="{Binding [AppTitle]}" Classes="muted" FontSize="12" />
-                    <TextBlock x:Name="FooterVersionText" Classes="muted" FontSize="12" />
+                    <TextBlock Text="{Binding Localization[AppTitle]}" Classes="muted" FontSize="12" />
+                    <TextBlock Text="{Binding VersionText}" Classes="muted" FontSize="12" />
                     <TextBlock Text="·" Classes="muted" FontSize="12" />
-                    <TextBlock Text="{Binding [By]}" Classes="muted" FontSize="12" />
+                    <TextBlock Text="{Binding Localization[By]}" Classes="muted" FontSize="12" />
                     <TextBlock Text="tsgsOFFICIAL" Classes="muted" FontSize="12" />
                 </StackPanel>
 
 
                 <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center"
                             VerticalAlignment="Center">
-                    <TextBlock Text="{Binding [FooterJoinCommunity]}" Classes="muted" FontSize="12"
+                    <TextBlock Text="{Binding Localization[FooterJoinCommunity]}" Classes="muted" FontSize="12"
                                VerticalAlignment="Center" />
 
-                    <Button Classes="linkIcon" Click="OnGitHubClick" ToolTip.Tip="GitHub">
+                    <Button Classes="linkIcon" Command="{Binding OpenGitHubCommand}" ToolTip.Tip="GitHub">
                         <iconPacks:PackIconSimpleIcons Kind="GitHub" Width="16" Height="16" />
                     </Button>
 
-                    <Button Classes="linkIcon" Click="OnDiscordClick" ToolTip.Tip="Discord">
+                    <Button Classes="linkIcon" Command="{Binding OpenDiscordCommand}" ToolTip.Tip="Discord">
                         <iconPacks:PackIconSimpleIcons Kind="Discord" Width="16" Height="16" Foreground="#5865F2" />
                     </Button>
                 </StackPanel>
@@ -57,7 +54,7 @@
                             VerticalAlignment="Center">
                     <iconPacks:PackIconPhosphorIcons Kind="Heart" Width="14" Height="14"
                                                    Foreground="{StaticResource SuccessColor}" />
-                    <TextBlock Text="{Binding [FooterOpenSource]}" Classes="muted" FontSize="12" />
+                    <TextBlock Text="{Binding Localization[FooterOpenSource]}" Classes="muted" FontSize="12" />
                 </StackPanel>
             </Grid>
         </Border>

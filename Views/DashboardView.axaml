@@ -3,10 +3,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:iconPacks="https://github.com/MahApps/IconPacks.Avalonia"
-             xmlns:iface="using:RustOptimizer.Interface"
+             xmlns:vm="using:RustOptimizer.ViewModels"
              mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="760"
              x:Class="RustOptimizer.Views.DashboardView"
-             x:DataType="iface:ILocalizationService">
+             x:DataType="vm:DashboardViewModel">
 
     <Grid ColumnDefinitions="*,300">
 
@@ -14,32 +14,32 @@
             <StackPanel Margin="24" Spacing="20">
 
                 <StackPanel Spacing="4">
-                    <TextBlock Text="{Binding [DashboardTitle]}" FontSize="26" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>
-                    <TextBlock Text="{Binding [DashboardSubtitle]}" Classes="muted"/>
+                    <TextBlock Text="{Binding Localization[DashboardTitle]}" FontSize="26" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>
+                    <TextBlock Text="{Binding Localization[DashboardSubtitle]}" Classes="muted"/>
                 </StackPanel>
 
                 <!-- Hero -->
                 <Border Classes="card" Padding="24">
                     <StackPanel Spacing="16" MaxWidth="440">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding [HeroTitle]}" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>
+                            <TextBlock Text="{Binding Localization[HeroTitle]}" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>
                             <TextBlock Text=" " FontSize="24"/>
-                            <TextBlock Text="{Binding [HeroTitleAccent]}" FontSize="24" FontWeight="Bold" Foreground="{StaticResource AccentColor}"/>
+                            <TextBlock Text="{Binding Localization[HeroTitleAccent]}" FontSize="24" FontWeight="Bold" Foreground="{StaticResource AccentColor}"/>
                         </StackPanel>
                         <TextBlock TextWrapping="Wrap" Classes="muted" FontSize="13">
-                            <Run Text="{Binding [HeroDescription]}"/>
-                            <Run Text="{Binding [HeroDescriptionAccent]}" Foreground="{StaticResource AccentColor}" FontWeight="Bold"/>
+                            <Run Text="{Binding Localization[HeroDescription]}"/>
+                            <Run Text="{Binding Localization[HeroDescriptionAccent]}" Foreground="{StaticResource AccentColor}" FontWeight="Bold"/>
                         </TextBlock>
                         <StackPanel Orientation="Horizontal" Spacing="16" VerticalAlignment="Center">
-                            <Button Classes="accentButton" Click="OnRunSmartOptimizationClick">
+                            <Button Classes="accentButton" Command="{Binding RunSmartOptimizationCommand}">
                                 <StackPanel Orientation="Horizontal" Spacing="8">
                                     <iconPacks:PackIconPhosphorIcons Kind="RocketLaunch" Width="16" Height="16"/>
-                                    <TextBlock Text="{Binding [RunSmartOptimization]}" FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding Localization[RunSmartOptimization]}" FontWeight="Bold"/>
                                 </StackPanel>
                             </Button>
                             <StackPanel Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
-                                <TextBlock Text="{Binding [LastScan]}" Classes="muted" FontSize="12"/>
-                                <TextBlock Text="{Binding [LastScanNever]}" Classes="muted" FontSize="12"/>
+                                <TextBlock Text="{Binding Localization[LastScan]}" Classes="muted" FontSize="12"/>
+                                <TextBlock Text="{Binding Localization[LastScanNever]}" Classes="muted" FontSize="12"/>
                             </StackPanel>
                         </StackPanel>
                     </StackPanel>
@@ -47,15 +47,15 @@
 
                 <!-- Optimization Overview -->
                 <StackPanel Spacing="12">
-                    <TextBlock Text="{Binding [OptimizationOverviewTitle]}" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>
+                    <TextBlock Text="{Binding Localization[OptimizationOverviewTitle]}" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>
                     <Grid ColumnDefinitions="*,*,*,*">
 
                         <Border Grid.Column="0" Classes="card" Margin="0,0,6,0">
                             <StackPanel Spacing="10">
                                 <iconPacks:PackIconPhosphorIcons Kind="Gauge" Width="24" Height="24" Foreground="{StaticResource AccentColor}"/>
                                 <StackPanel Spacing="0">
-                                    <TextBlock Text="{Binding [PerformanceLabel]}" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
-                                    <TextBlock Text="{Binding [StatusNotOptimized]}" FontSize="12" Foreground="{StaticResource AccentColor}"/>
+                                    <TextBlock Text="{Binding Localization[PerformanceLabel]}" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
+                                    <TextBlock Text="{Binding Localization[StatusNotOptimized]}" FontSize="12" Foreground="{StaticResource AccentColor}"/>
                                 </StackPanel>
                                 <TextBlock Text="0 / 23 settings" Classes="muted" FontSize="11"/>
                                 <ProgressBar Classes="thinBar" Minimum="0" Maximum="23" Value="0" Foreground="{StaticResource AccentColor}"/>
@@ -66,8 +66,8 @@
                             <StackPanel Spacing="10">
                                 <iconPacks:PackIconPhosphorIcons Kind="ShieldCheck" Width="24" Height="24" Foreground="{StaticResource SuccessColor}"/>
                                 <StackPanel Spacing="0">
-                                    <TextBlock Text="{Binding [SystemLabel]}" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
-                                    <TextBlock Text="{Binding [StatusGood]}" FontSize="12" Foreground="{StaticResource SuccessColor}"/>
+                                    <TextBlock Text="{Binding Localization[SystemLabel]}" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
+                                    <TextBlock Text="{Binding Localization[StatusGood]}" FontSize="12" Foreground="{StaticResource SuccessColor}"/>
                                 </StackPanel>
                                 <TextBlock Text="12 / 16 settings" Classes="muted" FontSize="11"/>
                                 <ProgressBar Classes="thinBar" Minimum="0" Maximum="16" Value="12" Foreground="{StaticResource SuccessColor}"/>
@@ -78,8 +78,8 @@
                             <StackPanel Spacing="10">
                                 <iconPacks:PackIconPhosphorIcons Kind="WifiHigh" Width="24" Height="24" Foreground="{StaticResource NetworkColor}"/>
                                 <StackPanel Spacing="0">
-                                    <TextBlock Text="{Binding [NetworkLabel]}" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
-                                    <TextBlock Text="{Binding [StatusGood]}" FontSize="12" Foreground="{StaticResource SuccessColor}"/>
+                                    <TextBlock Text="{Binding Localization[NetworkLabel]}" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
+                                    <TextBlock Text="{Binding Localization[StatusGood]}" FontSize="12" Foreground="{StaticResource SuccessColor}"/>
                                 </StackPanel>
                                 <TextBlock Text="8 / 10 settings" Classes="muted" FontSize="11"/>
                                 <ProgressBar Classes="thinBar" Minimum="0" Maximum="10" Value="8" Foreground="{StaticResource SuccessColor}"/>
@@ -90,8 +90,8 @@
                             <StackPanel Spacing="10">
                                 <iconPacks:PackIconPhosphorIcons Kind="Monitor" Width="24" Height="24" Foreground="{StaticResource GraphicsColor}"/>
                                 <StackPanel Spacing="0">
-                                    <TextBlock Text="{Binding [GraphicsLabel]}" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
-                                    <TextBlock Text="{Binding [StatusNotOptimized]}" FontSize="12" Foreground="{StaticResource AccentColor}"/>
+                                    <TextBlock Text="{Binding Localization[GraphicsLabel]}" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
+                                    <TextBlock Text="{Binding Localization[StatusNotOptimized]}" FontSize="12" Foreground="{StaticResource AccentColor}"/>
                                 </StackPanel>
                                 <TextBlock Text="0 / 15 settings" Classes="muted" FontSize="11"/>
                                 <ProgressBar Classes="thinBar" Minimum="0" Maximum="15" Value="0" Foreground="{StaticResource GraphicsColor}"/>
@@ -105,40 +105,40 @@
                 <Border Classes="card">
                     <StackPanel Spacing="14">
                         <StackPanel Spacing="2">
-                            <TextBlock Text="{Binding [QuickOptimizationTitle]}" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>
-                            <TextBlock Text="{Binding [QuickOptimizationSubtitle]}" Classes="muted" FontSize="12"/>
+                            <TextBlock Text="{Binding Localization[QuickOptimizationTitle]}" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>
+                            <TextBlock Text="{Binding Localization[QuickOptimizationSubtitle]}" Classes="muted" FontSize="12"/>
                         </StackPanel>
                         <Grid ColumnDefinitions="*,*,*,*">
 
                             <Border Grid.Column="0" Classes="card" Margin="0,0,6,0" Padding="14">
                                 <StackPanel Spacing="8">
                                     <iconPacks:PackIconPhosphorIcons Kind="RocketLaunch" Width="20" Height="20" Foreground="{StaticResource AccentColor}"/>
-                                    <TextBlock Text="{Binding [PresetPerformanceName]}" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
-                                    <TextBlock Text="{Binding [PresetPerformanceDesc]}" Classes="muted" FontSize="11"/>
+                                    <TextBlock Text="{Binding Localization[PresetPerformanceName]}" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
+                                    <TextBlock Text="{Binding Localization[PresetPerformanceDesc]}" Classes="muted" FontSize="11"/>
                                 </StackPanel>
                             </Border>
 
                             <Border Grid.Column="1" Classes="card" Margin="6,0,6,0" Padding="14">
                                 <StackPanel Spacing="8">
                                     <iconPacks:PackIconPhosphorIcons Kind="Scales" Width="20" Height="20" Foreground="{StaticResource NetworkColor}"/>
-                                    <TextBlock Text="{Binding [PresetBalancedName]}" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
-                                    <TextBlock Text="{Binding [PresetBalancedDesc]}" Classes="muted" FontSize="11"/>
+                                    <TextBlock Text="{Binding Localization[PresetBalancedName]}" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
+                                    <TextBlock Text="{Binding Localization[PresetBalancedDesc]}" Classes="muted" FontSize="11"/>
                                 </StackPanel>
                             </Border>
 
                             <Border Grid.Column="2" Classes="card" Margin="6,0,6,0" Padding="14">
                                 <StackPanel Spacing="8">
                                     <iconPacks:PackIconPhosphorIcons Kind="Diamond" Width="20" Height="20" Foreground="{StaticResource GraphicsColor}"/>
-                                    <TextBlock Text="{Binding [PresetQualityName]}" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
-                                    <TextBlock Text="{Binding [PresetQualityDesc]}" Classes="muted" FontSize="11"/>
+                                    <TextBlock Text="{Binding Localization[PresetQualityName]}" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
+                                    <TextBlock Text="{Binding Localization[PresetQualityDesc]}" Classes="muted" FontSize="11"/>
                                 </StackPanel>
                             </Border>
 
                             <Border Grid.Column="3" Classes="card" Margin="6,0,0,0" Padding="14">
                                 <StackPanel Spacing="8">
                                     <iconPacks:PackIconPhosphorIcons Kind="Sliders" Width="20" Height="20" Foreground="{DynamicResource TextMutedColor}"/>
-                                    <TextBlock Text="{Binding [PresetCustomName]}" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
-                                    <TextBlock Text="{Binding [PresetCustomDesc]}" Classes="muted" FontSize="11"/>
+                                    <TextBlock Text="{Binding Localization[PresetCustomName]}" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
+                                    <TextBlock Text="{Binding Localization[PresetCustomDesc]}" Classes="muted" FontSize="11"/>
                                 </StackPanel>
                             </Border>
 
@@ -155,43 +155,59 @@
                 <!-- System Information -->
                 <Border Classes="card">
                     <StackPanel Spacing="12">
-                        <TextBlock Text="{Binding [SystemInformationTitle]}" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>
+                        <TextBlock Text="{Binding Localization[SystemInformationTitle]}" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>
 
                         <StackPanel Orientation="Horizontal" Spacing="10">
                             <iconPacks:PackIconPhosphorIcons Kind="Cpu" Width="20" Height="20" Foreground="{DynamicResource TextMutedColor}"/>
                             <StackPanel Spacing="0">
-                                <TextBlock Text="{Binding [CpuLabel]}" Classes="muted" FontSize="11"/>
-                                <TextBlock Text="AMD Ryzen 5 5600X" FontSize="12" Foreground="{DynamicResource TextColor}"/>
+                                <TextBlock Text="{Binding Localization[CpuLabel]}" Classes="muted" FontSize="11"/>
+                                <TextBlock Text="{Binding CpuName}" FontSize="12" Foreground="{DynamicResource TextColor}"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <iconPacks:PackIconPhosphorIcons Kind="ChartLine" Width="20" Height="20" Foreground="{DynamicResource TextMutedColor}"/>
+                            <StackPanel Spacing="0">
+                                <TextBlock Text="{Binding Localization[CpuUsageLabel]}" Classes="muted" FontSize="11"/>
+                                <TextBlock Text="{Binding CpuUsageText}" FontSize="12" Foreground="{DynamicResource TextColor}"/>
                             </StackPanel>
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Spacing="10">
                             <iconPacks:PackIconPhosphorIcons Kind="GraphicsCard" Width="20" Height="20" Foreground="{DynamicResource TextMutedColor}"/>
                             <StackPanel Spacing="0">
-                                <TextBlock Text="{Binding [GpuLabel]}" Classes="muted" FontSize="11"/>
-                                <TextBlock Text="NVIDIA GeForce RTX 3060" FontSize="12" Foreground="{DynamicResource TextColor}"/>
+                                <TextBlock Text="{Binding Localization[GpuLabel]}" Classes="muted" FontSize="11"/>
+                                <TextBlock Text="{Binding GpuName}" FontSize="12" Foreground="{DynamicResource TextColor}"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <iconPacks:PackIconPhosphorIcons Kind="ChartLine" Width="20" Height="20" Foreground="{DynamicResource TextMutedColor}"/>
+                            <StackPanel Spacing="0">
+                                <TextBlock Text="{Binding Localization[GpuUsageLabel]}" Classes="muted" FontSize="11"/>
+                                <TextBlock Text="{Binding GpuUsageText}" FontSize="12" Foreground="{DynamicResource TextColor}"/>
                             </StackPanel>
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Spacing="10">
                             <iconPacks:PackIconPhosphorIcons Kind="Memory" Width="20" Height="20" Foreground="{DynamicResource TextMutedColor}"/>
                             <StackPanel Spacing="0">
-                                <TextBlock Text="{Binding [RamLabel]}" Classes="muted" FontSize="11"/>
-                                <TextBlock Text="16GB (2x8GB)" FontSize="12" Foreground="{DynamicResource TextColor}"/>
+                                <TextBlock Text="{Binding Localization[RamLabel]}" Classes="muted" FontSize="11"/>
+                                <TextBlock Text="{Binding RamText}" FontSize="12" Foreground="{DynamicResource TextColor}"/>
                             </StackPanel>
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Spacing="10">
                             <iconPacks:PackIconPhosphorIcons Kind="Monitor" Width="20" Height="20" Foreground="{DynamicResource TextMutedColor}"/>
                             <StackPanel Spacing="0">
-                                <TextBlock Text="{Binding [OsLabel]}" Classes="muted" FontSize="11"/>
-                                <TextBlock Text="Windows 11 64-bit" FontSize="12" Foreground="{DynamicResource TextColor}"/>
+                                <TextBlock Text="{Binding Localization[OsLabel]}" Classes="muted" FontSize="11"/>
+                                <TextBlock Text="{Binding OsDescription}" FontSize="12" Foreground="{DynamicResource TextColor}"/>
                             </StackPanel>
                         </StackPanel>
 
                         <Button Classes="listRow">
                             <Grid ColumnDefinitions="*,Auto">
-                                <TextBlock Grid.Column="0" Text="{Binding [MoreDetails]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="0" Text="{Binding Localization[MoreDetails]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
                                 <iconPacks:PackIconPhosphorIcons Grid.Column="1" Kind="CaretRight" Width="16" Height="16" Foreground="{DynamicResource TextMutedColor}" VerticalAlignment="Center"/>
                             </Grid>
                         </Button>
@@ -201,12 +217,12 @@
                 <!-- Quick Actions -->
                 <Border Classes="card">
                     <StackPanel Spacing="4">
-                        <TextBlock Text="{Binding [QuickActionsTitle]}" FontWeight="Bold" Foreground="{DynamicResource TextColor}" Margin="0,0,0,6"/>
+                        <TextBlock Text="{Binding Localization[QuickActionsTitle]}" FontWeight="Bold" Foreground="{DynamicResource TextColor}" Margin="0,0,0,6"/>
 
                         <Button Classes="listRow">
                             <Grid ColumnDefinitions="Auto,*,Auto">
                                 <iconPacks:PackIconPhosphorIcons Grid.Column="0" Kind="ShieldCheck" Width="18" Height="18" Foreground="{DynamicResource TextMutedColor}" Margin="0,0,10,0"/>
-                                <TextBlock Grid.Column="1" Text="{Binding [VerifyGameFiles]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" Text="{Binding Localization[VerifyGameFiles]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
                                 <iconPacks:PackIconPhosphorIcons Grid.Column="2" Kind="CaretRight" Width="16" Height="16" Foreground="{DynamicResource TextMutedColor}"/>
                             </Grid>
                         </Button>
@@ -214,7 +230,7 @@
                         <Button Classes="listRow">
                             <Grid ColumnDefinitions="Auto,*,Auto">
                                 <iconPacks:PackIconPhosphorIcons Grid.Column="0" Kind="Trash" Width="18" Height="18" Foreground="{DynamicResource TextMutedColor}" Margin="0,0,10,0"/>
-                                <TextBlock Grid.Column="1" Text="{Binding [ClearCache]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" Text="{Binding Localization[ClearCache]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
                                 <iconPacks:PackIconPhosphorIcons Grid.Column="2" Kind="CaretRight" Width="16" Height="16" Foreground="{DynamicResource TextMutedColor}"/>
                             </Grid>
                         </Button>
@@ -222,7 +238,7 @@
                         <Button Classes="listRow">
                             <Grid ColumnDefinitions="Auto,*,Auto">
                                 <iconPacks:PackIconPhosphorIcons Grid.Column="0" Kind="Power" Width="18" Height="18" Foreground="{DynamicResource TextMutedColor}" Margin="0,0,10,0"/>
-                                <TextBlock Grid.Column="1" Text="{Binding [OptimizeStartup]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" Text="{Binding Localization[OptimizeStartup]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
                                 <iconPacks:PackIconPhosphorIcons Grid.Column="2" Kind="CaretRight" Width="16" Height="16" Foreground="{DynamicResource TextMutedColor}"/>
                             </Grid>
                         </Button>
@@ -230,7 +246,7 @@
                         <Button Classes="listRow">
                             <Grid ColumnDefinitions="Auto,*,Auto">
                                 <iconPacks:PackIconPhosphorIcons Grid.Column="0" Kind="DownloadSimple" Width="18" Height="18" Foreground="{DynamicResource TextMutedColor}" Margin="0,0,10,0"/>
-                                <TextBlock Grid.Column="1" Text="{Binding [UpdateDrivers]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" Text="{Binding Localization[UpdateDrivers]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
                                 <iconPacks:PackIconPhosphorIcons Grid.Column="2" Kind="CaretRight" Width="16" Height="16" Foreground="{DynamicResource TextMutedColor}"/>
                             </Grid>
                         </Button>
@@ -240,33 +256,33 @@
                 <!-- Preset Profiles -->
                 <Border Classes="card">
                     <StackPanel Spacing="10">
-                        <TextBlock Text="{Binding [PresetProfilesTitle]}" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>
+                        <TextBlock Text="{Binding Localization[PresetProfilesTitle]}" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>
 
                         <Grid ColumnDefinitions="*,Auto">
-                            <TextBlock Grid.Column="0" Text="{Binding [ProfileLowEndPc]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="0" Text="{Binding Localization[ProfileLowEndPc]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
                             <Border Grid.Column="1" Classes="pill">
-                                <TextBlock Text="{Binding [TagRecommended]}"/>
+                                <TextBlock Text="{Binding Localization[TagRecommended]}"/>
                             </Border>
                         </Grid>
 
                         <Grid ColumnDefinitions="*,Auto">
-                            <TextBlock Grid.Column="0" Text="{Binding [ProfileCompetitive]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="1" Text="{Binding [TagHighFps]}" Classes="muted" FontSize="12"/>
+                            <TextBlock Grid.Column="0" Text="{Binding Localization[ProfileCompetitive]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="{Binding Localization[TagHighFps]}" Classes="muted" FontSize="12"/>
                         </Grid>
 
                         <Grid ColumnDefinitions="*,Auto">
-                            <TextBlock Grid.Column="0" Text="{Binding [ProfileStreamer]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="1" Text="{Binding [TagBalanced]}" Classes="muted" FontSize="12"/>
+                            <TextBlock Grid.Column="0" Text="{Binding Localization[ProfileStreamer]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="{Binding Localization[TagBalanced]}" Classes="muted" FontSize="12"/>
                         </Grid>
 
                         <Grid ColumnDefinitions="*,Auto">
-                            <TextBlock Grid.Column="0" Text="{Binding [ProfileCinematic]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="1" Text="{Binding [TagBestQuality]}" Classes="muted" FontSize="12"/>
+                            <TextBlock Grid.Column="0" Text="{Binding Localization[ProfileCinematic]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="{Binding Localization[TagBestQuality]}" Classes="muted" FontSize="12"/>
                         </Grid>
 
                         <Button Classes="listRow">
                             <Grid ColumnDefinitions="*,Auto">
-                                <TextBlock Grid.Column="0" Text="{Binding [ManageProfiles]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="0" Text="{Binding Localization[ManageProfiles]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
                                 <iconPacks:PackIconPhosphorIcons Grid.Column="1" Kind="CaretRight" Width="16" Height="16" Foreground="{DynamicResource TextMutedColor}" VerticalAlignment="Center"/>
                             </Grid>
                         </Button>

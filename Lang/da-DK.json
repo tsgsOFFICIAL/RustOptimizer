@@ -58,10 +58,13 @@
 
   "SystemInformationTitle": "Systemoplysninger",
   "CpuLabel": "CPU",
+  "CpuUsageLabel": "CPU-forbrug",
   "GpuLabel": "GPU",
+  "GpuUsageLabel": "GPU-forbrug",
   "RamLabel": "RAM",
   "OsLabel": "OS",
   "MoreDetails": "Flere detaljer",
+  "UnknownHardware": "Ukendt",
 
   "QuickActionsTitle": "Hurtige handlinger",
   "VerifyGameFiles": "Verificér spilfiler",

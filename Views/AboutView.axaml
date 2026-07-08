@@ -3,55 +3,55 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:iconPacks="https://github.com/MahApps/IconPacks.Avalonia"
-             xmlns:iface="using:RustOptimizer.Interface"
+             xmlns:vm="using:RustOptimizer.ViewModels"
              mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="600"
              x:Class="RustOptimizer.Views.AboutView"
-             x:DataType="iface:ILocalizationService">
+             x:DataType="vm:AboutViewModel">
 
     <StackPanel Margin="24" Spacing="20" MaxWidth="480">
 
-        <TextBlock Text="{Binding [AboutTitle]}" FontSize="26" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>
+        <TextBlock Text="{Binding Localization[AboutTitle]}" FontSize="26" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>
 
         <Border Classes="card">
             <StackPanel Spacing="16">
                 <StackPanel Orientation="Horizontal" Spacing="14">
                     <Image Source="/Assets/App/logo.ico" Width="48" Height="48"/>
                     <StackPanel Spacing="2" VerticalAlignment="Center">
-                        <TextBlock Text="{Binding [AppTitle]}" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>
+                        <TextBlock Text="{Binding Localization[AppTitle]}" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>
                         <StackPanel Orientation="Horizontal" Spacing="4">
-                            <TextBlock Text="{Binding [Version]}" Classes="muted" FontSize="12"/>
-                            <TextBlock x:Name="VersionText" Classes="muted" FontSize="12"/>
+                            <TextBlock Text="{Binding Localization[Version]}" Classes="muted" FontSize="12"/>
+                            <TextBlock Text="{Binding VersionText}" Classes="muted" FontSize="12"/>
                             <TextBlock Text="·" Classes="muted" FontSize="12"/>
-                            <TextBlock Text="{Binding [By]}" Classes="muted" FontSize="12"/>
+                            <TextBlock Text="{Binding Localization[By]}" Classes="muted" FontSize="12"/>
                             <TextBlock Text="tsgsOFFICIAL" Classes="muted" FontSize="12"/>
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
 
-                <TextBlock Text="{Binding [AppTagline]}" Classes="muted" TextWrapping="Wrap"/>
+                <TextBlock Text="{Binding Localization[AppTagline]}" Classes="muted" TextWrapping="Wrap"/>
 
                 <StackPanel Orientation="Horizontal" Spacing="8">
-                    <Button Content="{Binding [ViewChangelog]}" Click="OnViewChangelogClick"/>
-                    <Button x:Name="CheckForUpdatesButton" Content="{Binding [CheckForUpdates]}" Click="OnCheckForUpdatesClick"/>
+                    <Button Content="{Binding Localization[ViewChangelog]}" Command="{Binding ViewChangelogCommand}"/>
+                    <Button Content="{Binding Localization[CheckForUpdates]}" Command="{Binding CheckForUpdatesCommand}"/>
                 </StackPanel>
-                <TextBlock x:Name="UpdateStatusText" Classes="muted" FontSize="12" IsVisible="False"/>
+                <TextBlock Text="{Binding UpdateStatusText}" IsVisible="{Binding IsUpdateStatusVisible}" Classes="muted" FontSize="12"/>
             </StackPanel>
         </Border>
 
         <Border Classes="card">
             <StackPanel Spacing="12">
                 <StackPanel Orientation="Horizontal" Spacing="4">
-                    <Button Classes="linkIcon" Click="OnGitHubClick" ToolTip.Tip="GitHub">
+                    <Button Classes="linkIcon" Command="{Binding OpenGitHubCommand}" ToolTip.Tip="GitHub">
                         <iconPacks:PackIconSimpleIcons Kind="GitHub" Width="18" Height="18"/>
                     </Button>
-                    <Button Classes="linkIcon" Click="OnDiscordClick" ToolTip.Tip="Discord">
+                    <Button Classes="linkIcon" Command="{Binding OpenDiscordCommand}" ToolTip.Tip="Discord">
                         <iconPacks:PackIconSimpleIcons Kind="Discord" Width="18" Height="18" Foreground="#5865F2"/>
                     </Button>
-                    <Button Classes="linkIcon" Click="OnKofiClick" ToolTip.Tip="Ko-fi">
+                    <Button Classes="linkIcon" Command="{Binding OpenKofiCommand}" ToolTip.Tip="Ko-fi">
                         <iconPacks:PackIconPhosphorIcons Kind="CoffeeFill" Width="18" Height="18" Foreground="#FF6433"/>
                     </Button>
                 </StackPanel>
-                <TextBlock Text="{Binding [License]}" Classes="muted" FontSize="12"/>
+                <TextBlock Text="{Binding Localization[License]}" Classes="muted" FontSize="12"/>
             </StackPanel>
         </Border>
 

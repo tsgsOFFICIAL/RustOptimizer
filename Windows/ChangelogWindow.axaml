@@ -2,12 +2,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:iface="using:RustOptimizer.Interface"
+        xmlns:vm="using:RustOptimizer.ViewModels"
+        xmlns:views="using:RustOptimizer.Views"
         xmlns:controls="using:RustOptimizer.Controls"
         mc:Ignorable="d" d:DesignWidth="520" d:DesignHeight="600"
         x:Class="RustOptimizer.Windows.ChangelogWindow"
-        x:DataType="iface:ILocalizationService"
-        Title="{Binding [ChangelogTitle]}"
+        x:DataType="vm:ChangelogViewModel"
+        Title="{Binding Localization[ChangelogTitle]}"
         Icon="/Assets/App/logo.ico"
         Width="520" Height="600"
         MinWidth="380" MinHeight="320"
@@ -17,7 +18,8 @@
     <Grid RowDefinitions="Auto,*,Auto">
 
         <controls:TitleBar Grid.Row="0"
-                            Title="{Binding [ChangelogTitle]}"
+                            Localization="{Binding Localization}"
+                            Title="{Binding Localization[ChangelogTitle]}"
                             Author="tsgsOFFICIAL"
                             ShowMaximizeButton="False">
             <controls:TitleBar.Icon>
@@ -25,16 +27,16 @@
             </controls:TitleBar.Icon>
         </controls:TitleBar>
 
-        <ContentControl Grid.Row="1" x:Name="ContentHost" Margin="24"/>
+        <views:ChangelogView Grid.Row="1"/>
 
         <Border Grid.Row="2"
                 Padding="16"
                 BorderBrush="{DynamicResource BorderColor}"
                 BorderThickness="0,1,0,0">
-            <Button Content="{Binding [Close]}"
+            <Button Content="{Binding Localization[Close]}"
                     Classes="accentButton"
                     HorizontalAlignment="Right"
-                    Click="OnCloseClick"/>
+                    Command="{Binding CloseCommand}"/>
         </Border>
 
     </Grid>

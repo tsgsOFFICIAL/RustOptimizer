@@ -3,6 +3,9 @@
 All notable changes to Rust Optimizer are documented here.
 
 ## Unreleased
+
+## 0.8.2
+- Added real system info to the Dashboard's System Information card: your actual CPU/GPU model and live usage, and RAM used/total, replacing the old placeholder values.
 - Added smooth hover and press transitions to buttons, and fixed a color flash that briefly appeared when switching the active sidebar item, most noticeable in dark mode.
 - Fixed changelog text overflowing past the window edge instead of wrapping.
 - Added blockquote and fenced code block support to the changelog renderer, and gave inline `code` a proper background and border instead of just swapping the font.

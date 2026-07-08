@@ -20,12 +20,17 @@ namespace RustOptimizer
 
             try
             {
+                // SystemInfoService is Windows-only; matches this app's WinExe/app.manifest-only deployment.
+#pragma warning disable CA1416
                 Services = new ServiceCollection()
                     .AddSingleton<IThemeService, ThemeService>()
                     .AddSingleton<ILocalizationService, LocalizationService>()
                     .AddSingleton<IUpdateService, UpdateService>()
                     .AddSingleton<IRustProcessService, RustProcessService>()
+                    .AddSingleton<ISystemInfoService, SystemInfoService>()
+                    .AddSingleton<IDialogService, DialogService>()
                     .BuildServiceProvider();
+#pragma warning restore CA1416
 
                 BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
             }

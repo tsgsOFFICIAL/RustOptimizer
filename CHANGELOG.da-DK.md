@@ -3,6 +3,9 @@
 Alle væsentlige ændringer i Rust Optimizer er dokumenteret her.
 
 ## Unreleased
+
+## 0.8.2
+- Tilføjet rigtige systemoplysninger til Dashboardets Systemoplysninger-kort: din faktiske CPU-/GPU-model og aktuelle forbrug, samt RAM brugt/i alt, i stedet for de gamle pladsholderværdier.
 - Tilføjet bløde hover- og tryk-overgange til knapper, og rettet et farveglimt, der kortvarigt opstod ved skift af det aktive sidebar-element, mest tydeligt i mørk tilstand.
 - Rettet at changelog-tekst løb ud over vinduets kant i stedet for at ombryde.
 - Tilføjet understøttelse af citater og kodeblokke i changelog-visningen, og gav indlejret `kode` en rigtig baggrund og kant i stedet for blot at skifte skrifttype.

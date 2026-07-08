@@ -1,5 +1,5 @@
+using RustOptimizer.ViewModels;
 using RustOptimizer.Interface;
-using Avalonia.Interactivity;
 using RustOptimizer.Service;
 using Avalonia.Controls;
 using System.Reflection;
@@ -8,22 +8,22 @@ using System.IO;
 namespace RustOptimizer.Windows;
 
 /// <summary>
-/// A simple, standalone window that renders a block of Markdown (e.g. a CHANGELOG.md, or release
-/// notes fetched by an update check) so the user can see *why* an update happened, not just that
-/// a new version exists.
+/// A window shell hosting <see cref="Views.ChangelogView"/>: title bar, changelog content, and a
+/// Close footer. Renders a block of Markdown (e.g. a CHANGELOG.md, or release notes fetched by an
+/// update check) so the user can see *why* an update happened, not just that a new version exists.
 /// </summary>
 public partial class ChangelogWindow : Window
 {
-    public ChangelogWindow() : this(CreateDesignLocalization(), "# Changelog\n\n- Sample entry") { }
+    public ChangelogWindow() : this(CreateDesignViewModel()) { }
 
     /// <summary>
-    /// Creates an initialized localization service for the Avalonia previewer.
+    /// Creates an initialized view model for the Avalonia previewer.
     /// </summary>
-    private static LocalizationService CreateDesignLocalization()
+    private static ChangelogViewModel CreateDesignViewModel()
     {
         LocalizationService localization = new();
         localization.Initialize();
-        return localization;
+        return new ChangelogViewModel(localization, "# Changelog\n\n- Sample entry");
     }
 
     /// <summary>
@@ -32,10 +32,16 @@ public partial class ChangelogWindow : Window
     /// <param name="localization">The localization service used to resolve UI strings.</param>
     /// <param name="markdown">The Markdown content to display (e.g. loaded from a CHANGELOG.md or fetched release notes).</param>
     public ChangelogWindow(ILocalizationService localization, string markdown)
+        : this(new ChangelogViewModel(localization, markdown))
     {
-        DataContext = localization;
+    }
+
+    public ChangelogWindow(ChangelogViewModel viewModel)
+    {
+        DataContext = viewModel;
         InitializeComponent();
-        ContentHost.Content = MarkdownRenderer.Render(markdown);
+
+        viewModel.CloseRequested += Close;
     }
 
     /// <summary>
@@ -80,6 +86,4 @@ public partial class ChangelogWindow : Window
         AppLanguage.Russian => "CHANGELOG.ru-RU.md",
         _ => "CHANGELOG.md"
     };
-
-    private void OnCloseClick(object? sender, RoutedEventArgs e) => Close();
 }

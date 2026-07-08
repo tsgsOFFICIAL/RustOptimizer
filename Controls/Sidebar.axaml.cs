@@ -1,7 +1,8 @@
 using IconPacks.Avalonia.PhosphorIcons;
-using RustOptimizer.Interface;
-using Avalonia.Interactivity;
+using RustOptimizer.ViewModels;
+using System.ComponentModel;
 using Avalonia.Controls;
+using Avalonia;
 using System;
 
 namespace RustOptimizer.Controls;
@@ -27,48 +28,87 @@ public enum SidebarPage
 
 /// <summary>
 /// The app's nav rail: brand header, page list with a single active selection, and a pinned
-/// Rust status/launch section at the bottom.
+/// Rust status/launch section at the bottom. All state lives in <see cref="SidebarViewModel"/>,
+/// exposed via <see cref="ViewModel"/> - a dedicated property bound explicitly (like
+/// <c>TitleBar.Localization</c>) rather than relying on the ambient
+/// <see cref="StyledElement.DataContext"/>. Avalonia evaluates a control's compiled bindings as
+/// soon as it's attached to the visual tree, which happens before a parent's own
+/// "DataContext={Binding ...}" override (or any code-behind assignment after InitializeComponent)
+/// has a chance to land - in that gap this control would inherit its parent's DataContext (a
+/// different view model type) and the compiled binding's hard cast would throw. A dedicated
+/// StyledProperty has no such gap: it starts at a harmless null and only ever becomes the correct
+/// type.
 /// </summary>
 public partial class Sidebar : UserControl
 {
-    /// <summary>
-    /// Raised when the user selects a different page from the nav list.
-    /// </summary>
-    public event EventHandler<SidebarPage>? NavigationRequested;
-
-    /// <summary>
-    /// Raised when the user clicks "Launch Rust".
-    /// </summary>
-    public event EventHandler? LaunchRustRequested;
-
-    private Button[] NavButtons => new[]
-    {
-        NavDashboard, NavOptimizer, NavGraphics, NavSystem, NavNetwork,
-        NavGameplay, NavConfigs, NavUtilities, NavBackupRestore, NavSettings, NavAbout
-    };
+    public static readonly StyledProperty<SidebarViewModel?> ViewModelProperty =
+        AvaloniaProperty.Register<Sidebar, SidebarViewModel?>(nameof(ViewModel));
 
     public Sidebar()
     {
         InitializeComponent();
-
-        // The Dashboard button starts marked active in XAML; sync its icon to match rather than
-        // hardcoding the filled kind there too, so this stays the one place that decides it.
-        SetIconFilled(GetIcon(NavDashboard), filled: true);
     }
 
-    private void OnNavItemClick(object? sender, RoutedEventArgs e)
+    public SidebarViewModel? ViewModel
     {
-        if (sender is not Button { Tag: string tag } clicked || !Enum.TryParse(tag, out SidebarPage page))
+        get => GetValue(ViewModelProperty);
+        set => SetValue(ViewModelProperty, value);
+    }
+
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+
+        if (change.Property != ViewModelProperty)
             return;
 
-        foreach (Button button in NavButtons)
-        {
-            bool isActive = button == clicked;
-            button.Classes.Set("active", isActive);
-            SetIconFilled(GetIcon(button), isActive);
-        }
+        if (change.OldValue is SidebarViewModel oldViewModel)
+            oldViewModel.PropertyChanged -= OnViewModelPropertyChanged;
 
-        NavigationRequested?.Invoke(this, page);
+        if (change.NewValue is SidebarViewModel newViewModel)
+        {
+            newViewModel.PropertyChanged += OnViewModelPropertyChanged;
+            UpdateActiveIcon();
+        }
+    }
+
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+        ViewModel?.StartPolling();
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        ViewModel?.StopPolling();
+    }
+
+    private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(SidebarViewModel.ActivePage))
+            UpdateActiveIcon();
+    }
+
+    private Button[] NavButtons =>
+    [
+        NavDashboard, NavOptimizer, NavGraphics, NavSystem, NavNetwork,
+        NavGameplay, NavConfigs, NavUtilities, NavBackupRestore, NavSettings, NavAbout
+    ];
+
+    /// <summary>
+    /// Switches every nav button's icon between its outline and filled variant to match whichever
+    /// one is <see cref="SidebarViewModel.ActivePage"/>.
+    /// </summary>
+    private void UpdateActiveIcon()
+    {
+        if (ViewModel is not { } viewModel)
+            return;
+
+        string activeTag = viewModel.ActivePage.ToString();
+
+        foreach (Button button in NavButtons)
+            SetIconFilled(GetIcon(button), filled: (string?)button.Tag == activeTag);
     }
 
     /// <summary>
@@ -90,24 +130,5 @@ public partial class Sidebar : UserControl
 
         if (Enum.TryParse(targetName, out PackIconPhosphorIconsKind kind))
             icon.Kind = kind;
-    }
-
-    private void OnLaunchRustClick(object? sender, RoutedEventArgs e)
-    {
-        // Disable immediately so a slow Steam boot can't be spammed into multiple launches; the
-        // next poll re-enables it on its own if Rust never actually starts (e.g. Steam missing).
-        LaunchRustButton.IsEnabled = false;
-        LaunchRustRequested?.Invoke(this, EventArgs.Empty);
-    }
-
-    /// <summary>
-    /// Updates the status dot/text and Launch button to reflect whether Rust is currently running.
-    /// Called on a poll timer owned by <see cref="MainWindow"/>.
-    /// </summary>
-    public void SetRustRunning(bool isRunning)
-    {
-        RustStatusDot.Classes.Set("running", isRunning);
-        RustStatusText.Text = ((ILocalizationService)DataContext!)[isRunning ? "RustRunning" : "RustNotRunning"];
-        LaunchRustButton.IsEnabled = !isRunning;
     }
 }

@@ -58,10 +58,13 @@
 
   "SystemInformationTitle": "Информация о системе",
   "CpuLabel": "Процессор",
+  "CpuUsageLabel": "Загрузка ЦП",
   "GpuLabel": "Видеокарта",
+  "GpuUsageLabel": "Загрузка ГП",
   "RamLabel": "Память",
   "OsLabel": "ОС",
   "MoreDetails": "Подробнее",
+  "UnknownHardware": "Неизвестно",
 
   "QuickActionsTitle": "Быстрые действия",
   "VerifyGameFiles": "Проверить файлы игры",

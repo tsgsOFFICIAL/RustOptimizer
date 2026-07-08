@@ -3,33 +3,40 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:iconPacks="https://github.com/MahApps/IconPacks.Avalonia"
-             xmlns:iface="using:RustOptimizer.Interface"
+             xmlns:vm="using:RustOptimizer.ViewModels"
+             xmlns:converters="using:RustOptimizer.Converters"
              mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="600"
              x:Class="RustOptimizer.Views.SettingsView"
-             x:DataType="iface:ILocalizationService">
+             x:DataType="vm:SettingsViewModel">
 
     <StackPanel Margin="24" Spacing="20" MaxWidth="480">
 
-        <TextBlock Text="{Binding [SettingsTitle]}" FontSize="26" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>
+        <TextBlock Text="{Binding Localization[SettingsTitle]}" FontSize="26" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>
 
         <Border Classes="card">
             <StackPanel Spacing="14">
-                <TextBlock Text="{Binding [ThemeLabel]}" FontWeight="SemiBold" Foreground="{DynamicResource TextColor}"/>
+                <TextBlock Text="{Binding Localization[ThemeLabel]}" FontWeight="SemiBold" Foreground="{DynamicResource TextColor}"/>
                 <Border Classes="segmentGroup" HorizontalAlignment="Left">
                     <StackPanel Orientation="Horizontal" Spacing="2">
-                        <Button x:Name="ThemeLightButton" Classes="segment" Tag="Light" Click="OnThemeSegmentClick">
+                        <Button Classes="segment" Tag="Light"
+                                Classes.active="{Binding CurrentTheme, Converter={x:Static converters:EnumEqualsConverter.Instance}, ConverterParameter=Light}"
+                                Command="{Binding SetThemeCommand}" CommandParameter="{Binding $self.Tag}">
                             <StackPanel Orientation="Horizontal" Spacing="6">
                                 <iconPacks:PackIconPhosphorIcons Kind="Sun" Width="16" Height="16"/>
                                 <TextBlock Text="Light"/>
                             </StackPanel>
                         </Button>
-                        <Button x:Name="ThemeDarkButton" Classes="segment" Tag="Dark" Click="OnThemeSegmentClick">
+                        <Button Classes="segment" Tag="Dark"
+                                Classes.active="{Binding CurrentTheme, Converter={x:Static converters:EnumEqualsConverter.Instance}, ConverterParameter=Dark}"
+                                Command="{Binding SetThemeCommand}" CommandParameter="{Binding $self.Tag}">
                             <StackPanel Orientation="Horizontal" Spacing="6">
                                 <iconPacks:PackIconPhosphorIcons Kind="Moon" Width="16" Height="16"/>
                                 <TextBlock Text="Dark"/>
                             </StackPanel>
                         </Button>
-                        <Button x:Name="ThemeSystemButton" Classes="segment" Tag="System" Click="OnThemeSegmentClick">
+                        <Button Classes="segment" Tag="System"
+                                Classes.active="{Binding CurrentTheme, Converter={x:Static converters:EnumEqualsConverter.Instance}, ConverterParameter=System}"
+                                Command="{Binding SetThemeCommand}" CommandParameter="{Binding $self.Tag}">
                             <StackPanel Orientation="Horizontal" Spacing="6">
                                 <iconPacks:PackIconPhosphorIcons Kind="Monitor" Width="16" Height="16"/>
                                 <TextBlock Text="System"/>
@@ -42,12 +49,18 @@
 
         <Border Classes="card">
             <StackPanel Spacing="14">
-                <TextBlock Text="{Binding [LanguageLabel]}" FontWeight="SemiBold" Foreground="{DynamicResource TextColor}"/>
+                <TextBlock Text="{Binding Localization[LanguageLabel]}" FontWeight="SemiBold" Foreground="{DynamicResource TextColor}"/>
                 <Border Classes="segmentGroup" HorizontalAlignment="Left">
                     <StackPanel Orientation="Horizontal" Spacing="2">
-                        <Button x:Name="LanguageEnglishButton" Classes="segment" Tag="English" Content="English" Click="OnLanguageSegmentClick"/>
-                        <Button x:Name="LanguageDanishButton" Classes="segment" Tag="Danish" Content="Dansk" Click="OnLanguageSegmentClick"/>
-                        <Button x:Name="LanguageRussianButton" Classes="segment" Tag="Russian" Content="Русский" Click="OnLanguageSegmentClick"/>
+                        <Button Classes="segment" Tag="English" Content="English"
+                                Classes.active="{Binding CurrentLanguage, Converter={x:Static converters:EnumEqualsConverter.Instance}, ConverterParameter=English}"
+                                Command="{Binding SetLanguageCommand}" CommandParameter="{Binding $self.Tag}"/>
+                        <Button Classes="segment" Tag="Danish" Content="Dansk"
+                                Classes.active="{Binding CurrentLanguage, Converter={x:Static converters:EnumEqualsConverter.Instance}, ConverterParameter=Danish}"
+                                Command="{Binding SetLanguageCommand}" CommandParameter="{Binding $self.Tag}"/>
+                        <Button Classes="segment" Tag="Russian" Content="Русский"
+                                Classes.active="{Binding CurrentLanguage, Converter={x:Static converters:EnumEqualsConverter.Instance}, ConverterParameter=Russian}"
+                                Command="{Binding SetLanguageCommand}" CommandParameter="{Binding $self.Tag}"/>
                     </StackPanel>
                 </Border>
             </StackPanel>
