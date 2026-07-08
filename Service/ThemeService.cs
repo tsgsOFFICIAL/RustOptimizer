@@ -1,3 +1,4 @@
+using RustOptimizer.Service.Logging;
 using RustOptimizer.Interface;
 using Avalonia.Styling;
 using System.IO;
@@ -84,8 +85,9 @@ public sealed class ThemeService : IThemeService
                 _ => AppTheme.System
             };
         }
-        catch
+        catch (Exception ex)
         {
+            AppLog.Warn("ThemeService", $"Failed to load theme preference from '{PrefPath}'.", ex);
             return AppTheme.System;
         }
     }
@@ -100,7 +102,9 @@ public sealed class ThemeService : IThemeService
             Directory.CreateDirectory(Path.GetDirectoryName(PrefPath)!);
             File.WriteAllText(PrefPath, theme.ToString());
         }
-        catch
-        { }
+        catch (Exception ex)
+        {
+            AppLog.Warn("ThemeService", $"Failed to save theme preference to '{PrefPath}'.", ex);
+        }
     }
 }

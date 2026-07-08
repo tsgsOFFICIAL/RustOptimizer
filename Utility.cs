@@ -1,6 +1,7 @@
+using RustOptimizer.Service.Logging;
 using System.Diagnostics;
-using System.IO;
 using System.Reflection;
+using System.IO;
 using System;
 
 namespace RustOptimizer;
@@ -53,8 +54,9 @@ public static class Utility
         {
             Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
         }
-        catch
+        catch (Exception ex)
         {
+            AppLog.Warn("Utility", $"Failed to open URL '{url}'.", ex);
         }
     }
 }

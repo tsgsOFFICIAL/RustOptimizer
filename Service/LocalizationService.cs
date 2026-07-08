@@ -1,3 +1,4 @@
+using RustOptimizer.Service.Logging;
 using System.Collections.Generic;
 using RustOptimizer.Interface;
 using System.ComponentModel;
@@ -179,8 +180,9 @@ public sealed class LocalizationService : ILocalizationService
                 _ => AppLanguage.English
             };
         }
-        catch
+        catch (Exception ex)
         {
+            AppLog.Warn("LocalizationService", $"Failed to load language preference from '{PrefPath}'.", ex);
             return AppLanguage.English;
         }
     }
@@ -213,8 +215,9 @@ public sealed class LocalizationService : ILocalizationService
             Directory.CreateDirectory(Path.GetDirectoryName(PrefPath)!);
             File.WriteAllText(PrefPath, language.ToString());
         }
-        catch
+        catch (Exception ex)
         {
+            AppLog.Warn("LocalizationService", $"Failed to save language preference to '{PrefPath}'.", ex);
         }
     }
 

@@ -47,6 +47,7 @@
         <EmbeddedResource Include="Lang\ru-RU.json"/>
         <None Remove="CHANGELOG.md"/>
         <EmbeddedResource Include="CHANGELOG.md"/>
+
         <!-- WithCulture=false is required here: MSBuild's default culture detection treats
              "CHANGELOG.da-DK.md"/"CHANGELOG.ru-RU.md" as satellite-assembly resources (since
              "da-DK"/"ru-RU" parse as valid CultureInfo names), routing them into a separate
@@ -55,49 +56,18 @@
         <EmbeddedResource Include="CHANGELOG.da-DK.md">
             <WithCulture>false</WithCulture>
         </EmbeddedResource>
+
+
         <None Remove="CHANGELOG.ru-RU.md"/>
         <EmbeddedResource Include="CHANGELOG.ru-RU.md">
             <WithCulture>false</WithCulture>
         </EmbeddedResource>
-        <None Remove="publish\test-fixed\IconPacks.Avalonia.FontAwesome.xml"/>
-        <None Remove="publish\test-fixed\IconPacks.Avalonia.RadixIcons.dll"/>
-        <None Remove="publish\test-nightly\IconPacks.Avalonia.Fontisto.xml"/>
-        <None Remove="publish\test-nightly\IconPacks.Avalonia.Material.dll"/>
-        <None Remove="publish\test-nightly\RustOptimizer.runtimeconfig.json"/>
-        <None Remove="publish\test-no-hash\Avalonia.Win32.dll"/>
-        <None Remove="publish\test-no-hash\IconPacks.Avalonia.Codicons.xml"/>
-        <None Remove="publish\test-no-hash\IconPacks.Avalonia.Coolicons.xml"/>
-        <None Remove="publish\test-no-hash\IconPacks.Avalonia.FontAwesome5.dll"/>
-        <None Remove="publish\test-no-hash\IconPacks.Avalonia.Octicons.dll"/>
-        <None Remove="publish\test-no-hash\Tmds.DBus.Protocol.dll"/>
-        <None Remove="publish\test-release-clean\IconPacks.Avalonia.Coolicons.dll"/>
-        <None Remove="publish\test-release-clean\IconPacks.Avalonia.Fontaudio.xml"/>
-        <None Remove="publish\test-release-clean\Microsoft.Extensions.DependencyInjection.dll"/>
-        <None Remove="publish\test-release\Avalonia.FreeDesktop.dll"/>
-        <None Remove="publish\test-release\IconPacks.Avalonia.BootstrapIcons.xml"/>
-        <None Remove="publish\test-release\IconPacks.Avalonia.Fontaudio.dll"/>
-        <None Remove="publish\test-release\IconPacks.Avalonia.Lucide.dll"/>
-        <None Remove="publish\test-release\IconPacks.Avalonia.Material.dll"/>
-        <None Remove="publish\test-release\IconPacks.Avalonia.Material.xml"/>
-        <None Remove="publish\test-release\IconPacks.Avalonia.RemixIcon.xml"/>
-        <None Remove="publish\test-release\IconPacks.Avalonia.Typicons.xml"/>
-        <None Remove="publish\test-release\IconPacks.Avalonia.WeatherIcons.dll"/>
-        <None Remove="publish\test-release\RustOptimizer.pdb"/>
-        <None Remove="publish\test-release\RustOptimizer.runtimeconfig.json"/>
-        <None Remove="publish\test-sdc-style\Avalonia.HarfBuzz.dll"/>
-        <None Remove="publish\test-sdc-style\Avalonia.Metal.dll"/>
-        <None Remove="publish\test-sdc-style\IconPacks.Avalonia.RPGAwesome.xml"/>
-        <None Remove="publish\test-sdc-style\IconPacks.Avalonia.RemixIcon.xml"/>
-        <None Remove="publish\test-sdc-style\IconPacks.Avalonia.xml"/>
-        <None Remove="publish\test-sdc-style\Microsoft.Extensions.DependencyInjection.Abstractions.dll"/>
-        <None Remove="publish\test-sdc-style\libHarfBuzzSharp.dll"/>
     </ItemGroup>
 
     <ItemGroup>
         <Folder Include="Assets\Changelog\"/>
         <Folder Include="Assets\Fonts\"/>
         <Folder Include="Assets\Github\"/>
-        <Folder Include="Service\Updates\Markdown\"/>
     </ItemGroup>
 
     <ItemGroup>
