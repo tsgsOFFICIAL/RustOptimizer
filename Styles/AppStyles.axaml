@@ -1,214 +1,224 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-  <Design.PreviewWith>
-    <Border Padding="20">
-      <!-- Add Controls for Previewer Here -->
-    </Border>
-  </Design.PreviewWith>
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <!-- Add Controls for Previewer Here -->
+        </Border>
+    </Design.PreviewWith>
 
     <Style Selector="Window">
         <Setter Property="FontFamily" Value="{DynamicResource Montserrat}"></Setter>
     </Style>
-    
+
+    <Style Selector="Button /template/ ContentPresenter">
+        <Setter Property="Transitions">
+            <Transitions>
+                <BrushTransition Property="Foreground" Duration="0:0:0.1" />
+                <BrushTransition Property="Background" Duration="0:0:0.1" />
+                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.1"/>
+            </Transitions>
+        </Setter>
+    </Style>
+
     <Style Selector="TextBlock.title">
-        <Setter Property="FontSize" Value="20"/>
-        <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="Foreground" Value="{DynamicResource TextColor}"/>
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="{DynamicResource TextColor}" />
     </Style>
 
     <Style Selector="TextBlock.muted">
-        <Setter Property="Foreground" Value="{DynamicResource TextMutedColor}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextMutedColor}" />
     </Style>
 
     <!-- Named "accentButton" rather than "accent": Avalonia's FluentTheme reserves the "accent"
          class on Button for its own system-accent-color styling, which was silently winning over
          this style and showing Windows' accent color instead of our own AccentColor brush. -->
     <Style Selector="Button.accentButton">
-        <Setter Property="Background" Value="{DynamicResource AccentColor}"/>
-        <Setter Property="Foreground" Value="{DynamicResource WhiteColor}"/>
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="CornerRadius" Value="8"/>
-        <Setter Property="Padding" Value="16,8"/>
-        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Background" Value="{DynamicResource AccentColor}" />
+        <Setter Property="Foreground" Value="{DynamicResource WhiteColor}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Padding" Value="16,8" />
+        <Setter Property="Cursor" Value="Hand" />
     </Style>
 
     <Style Selector="Button.accentButton:pointerover /template/ ContentPresenter">
-        <Setter Property="Background" Value="{DynamicResource AccentColorHover}"/>
+        <Setter Property="Background" Value="{DynamicResource AccentColorHover}" />
     </Style>
 
     <Style Selector="Border.card">
-        <Setter Property="Background" Value="{DynamicResource BgColor}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="CornerRadius" Value="12"/>
-        <Setter Property="Padding" Value="16"/>
+        <Setter Property="Background" Value="{DynamicResource BgColor}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="12" />
+        <Setter Property="Padding" Value="16" />
     </Style>
 
     <Style Selector="Button.captionButton">
-        <Setter Property="Width" Value="46"/>
-        <Setter Property="Height" Value="40"/>
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="CornerRadius" Value="0"/>
-        <Setter Property="Foreground" Value="{DynamicResource TextMutedColor}"/>
-        <Setter Property="HorizontalContentAlignment" Value="Center"/>
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Width" Value="46" />
+        <Setter Property="Height" Value="40" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="CornerRadius" Value="0" />
+        <Setter Property="Foreground" Value="{DynamicResource TextMutedColor}" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Cursor" Value="Hand" />
     </Style>
 
     <Style Selector="Button.captionButton:pointerover /template/ ContentPresenter">
-        <Setter Property="Background" Value="{DynamicResource BorderColor}"/>
+        <Setter Property="Background" Value="{DynamicResource BorderColor}" />
     </Style>
 
     <Style Selector="Button.captionButton.close:pointerover /template/ ContentPresenter">
-        <Setter Property="Background" Value="{DynamicResource DangerColor}"/>
+        <Setter Property="Background" Value="{DynamicResource DangerColor}" />
     </Style>
 
     <Style Selector="Button.captionButton.close:pointerover">
-        <Setter Property="Foreground" Value="{DynamicResource WhiteColor}"/>
+        <Setter Property="Foreground" Value="{DynamicResource WhiteColor}" />
     </Style>
 
     <Style Selector="TextBlock.changelogH1">
-        <Setter Property="FontSize" Value="20"/>
-        <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="Foreground" Value="{DynamicResource TextColor}"/>
-        <Setter Property="Margin" Value="0,12,0,4"/>
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="{DynamicResource TextColor}" />
+        <Setter Property="Margin" Value="0,12,0,4" />
     </Style>
 
     <Style Selector="TextBlock.changelogH2">
-        <Setter Property="FontSize" Value="16"/>
-        <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="Foreground" Value="{DynamicResource TextColor}"/>
-        <Setter Property="Margin" Value="0,10,0,4"/>
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="{DynamicResource TextColor}" />
+        <Setter Property="Margin" Value="0,10,0,4" />
     </Style>
 
     <Style Selector="TextBlock.changelogH3">
-        <Setter Property="FontSize" Value="14"/>
-        <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="Foreground" Value="{DynamicResource TextMutedColor}"/>
-        <Setter Property="Margin" Value="0,8,0,2"/>
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="{DynamicResource TextMutedColor}" />
+        <Setter Property="Margin" Value="0,8,0,2" />
     </Style>
 
     <Style Selector="TextBlock.changelogBody">
-        <Setter Property="FontSize" Value="13"/>
-        <Setter Property="Foreground" Value="{DynamicResource TextColor}"/>
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="Foreground" Value="{DynamicResource TextColor}" />
     </Style>
 
     <Style Selector="Button.navItem">
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="{DynamicResource TextMutedColor}"/>
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="CornerRadius" Value="8"/>
-        <Setter Property="Padding" Value="12,10"/>
-        <Setter Property="HorizontalAlignment" Value="Stretch"/>
-        <Setter Property="HorizontalContentAlignment" Value="Left"/>
-        <Setter Property="FontWeight" Value="Medium"/>
-        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource TextMutedColor}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Padding" Value="12,10" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="FontWeight" Value="Medium" />
+        <Setter Property="Cursor" Value="Hand" />
     </Style>
 
     <Style Selector="Button.navItem:pointerover /template/ ContentPresenter">
-        <Setter Property="Background" Value="{DynamicResource BorderColor}"/>
+        <Setter Property="Background" Value="{DynamicResource BorderColor}" />
     </Style>
 
     <Style Selector="Button.navItem.active">
-        <Setter Property="Background" Value="#26F97316"/>
-        <Setter Property="Foreground" Value="{DynamicResource AccentColor}"/>
+        <Setter Property="Background" Value="#26F97316" />
+        <Setter Property="Foreground" Value="{DynamicResource AccentColor}" />
     </Style>
 
     <Style Selector="Button.navItem.active:pointerover /template/ ContentPresenter">
-        <Setter Property="Background" Value="#26F97316"/>
+        <Setter Property="Background" Value="#26F97316" />
     </Style>
-    
+
     <Style Selector="Ellipse.rustStatusDot">
-        <Setter Property="Fill" Value="{DynamicResource TextMutedColor}"/>
+        <Setter Property="Fill" Value="{DynamicResource TextMutedColor}" />
     </Style>
 
     <Style Selector="Ellipse.rustStatusDot.running">
-        <Setter Property="Fill" Value="{DynamicResource SuccessColor}"/>
+        <Setter Property="Fill" Value="{DynamicResource SuccessColor}" />
     </Style>
 
     <Style Selector="Button.listRow">
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="{DynamicResource TextColor}"/>
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="CornerRadius" Value="8"/>
-        <Setter Property="Padding" Value="4,8"/>
-        <Setter Property="HorizontalAlignment" Value="Stretch"/>
-        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource TextColor}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Padding" Value="4,8" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="Cursor" Value="Hand" />
     </Style>
 
     <Style Selector="Button.listRow:pointerover /template/ ContentPresenter">
-        <Setter Property="Background" Value="{DynamicResource BorderColor}"/>
+        <Setter Property="Background" Value="{DynamicResource BorderColor}" />
     </Style>
 
     <Style Selector="Border.pill">
-        <Setter Property="Background" Value="#2622C55E"/>
-        <Setter Property="CornerRadius" Value="10"/>
-        <Setter Property="Padding" Value="8,2"/>
+        <Setter Property="Background" Value="#2622C55E" />
+        <Setter Property="CornerRadius" Value="10" />
+        <Setter Property="Padding" Value="8,2" />
     </Style>
 
     <Style Selector="Border.pill TextBlock">
-        <Setter Property="Foreground" Value="{DynamicResource SuccessColor}"/>
-        <Setter Property="FontSize" Value="11"/>
-        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{DynamicResource SuccessColor}" />
+        <Setter Property="FontSize" Value="11" />
+        <Setter Property="FontWeight" Value="SemiBold" />
     </Style>
 
     <Style Selector="ProgressBar.thinBar">
-        <Setter Property="Height" Value="6"/>
-        <Setter Property="MinWidth" Value="0"/>
-        <Setter Property="CornerRadius" Value="3"/>
-        <Setter Property="Background" Value="{DynamicResource BorderColor}"/>
-        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Height" Value="6" />
+        <Setter Property="MinWidth" Value="0" />
+        <Setter Property="CornerRadius" Value="3" />
+        <Setter Property="Background" Value="{DynamicResource BorderColor}" />
+        <Setter Property="BorderThickness" Value="0" />
     </Style>
 
     <Style Selector="Border.segmentGroup">
-        <Setter Property="Background" Value="{DynamicResource BgColor}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="CornerRadius" Value="10"/>
-        <Setter Property="Padding" Value="4"/>
+        <Setter Property="Background" Value="{DynamicResource BgColor}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="10" />
+        <Setter Property="Padding" Value="4" />
     </Style>
 
     <Style Selector="Button.segment">
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="{DynamicResource TextMutedColor}"/>
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="CornerRadius" Value="8"/>
-        <Setter Property="Padding" Value="16,9"/>
-        <Setter Property="FontSize" Value="13"/>
-        <Setter Property="FontWeight" Value="Medium"/>
-        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource TextMutedColor}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Padding" Value="16,9" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="FontWeight" Value="Medium" />
+        <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Transitions">
             <Transitions>
-                <BrushTransition Property="Background" Duration="0:0:0.12"/>
+                <BrushTransition Property="Background" Duration="0:0:0.12" />
             </Transitions>
         </Setter>
     </Style>
 
     <Style Selector="Button.segment:pointerover /template/ ContentPresenter">
-        <Setter Property="Background" Value="{DynamicResource BorderColor}"/>
+        <Setter Property="Background" Value="{DynamicResource BorderColor}" />
     </Style>
 
     <Style Selector="Button.segment.active">
-        <Setter Property="Background" Value="{DynamicResource AccentColor}"/>
-        <Setter Property="Foreground" Value="{DynamicResource WhiteColor}"/>
+        <Setter Property="Background" Value="{DynamicResource AccentColor}" />
+        <Setter Property="Foreground" Value="{DynamicResource WhiteColor}" />
     </Style>
 
     <Style Selector="Button.segment.active:pointerover /template/ ContentPresenter">
-        <Setter Property="Background" Value="{DynamicResource AccentColorHover}"/>
+        <Setter Property="Background" Value="{DynamicResource AccentColorHover}" />
     </Style>
 
     <Style Selector="Button.linkIcon">
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="{DynamicResource TextMutedColor}"/>
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="CornerRadius" Value="6"/>
-        <Setter Property="Padding" Value="4"/>
-        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource TextMutedColor}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="CornerRadius" Value="6" />
+        <Setter Property="Padding" Value="4" />
+        <Setter Property="Cursor" Value="Hand" />
     </Style>
 
     <Style Selector="Button.linkIcon:pointerover /template/ ContentPresenter">
-        <Setter Property="Background" Value="{DynamicResource BorderColor}"/>
+        <Setter Property="Background" Value="{DynamicResource BorderColor}" />
     </Style>
 </Styles>
