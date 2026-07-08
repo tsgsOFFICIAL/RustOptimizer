@@ -1,9 +1,8 @@
-using System.Runtime.InteropServices;
 using LibreHardwareMonitor.Hardware;
 using RustOptimizer.Service.Logging;
 using System.Runtime.Versioning;
 using RustOptimizer.Interface;
-using System.Management;
+using System.Collections.Generic;
 using System.Linq;
 using System;
 
@@ -19,6 +18,7 @@ public sealed class SystemInfoService(ILocalizationService localization) : ISyst
     private Computer? _hardwareMonitor;
     private IHardware? _cpuHardware;
     private IHardware? _gpuHardware;
+    private IHardware? _memoryHardware;
     private ISensor? _cpuLoadSensor;
     private ISensor? _gpuLoadSensor;
 
@@ -29,16 +29,13 @@ public sealed class SystemInfoService(ILocalizationService localization) : ISyst
 
         try
         {
-            using ManagementObjectSearcher searcher = new("SELECT Name FROM Win32_Processor");
-            foreach (ManagementBaseObject obj in searcher.Get())
-            {
-                if (obj["Name"] is string name && !string.IsNullOrWhiteSpace(name))
-                    return _cpuName = Normalize(name);
-            }
+            EnsureHardwareMonitorOpen();
+            if (_cpuHardware?.Name is string name && !string.IsNullOrWhiteSpace(name))
+                return _cpuName = Normalize(name);
         }
         catch (Exception ex)
         {
-            AppLog.Warn("SystemInfoService", "Failed to query CPU name via WMI.", ex);
+            AppLog.Warn("SystemInfoService", "Failed to query CPU name via LibreHardwareMonitor.", ex);
         }
 
         return _cpuName = Unknown();
@@ -51,27 +48,13 @@ public sealed class SystemInfoService(ILocalizationService localization) : ISyst
 
         try
         {
-            using ManagementObjectSearcher searcher = new("SELECT Name FROM Win32_VideoController");
-            string? fallback = null;
-
-            foreach (ManagementBaseObject obj in searcher.Get())
-            {
-                if (obj["Name"] is not string name || string.IsNullOrWhiteSpace(name))
-                    continue;
-
-                // Prefer a real adapter over the software rasterizer Windows always lists alongside it.
-                if (!name.Contains("Basic Render", StringComparison.OrdinalIgnoreCase))
-                    return _gpuName = Normalize(name);
-
-                fallback ??= Normalize(name);
-            }
-
-            if (fallback != null)
-                return _gpuName = fallback;
+            EnsureHardwareMonitorOpen();
+            if (_gpuHardware?.Name is string name && !string.IsNullOrWhiteSpace(name))
+                return _gpuName = Normalize(name);
         }
         catch (Exception ex)
         {
-            AppLog.Warn("SystemInfoService", "Failed to query GPU name via WMI.", ex);
+            AppLog.Warn("SystemInfoService", "Failed to query GPU name via LibreHardwareMonitor.", ex);
         }
 
         return _gpuName = Unknown();
@@ -85,11 +68,29 @@ public sealed class SystemInfoService(ILocalizationService localization) : ISyst
 
     public MemoryInfo GetMemoryInfo()
     {
-        MEMORYSTATUSEX status = new() { dwLength = (uint)Marshal.SizeOf<MEMORYSTATUSEX>() };
-        if (!GlobalMemoryStatusEx(ref status))
-            return default;
+        try
+        {
+            EnsureHardwareMonitorOpen();
+            _memoryHardware?.Update();
 
-        return new MemoryInfo(status.ullTotalPhys, status.ullTotalPhys - status.ullAvailPhys);
+            double? usedGb = _memoryHardware?.Sensors
+                .FirstOrDefault(s => s.SensorType == SensorType.Data && s.Name == "Memory Used")?.Value;
+            double? availableGb = _memoryHardware?.Sensors
+                .FirstOrDefault(s => s.SensorType == SensorType.Data && s.Name == "Memory Available")?.Value;
+
+            if (usedGb is not { } used || availableGb is not { } available)
+                return default;
+
+            const double BytesPerGb = 1024 * 1024 * 1024;
+            ulong usedBytes = (ulong)(used * BytesPerGb);
+            ulong totalBytes = (ulong)((used + available) * BytesPerGb);
+            return new MemoryInfo(totalBytes, usedBytes);
+        }
+        catch (Exception ex)
+        {
+            AppLog.Warn("SystemInfoService", "Failed to read memory info via LibreHardwareMonitor.", ex);
+            return default;
+        }
     }
 
     public double? GetCpuUsagePercent()
@@ -136,7 +137,7 @@ public sealed class SystemInfoService(ILocalizationService localization) : ISyst
         if (_hardwareMonitor != null)
             return;
 
-        _hardwareMonitor = new Computer { IsCpuEnabled = true, IsGpuEnabled = true };
+        _hardwareMonitor = new Computer { IsCpuEnabled = true, IsGpuEnabled = true, IsMemoryEnabled = true };
         _hardwareMonitor.Open();
         _hardwareMonitor.Accept(new SensorUpdateVisitor());
 
@@ -146,36 +147,45 @@ public sealed class SystemInfoService(ILocalizationService localization) : ISyst
 
         // Prefer a discrete adapter's own load sensor ("GPU Core") over an integrated one,
         // which only exposes per-engine D3D counters instead - matches the GetGpuName() preference.
-        _gpuHardware = _hardwareMonitor.Hardware
-            .FirstOrDefault(h => h.HardwareType is HardwareType.GpuNvidia or HardwareType.GpuAmd)
-            ?? _hardwareMonitor.Hardware.FirstOrDefault(h => h.HardwareType == HardwareType.GpuIntel);
+        _gpuHardware = SelectPrimaryGpu(_hardwareMonitor.Hardware.Where(h => h.HardwareType is HardwareType.GpuNvidia or HardwareType.GpuAmd))
+            ?? SelectPrimaryGpu(_hardwareMonitor.Hardware.Where(h => h.HardwareType == HardwareType.GpuIntel));
 
         _gpuLoadSensor = _gpuHardware?.Sensors.FirstOrDefault(s => s.SensorType == SensorType.Load && s.Name == "GPU Core")
             ?? _gpuHardware?.Sensors.FirstOrDefault(s => s.SensorType == SensorType.Load && s.Name == "D3D 3D")
             ?? _gpuHardware?.Sensors.FirstOrDefault(s => s.SensorType == SensorType.Load);
+
+        // LibreHardwareMonitor exposes physical RAM and the page file as two separate "Memory"
+        // hardware entries ("Total Memory" and "Virtual Memory") - we only want the former.
+        _memoryHardware = _hardwareMonitor.Hardware
+            .FirstOrDefault(h => h.HardwareType == HardwareType.Memory && h.Name == "Total Memory");
+    }
+
+    /// <summary>
+    /// Picks the adapter with the most total VRAM out of a same-type group. A discrete GPU
+    /// alongside its host's integrated GPU (e.g. an AMD APU's Radeon graphics next to a Radeon
+    /// RX card) both report the same <see cref="HardwareType"/>, so type alone can't tell them
+    /// apart - total video memory does, since a discrete card reports several GB while an
+    /// APU's shared allocation is a small fraction of that.
+    /// </summary>
+    private static IHardware? SelectPrimaryGpu(IEnumerable<IHardware> candidates)
+    {
+        IHardware[] gpus = candidates.ToArray();
+        return gpus.Length <= 1 ? gpus.FirstOrDefault() : gpus.MaxBy(GetTotalMemoryMiB);
+    }
+
+    private static double GetTotalMemoryMiB(IHardware hardware)
+    {
+        hardware.Update();
+        return hardware.Sensors
+            .Where(s => s.SensorType == SensorType.SmallData && s.Name == "GPU Memory Total")
+            .Select(s => s.Value ?? 0)
+            .DefaultIfEmpty(0)
+            .Max();
     }
 
     private string Unknown() => localization["UnknownHardware"];
 
     private static string Normalize(string name) => string.Join(' ', name.Split(' ', StringSplitOptions.RemoveEmptyEntries));
-
-    [StructLayout(LayoutKind.Sequential)]
-    private struct MEMORYSTATUSEX
-    {
-        public uint dwLength;
-        public uint dwMemoryLoad;
-        public ulong ullTotalPhys;
-        public ulong ullAvailPhys;
-        public ulong ullTotalPageFile;
-        public ulong ullAvailPageFile;
-        public ulong ullTotalVirtual;
-        public ulong ullAvailVirtual;
-        public ulong ullAvailExtendedVirtual;
-    }
-
-    [DllImport("kernel32.dll", SetLastError = true)]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    private static extern bool GlobalMemoryStatusEx(ref MEMORYSTATUSEX lpBuffer);
 
     /// <summary>
     /// LibreHardwareMonitor requires visiting hardware/sub-hardware explicitly to refresh sensors -
