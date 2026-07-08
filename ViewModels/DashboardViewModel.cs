@@ -11,6 +11,7 @@ namespace RustOptimizer.ViewModels;
 /// </summary>
 public sealed class DashboardViewModel : ViewModelBase
 {
+    private readonly IRustProcessService _rustProcess;
     private const string NotAvailable = "N/A";
 
     private readonly ISystemInfoService _systemInfo;
@@ -23,15 +24,18 @@ public sealed class DashboardViewModel : ViewModelBase
     private string _cpuUsageText = NotAvailable;
     private string _gpuUsageText = NotAvailable;
 
-    public DashboardViewModel(ILocalizationService localization, ISystemInfoService systemInfo)
+    public DashboardViewModel(ILocalizationService localization, ISystemInfoService systemInfo, IRustProcessService rustProcess)
         : base(localization)
     {
+        _rustProcess = rustProcess;
         _systemInfo = systemInfo;
 
         RunSmartOptimizationCommand = new RelayCommand(() =>
         {
             // Mock data only for now - no real optimization logic wired up yet.
         });
+
+        VerifyRustFilesCommand = new RelayCommand(VerifyRustFiles);
 
         // Static identity strings never change, so these are resolved once here rather than on
         // every poll tick.
@@ -42,6 +46,7 @@ public sealed class DashboardViewModel : ViewModelBase
     }
 
     public RelayCommand RunSmartOptimizationCommand { get; }
+    public RelayCommand VerifyRustFilesCommand { get; }
 
     public string CpuName { get => _cpuName; private set => SetProperty(ref _cpuName, value); }
     public string GpuName { get => _gpuName; private set => SetProperty(ref _gpuName, value); }
@@ -77,6 +82,11 @@ public sealed class DashboardViewModel : ViewModelBase
         RamText = FormatMemory(_systemInfo.GetMemoryInfo());
         CpuUsageText = FormatPercent(_systemInfo.GetCpuUsagePercent());
         GpuUsageText = FormatPercent(_systemInfo.GetGpuUsagePercent());
+    }
+
+    private void VerifyRustFiles()
+    {
+        _rustProcess.VerifyFiles();
     }
 
     private static string FormatMemory(MemoryInfo memory)

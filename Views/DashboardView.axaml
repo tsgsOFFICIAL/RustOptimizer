@@ -219,7 +219,7 @@
                     <StackPanel Spacing="4">
                         <TextBlock Text="{Binding Localization[QuickActionsTitle]}" FontWeight="Bold" Foreground="{DynamicResource TextColor}" Margin="0,0,0,6"/>
 
-                        <Button Classes="listRow">
+                        <Button Classes="listRow" Command="{Binding VerifyRustFilesCommand}">
                             <Grid ColumnDefinitions="Auto,*,Auto">
                                 <iconPacks:PackIconPhosphorIcons Grid.Column="0" Kind="ShieldCheck" Width="18" Height="18" Foreground="{DynamicResource TextMutedColor}" Margin="0,0,10,0"/>
                                 <TextBlock Grid.Column="1" Text="{Binding Localization[VerifyGameFiles]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>

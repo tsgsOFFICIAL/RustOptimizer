@@ -81,9 +81,9 @@ public sealed class SystemInfoService(ILocalizationService localization) : ISyst
             if (usedGb is not { } used || availableGb is not { } available)
                 return default;
 
-            const double BytesPerGb = 1024 * 1024 * 1024;
-            ulong usedBytes = (ulong)(used * BytesPerGb);
-            ulong totalBytes = (ulong)((used + available) * BytesPerGb);
+            const double bytesPerGb = 1024 * 1024 * 1024;
+            ulong usedBytes = (ulong)(used * bytesPerGb);
+            ulong totalBytes = (ulong)((used + available) * bytesPerGb);
             return new MemoryInfo(totalBytes, usedBytes);
         }
         catch (Exception ex)

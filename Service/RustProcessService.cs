@@ -19,4 +19,6 @@ public sealed class RustProcessService : IRustProcessService
     }
 
     public void Launch() => Utility.OpenUrl($"steam://rungameid/{SteamAppId}");
+    
+    public void VerifyFiles() => Utility.OpenUrl($"steam://validate/{SteamAppId}");
 }

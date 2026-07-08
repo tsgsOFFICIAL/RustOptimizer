@@ -15,6 +15,7 @@ public sealed class MainWindowViewModel : ViewModelBase
     private readonly IUpdateService _updates;
     private readonly IDialogService _dialogs;
     private readonly ISystemInfoService _systemInfo;
+    private readonly IRustProcessService _rustProcess;
 
     private DashboardViewModel? _dashboard;
     private SettingsViewModel? _settings;
@@ -31,6 +32,7 @@ public sealed class MainWindowViewModel : ViewModelBase
         _updates = updates;
         _dialogs = dialogs;
         _systemInfo = systemInfo;
+        _rustProcess = rustProcess;
 
         Sidebar = new SidebarViewModel(localization, rustProcess);
         Sidebar.NavigationRequested += (_, page) => Navigate(page);
@@ -39,7 +41,7 @@ public sealed class MainWindowViewModel : ViewModelBase
         OpenGitHubCommand = new RelayCommand(() => Utility.OpenUrl(ProjectLinks.GitHub));
         OpenDiscordCommand = new RelayCommand(() => Utility.OpenUrl(ProjectLinks.Discord));
 
-        CurrentPage = _dashboard = new DashboardViewModel(localization, systemInfo);
+        CurrentPage = _dashboard = new DashboardViewModel(localization, systemInfo, rustProcess);
     }
 
     public SidebarViewModel Sidebar { get; }
@@ -96,7 +98,7 @@ public sealed class MainWindowViewModel : ViewModelBase
     {
         CurrentPage = page switch
         {
-            SidebarPage.Dashboard => _dashboard ??= new DashboardViewModel(Localization, _systemInfo),
+            SidebarPage.Dashboard => _dashboard ??= new DashboardViewModel(Localization, _systemInfo, _rustProcess),
             SidebarPage.Settings => _settings ??= new SettingsViewModel(_theme, Localization),
             SidebarPage.About => _about ??= new AboutViewModel(Localization, _updates, _dialogs),
             _ => ShowComingSoon(page)

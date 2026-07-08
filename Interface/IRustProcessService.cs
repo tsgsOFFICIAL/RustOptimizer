@@ -14,4 +14,9 @@ public interface IRustProcessService
     /// Launches Rust through Steam's protocol handler.
     /// </summary>
     void Launch();
+    
+    /// <summary>
+    /// Verified Rust's game files through Steam's protocol handler.
+    /// </summary>
+    void VerifyFiles();
 }
