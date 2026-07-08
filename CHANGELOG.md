@@ -4,6 +4,10 @@ All notable changes to Rust Optimizer are documented here.
 
 ## Unreleased
 
+## 0.8.3
+- Fixed the Dashboard picking your integrated GPU instead of the discrete one (and reporting its usage) on systems with both, like an AMD APU paired with a Radeon card.
+- Moved CPU/GPU name and RAM detection off WMI and the Win32 memory API onto the same LibreHardwareMonitor backend already used for live usage.
+
 ## 0.8.2
 - Added real system info to the Dashboard's System Information card: your actual CPU/GPU model and live usage, and RAM used/total, replacing the old placeholder values.
 - Added smooth hover and press transitions to buttons, and fixed a color flash that briefly appeared when switching the active sidebar item, most noticeable in dark mode.

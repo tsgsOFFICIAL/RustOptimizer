@@ -4,6 +4,10 @@ Alle væsentlige ændringer i Rust Optimizer er dokumenteret her.
 
 ## Unreleased
 
+## 0.8.3
+- Rettet at Dashboardet valgte din integrerede GPU i stedet for den dedikerede (og viste dens forbrug) på systemer med begge dele, f.eks. en AMD APU sammen med et Radeon-kort.
+- Flyttet registrering af CPU-/GPU-navn og RAM fra WMI og Win32-hukommelses-API'et til den samme LibreHardwareMonitor-backend, der allerede bruges til aktuelt forbrug.
+
 ## 0.8.2
 - Tilføjet rigtige systemoplysninger til Dashboardets Systemoplysninger-kort: din faktiske CPU-/GPU-model og aktuelle forbrug, samt RAM brugt/i alt, i stedet for de gamle pladsholderværdier.
 - Tilføjet bløde hover- og tryk-overgange til knapper, og rettet et farveglimt, der kortvarigt opstod ved skift af det aktive sidebar-element, mest tydeligt i mørk tilstand.
