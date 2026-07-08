@@ -5,6 +5,7 @@
     <SolidColorBrush x:Key="BgColor"                Color="#F3F4F6"/>
     <SolidColorBrush x:Key="BorderColor"            Color="#C8CDD8"/>
     <SolidColorBrush x:Key="BorderColorTransparent" Color="#00C8CDD8"/>
+    <SolidColorBrush x:Key="BorderColorMuted"       Color="#4DC8CDD8"/>
     <!-- AccentColor (#F97316) at 15% alpha (#26), pre-blended opaque over this theme's BgColor
          (#F3F4F6): result = alpha*fg + (1-alpha)*bg per channel, alpha = 0x26/255 = 0.14902.
          R: 0.14902*249 + 0.85098*243 = 243.89 -> 0xF4

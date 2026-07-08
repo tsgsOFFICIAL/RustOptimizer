@@ -107,6 +107,47 @@
         <Setter Property="Foreground" Value="{DynamicResource TextColor}" />
     </Style>
 
+    <Style Selector="Border.changelogCode">
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="6" />
+        <Setter Property="Padding" Value="12,8" />
+        <Setter Property="Margin" Value="0,4" />
+    </Style>
+
+    <Style Selector="TextBlock.changelogCode">
+        <Setter Property="FontFamily" Value="Consolas,Menlo,monospace" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="Foreground" Value="{DynamicResource TextColor}" />
+    </Style>
+
+    <Style Selector="Border.changelogInlineCode">
+        <Setter Property="Background" Value="{DynamicResource BorderColorMuted}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="4" />
+        <Setter Property="Padding" Value="4,0" />
+    </Style>
+
+    <Style Selector="TextBlock.changelogInlineCode">
+        <Setter Property="FontFamily" Value="Consolas,Menlo,monospace" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="Foreground" Value="{DynamicResource TextColor}" />
+    </Style>
+
+    <Style Selector="Border.changelogQuote">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+        <Setter Property="BorderThickness" Value="3,0,0,0" />
+        <Setter Property="Padding" Value="12,4,0,4" />
+        <Setter Property="Margin" Value="0,2" />
+    </Style>
+
+    <Style Selector="TextBlock.changelogQuote">
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="FontStyle" Value="Italic" />
+        <Setter Property="Foreground" Value="{DynamicResource TextMutedColor}" />
+    </Style>
+
     <Style Selector="Button.navItem">
         <Setter Property="Background" Value="{DynamicResource BorderColorTransparent}" />
         <Setter Property="Foreground" Value="{DynamicResource TextMutedColor}" />

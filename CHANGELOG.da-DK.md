@@ -4,6 +4,15 @@ Alle væsentlige ændringer i Rust Optimizer er dokumenteret her.
 
 ## Unreleased
 - Tilføjet bløde hover- og tryk-overgange til knapper, og rettet et farveglimt, der kortvarigt opstod ved skift af det aktive sidebar-element, mest tydeligt i mørk tilstand.
+- Rettet at changelog-tekst løb ud over vinduets kant i stedet for at ombryde.
+- Tilføjet understøttelse af citater og kodeblokke i changelog-visningen, og gav indlejret `kode` en rigtig baggrund og kant i stedet for blot at skifte skrifttype.
+
+> Sådan ser et citat ud nu.
+
+```
+kodeblokke vises nu
+i en indrammet, monospaced boks
+```
 
 ## 0.8.1
 - Tilføjet en rigtig "Launch Rust"-knap, der starter spillet via Steam og automatisk deaktiverer sig selv, mens Rust allerede kører.

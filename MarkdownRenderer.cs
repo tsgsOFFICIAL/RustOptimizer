@@ -1,5 +1,6 @@
 using Avalonia.Markup.Xaml.MarkupExtensions;
 using System.Text.RegularExpressions;
+using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Documents;
 using System.Collections.Generic;
 using Avalonia.Controls;
@@ -35,14 +36,26 @@ public static partial class MarkdownRenderer
     public static Control Render(string markdown)
     {
         StackPanel panel = new() { Spacing = 4 };
+        string[] lines = markdown.Replace("\r\n", "\n").Split('\n');
 
-        foreach (string rawLine in markdown.Replace("\r\n", "\n").Split('\n'))
+        for (int i = 0; i < lines.Length; i++)
         {
-            string line = rawLine.Trim();
+            string line = lines[i].Trim();
 
             if (line.Length == 0)
             {
                 panel.Children.Add(new Border { Height = 6 });
+                continue;
+            }
+
+            if (line.StartsWith("```"))
+            {
+                List<string> codeLines = new();
+                i++;
+                while (i < lines.Length && !lines[i].Trim().StartsWith("```"))
+                    codeLines.Add(lines[i++]);
+
+                panel.Children.Add(CreateCodeBlock(string.Join('\n', codeLines)));
                 continue;
             }
 
@@ -85,10 +98,24 @@ public static partial class MarkdownRenderer
                 continue;
             }
 
+            if (line == ">" || line.StartsWith("> "))
+            {
+                List<string> quoteLines = new() { line.Length > 1 ? line[2..] : "" };
+                while (i + 1 < lines.Length && (lines[i + 1].Trim() == ">" || lines[i + 1].Trim().StartsWith("> ")))
+                {
+                    string next = lines[++i].Trim();
+                    quoteLines.Add(next.Length > 1 ? next[2..] : "");
+                }
+
+                panel.Children.Add(CreateBlockquote(quoteLines));
+                continue;
+            }
+
             panel.Children.Add(CreateTextBlock(line, "changelogBody"));
         }
 
-        return new ScrollViewer { Content = panel };
+        // Horizontal scroll gives content infinite width during measure, which breaks Wrap above.
+        return new ScrollViewer { Content = panel, HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled };
     }
 
     /// <summary>
@@ -136,12 +163,46 @@ public static partial class MarkdownRenderer
 
         TextBlock content = CreateTextBlock(text, "changelogBody");
 
-        return new StackPanel
+        // Grid, not a horizontal StackPanel - StackPanel hands children infinite width along
+        // the stack axis, which was quietly breaking wrap on `content`.
+        Grid grid = new()
         {
-            Orientation = Orientation.Horizontal,
-            Margin = new Thickness(8, 0, 0, 0),
-            Children = { bullet, content }
+            ColumnDefinitions = new ColumnDefinitions("Auto,*"),
+            Margin = new Thickness(8, 0, 0, 0)
         };
+        Grid.SetColumn(bullet, 0);
+        Grid.SetColumn(content, 1);
+        grid.Children.Add(bullet);
+        grid.Children.Add(content);
+
+        return grid;
+    }
+
+    /// <summary>
+    /// Creates a fenced code block: raw (non-inline-parsed), monospaced, wrapping text in a bordered box.
+    /// </summary>
+    private static Control CreateCodeBlock(string code)
+    {
+        TextBlock block = new() { Text = code, TextWrapping = TextWrapping.Wrap };
+        block.Classes.Add("changelogCode");
+
+        Border border = new() { Child = block };
+        border.Classes.Add("changelogCode");
+        return border;
+    }
+
+    /// <summary>
+    /// Creates a blockquote: one or more wrapping text lines behind a left accent bar.
+    /// </summary>
+    private static Control CreateBlockquote(List<string> lines)
+    {
+        StackPanel content = new() { Spacing = 2 };
+        foreach (string line in lines)
+            content.Children.Add(CreateTextBlock(line, "changelogQuote"));
+
+        Border border = new() { Child = content };
+        border.Classes.Add("changelogQuote");
+        return border;
     }
 
     /// <summary>
@@ -162,7 +223,7 @@ public static partial class MarkdownRenderer
             else if (match.Groups["italic"].Success)
                 inlines.Add(new Run { Text = match.Groups["italic"].Value, FontStyle = FontStyle.Italic });
             else if (match.Groups["code"].Success)
-                inlines.Add(new Run { Text = match.Groups["code"].Value, FontFamily = new FontFamily("Consolas,Menlo,monospace") });
+                inlines.Add(CreateInlineCode(match.Groups["code"].Value));
             else if (match.Groups["linkurl"].Success)
                 inlines.Add(CreateLink(match.Groups["linktext"].Value, match.Groups["linkurl"].Value));
 
@@ -191,5 +252,19 @@ public static partial class MarkdownRenderer
         link.PointerPressed += (_, _) => Utility.OpenUrl(url);
 
         return new InlineUIContainer { Child = link };
+    }
+
+    /// <summary>
+    /// Creates an inline code span as a bordered, monospaced chip that hugs the text width.
+    /// </summary>
+    private static Inline CreateInlineCode(string text)
+    {
+        TextBlock block = new() { Text = text };
+        block.Classes.Add("changelogInlineCode");
+
+        Border chip = new() { Child = block };
+        chip.Classes.Add("changelogInlineCode");
+
+        return new InlineUIContainer { Child = chip };
     }
 }

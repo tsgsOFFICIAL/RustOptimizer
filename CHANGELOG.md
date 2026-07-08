@@ -4,6 +4,15 @@ All notable changes to Rust Optimizer are documented here.
 
 ## Unreleased
 - Added smooth hover and press transitions to buttons, and fixed a color flash that briefly appeared when switching the active sidebar item, most noticeable in dark mode.
+- Fixed changelog text overflowing past the window edge instead of wrapping.
+- Added blockquote and fenced code block support to the changelog renderer, and gave inline `code` a proper background and border instead of just swapping the font.
+
+> This is what a blockquote looks like now.
+
+```
+fenced code blocks now render
+in a bordered, monospaced box
+```
 
 ## 0.8.1
 - Added a real "Launch Rust" button that starts the game through Steam and automatically disables itself while Rust is already running.
