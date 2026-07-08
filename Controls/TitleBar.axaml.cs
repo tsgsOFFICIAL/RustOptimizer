@@ -26,6 +26,15 @@ public partial class TitleBar : UserControl
     public static readonly StyledProperty<bool> ShowMaximizeButtonProperty =
         AvaloniaProperty.Register<TitleBar, bool>(nameof(ShowMaximizeButton), defaultValue: true);
 
+    /// <summary>
+    /// Whether the icon/title/author/version block on the left is shown. Defaults to true;
+    /// windows that already display branding elsewhere (e.g. MainWindow's sidebar logo) should
+    /// set this false instead of just leaving Title/Icon unset, so the title bar doesn't reserve
+    /// an empty gap for a branding block nobody bound.
+    /// </summary>
+    public static readonly StyledProperty<bool> ShowBrandingProperty =
+        AvaloniaProperty.Register<TitleBar, bool>(nameof(ShowBranding), defaultValue: true);
+
     public static readonly StyledProperty<string?> AuthorProperty =
         AvaloniaProperty.Register<TitleBar, string?>(nameof(Author));
 
@@ -50,6 +59,12 @@ public partial class TitleBar : UserControl
     {
         get => GetValue(ShowMaximizeButtonProperty);
         set => SetValue(ShowMaximizeButtonProperty, value);
+    }
+
+    public bool ShowBranding
+    {
+        get => GetValue(ShowBrandingProperty);
+        set => SetValue(ShowBrandingProperty, value);
     }
 
     /// <summary>

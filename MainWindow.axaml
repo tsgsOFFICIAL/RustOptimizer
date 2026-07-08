@@ -16,7 +16,7 @@
         WindowStartupLocation="CenterScreen">
 
     <Grid RowDefinitions="Auto, *, Auto">
-        <controls:TitleBar Grid.Row="0" />
+        <controls:TitleBar Grid.Row="0" ShowBranding="False" />
 
         <Grid Grid.Row="1" ColumnDefinitions="Auto, *">
             <controls:Sidebar Grid.Column="0"

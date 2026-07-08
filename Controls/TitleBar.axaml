@@ -17,6 +17,39 @@
               Background="Transparent"
               PointerPressed="OnHeaderPointerPressed">
 
+            <StackPanel Grid.Column="0"
+                        Orientation="Horizontal"
+                        Spacing="10"
+                        Margin="12,0,0,0"
+                        VerticalAlignment="Center"
+                        IsVisible="{Binding #Root.ShowBranding}">
+                <ContentPresenter Content="{Binding #Root.Icon}"
+                                  Width="22" Height="22"
+                                  VerticalAlignment="Center"/>
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Spacing="1">
+                    <TextBlock Text="{Binding #Root.Title}"
+                               Foreground="{DynamicResource TextColor}"
+                               FontWeight="Medium"
+                               FontSize="12"/>
+                    <StackPanel Orientation="Horizontal" Spacing="3">
+                        <TextBlock Text="{Binding [By]}"
+                                   Classes="muted"
+                                   FontSize="10"/>
+                        <TextBlock Text="{Binding #Root.Author}"
+                                   Classes="muted"
+                                   FontSize="10"/>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Spacing="3" VerticalAlignment="Center" Margin="6,0,0,0">
+                    <TextBlock Text="{Binding [Version]}"
+                               Classes="muted"
+                               FontSize="10"/>
+                    <TextBlock Text="{Binding #Root.VersionText}"
+                               Classes="muted"
+                               FontSize="10"/>
+                </StackPanel>
+            </StackPanel>
+
             <StackPanel Grid.Column="2"
                         Orientation="Horizontal">
                 <Button Classes="captionButton" Click="OnMinimizeClick">
