@@ -20,8 +20,8 @@
                         Margin="20,20,20,16">
                 <Image Source="/Assets/App/logo.ico" Width="32" Height="32" />
                 <StackPanel Spacing="0" VerticalAlignment="Center">
-                    <TextBlock Text="RUST" FontSize="15" FontWeight="Bold" Foreground="{DynamicResource TextColor}" />
-                    <TextBlock Text="OPTIMIZER" FontSize="15" FontWeight="Bold"
+                    <TextBlock Text="RUST" FontSize="15" FontWeight="900" Foreground="{DynamicResource TextColor}" />
+                    <TextBlock Text="OPTIMIZER" FontSize="15" FontWeight="900"
                                Foreground="{DynamicResource AccentColor}" />
                 </StackPanel>
             </StackPanel>

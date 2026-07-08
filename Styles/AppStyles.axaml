@@ -6,6 +6,10 @@
     </Border>
   </Design.PreviewWith>
 
+    <Style Selector="Window">
+        <Setter Property="FontFamily" Value="{DynamicResource Montserrat}"></Setter>
+    </Style>
+    
     <Style Selector="TextBlock.title">
         <Setter Property="FontSize" Value="20"/>
         <Setter Property="FontWeight" Value="Bold"/>

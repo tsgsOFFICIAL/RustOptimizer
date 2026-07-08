@@ -17,5 +17,7 @@
                 <MergeResourceInclude Source="/Theme/Colors.axaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
+        
+        <FontFamily x:Key="Montserrat">/Assets/Fonts/Montserrat-Medium.ttf#Montserrat</FontFamily>
     </Application.Resources>
 </Application>
