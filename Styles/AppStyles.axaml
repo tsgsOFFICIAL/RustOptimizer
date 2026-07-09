@@ -10,6 +10,10 @@
         <Setter Property="FontFamily" Value="{DynamicResource Montserrat}"></Setter>
     </Style>
 
+    <Style Selector="Button">
+        <Setter Property="Cursor" Value="Hand" />
+    </Style>
+
     <Style Selector="Button /template/ ContentPresenter">
         <Setter Property="Transitions">
             <Transitions>
@@ -18,7 +22,7 @@
             </Transitions>
         </Setter>
     </Style>
-    
+
     <Style Selector="TextBlock.title">
         <Setter Property="FontSize" Value="20" />
         <Setter Property="FontWeight" Value="Bold" />
@@ -38,7 +42,6 @@
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="CornerRadius" Value="8" />
         <Setter Property="Padding" Value="16,8" />
-        <Setter Property="Cursor" Value="Hand" />
     </Style>
 
     <Style Selector="Button.accentButton:pointerover /template/ ContentPresenter">
@@ -52,7 +55,7 @@
         <Setter Property="CornerRadius" Value="12" />
         <Setter Property="Padding" Value="16" />
     </Style>
-    
+
     <Style Selector="Button.card">
         <Setter Property="Background" Value="{DynamicResource BgColor}" />
         <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
@@ -61,7 +64,6 @@
         <Setter Property="Padding" Value="14" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-        <Setter Property="Cursor" Value="Hand" />
     </Style>
 
     <Style Selector="Button.card:pointerover /template/ ContentPresenter">
@@ -77,13 +79,12 @@
         <Setter Property="Foreground" Value="{DynamicResource TextMutedColor}" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="Cursor" Value="Hand" />
     </Style>
 
     <Style Selector="Button.captionButton:pointerover /template/ ContentPresenter">
         <Setter Property="Background" Value="{DynamicResource BorderColor}" />
     </Style>
-    
+
     <Style Selector="Button.captionButton.close">
         <Setter Property="Background" Value="{DynamicResource DangerColorTransparent}" />
     </Style>
@@ -172,7 +173,6 @@
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="FontWeight" Value="Medium" />
-        <Setter Property="Cursor" Value="Hand" />
     </Style>
 
     <Style Selector="Button.navItem:pointerover /template/ ContentPresenter">
@@ -204,7 +204,6 @@
         <Setter Property="Padding" Value="4,8" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-        <Setter Property="Cursor" Value="Hand" />
     </Style>
 
     <Style Selector="Button.listRow:pointerover /template/ ContentPresenter">
@@ -247,7 +246,6 @@
         <Setter Property="Padding" Value="16,9" />
         <Setter Property="FontSize" Value="13" />
         <Setter Property="FontWeight" Value="Medium" />
-        <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Transitions">
             <Transitions>
                 <BrushTransition Property="Background" Duration="0:0:0.12" />
@@ -274,7 +272,6 @@
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="CornerRadius" Value="6" />
         <Setter Property="Padding" Value="4" />
-        <Setter Property="Cursor" Value="Hand" />
     </Style>
 
     <Style Selector="Button.linkIcon:pointerover /template/ ContentPresenter">
