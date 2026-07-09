@@ -112,37 +112,49 @@
                         </StackPanel>
                         <Grid ColumnDefinitions="*,*,*,*">
 
-                            <Border Grid.Column="0" Classes="card" Margin="0,0,6,0" Padding="14">
+                            <Button Grid.Column="0" Classes="card outOfOrder" Margin="0,0,6,0" ToolTip.Tip="{Binding Localization[ComingSoon]}">
                                 <StackPanel Spacing="8">
-                                    <iconPacks:PackIconPhosphorIcons Kind="RocketLaunch" Width="20" Height="20" Foreground="{StaticResource AccentColor}"/>
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <iconPacks:PackIconPhosphorIcons Grid.Column="0" Kind="RocketLaunch" Width="20" Height="20" Foreground="{StaticResource AccentColor}" HorizontalAlignment="Left"/>
+                                        <iconPacks:PackIconPhosphorIcons Grid.Column="1" Kind="Barricade" Width="14" Height="14" Foreground="{DynamicResource TextMutedColor}"/>
+                                    </Grid>
                                     <TextBlock Text="{Binding Localization[PresetPerformanceName]}" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
                                     <TextBlock Text="{Binding Localization[PresetPerformanceDesc]}" Classes="muted" FontSize="11"/>
                                 </StackPanel>
-                            </Border>
+                            </Button>
 
-                            <Border Grid.Column="1" Classes="card" Margin="6,0,6,0" Padding="14">
+                            <Button Grid.Column="1" Classes="card outOfOrder" Margin="6,0,6,0" ToolTip.Tip="{Binding Localization[ComingSoon]}">
                                 <StackPanel Spacing="8">
-                                    <iconPacks:PackIconPhosphorIcons Kind="Scales" Width="20" Height="20" Foreground="{StaticResource NetworkColor}"/>
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <iconPacks:PackIconPhosphorIcons Grid.Column="0" Kind="Scales" Width="20" Height="20" Foreground="{StaticResource NetworkColor}" HorizontalAlignment="Left"/>
+                                        <iconPacks:PackIconPhosphorIcons Grid.Column="1" Kind="Barricade" Width="14" Height="14" Foreground="{DynamicResource TextMutedColor}"/>
+                                    </Grid>
                                     <TextBlock Text="{Binding Localization[PresetBalancedName]}" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
                                     <TextBlock Text="{Binding Localization[PresetBalancedDesc]}" Classes="muted" FontSize="11"/>
                                 </StackPanel>
-                            </Border>
+                            </Button>
 
-                            <Border Grid.Column="2" Classes="card" Margin="6,0,6,0" Padding="14">
+                            <Button Grid.Column="2" Classes="card outOfOrder" Margin="6,0,6,0" ToolTip.Tip="{Binding Localization[ComingSoon]}">
                                 <StackPanel Spacing="8">
-                                    <iconPacks:PackIconPhosphorIcons Kind="Diamond" Width="20" Height="20" Foreground="{StaticResource GraphicsColor}"/>
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <iconPacks:PackIconPhosphorIcons Grid.Column="0" Kind="Diamond" Width="20" Height="20" Foreground="{StaticResource GraphicsColor}" HorizontalAlignment="Left"/>
+                                        <iconPacks:PackIconPhosphorIcons Grid.Column="1" Kind="Barricade" Width="14" Height="14" Foreground="{DynamicResource TextMutedColor}"/>
+                                    </Grid>
                                     <TextBlock Text="{Binding Localization[PresetQualityName]}" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
                                     <TextBlock Text="{Binding Localization[PresetQualityDesc]}" Classes="muted" FontSize="11"/>
                                 </StackPanel>
-                            </Border>
+                            </Button>
 
-                            <Border Grid.Column="3" Classes="card" Margin="6,0,0,0" Padding="14">
+                            <Button Grid.Column="3" Classes="card outOfOrder" Margin="6,0,0,0" ToolTip.Tip="{Binding Localization[ComingSoon]}">
                                 <StackPanel Spacing="8">
-                                    <iconPacks:PackIconPhosphorIcons Kind="Sliders" Width="20" Height="20" Foreground="{DynamicResource TextMutedColor}"/>
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <iconPacks:PackIconPhosphorIcons Grid.Column="0" Kind="Sliders" Width="20" Height="20" Foreground="{DynamicResource TextMutedColor}" HorizontalAlignment="Left"/>
+                                        <iconPacks:PackIconPhosphorIcons Grid.Column="1" Kind="Barricade" Width="14" Height="14" Foreground="{DynamicResource TextMutedColor}"/>
+                                    </Grid>
                                     <TextBlock Text="{Binding Localization[PresetCustomName]}" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
                                     <TextBlock Text="{Binding Localization[PresetCustomDesc]}" Classes="muted" FontSize="11"/>
                                 </StackPanel>
-                            </Border>
+                            </Button>
 
                         </Grid>
                     </StackPanel>
