@@ -265,4 +265,19 @@
     <Style Selector="Button.linkIcon:pointerover /template/ ContentPresenter">
         <Setter Property="Background" Value="{DynamicResource BorderColor}" />
     </Style>
+
+    <!-- "Out of order" marker for buttons whose feature isn't wired up yet: dims the button and
+         swaps the cursor so it doesn't read as clickable. Pair with a Barricade icon in place of
+         the row's usual trailing caret, and a ToolTip bound to Localization[ComingSoon].
+         
+         TODO: Replace 'Barricade' with 'CaretRight'
+          -->
+    <Style Selector="Button.outOfOrder">
+        <Setter Property="Opacity" Value="0.55" />
+        <Setter Property="Cursor" Value="No" />
+    </Style>
+
+    <Style Selector="Button.outOfOrder:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource BorderColorTransparent}" />
+    </Style>
 </Styles>
