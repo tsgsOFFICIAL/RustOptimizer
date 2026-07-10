@@ -103,63 +103,6 @@
                     </Grid>
                 </StackPanel>
 
-                <!-- Quick Optimization -->
-                <Border Classes="card">
-                    <StackPanel Spacing="14">
-                        <StackPanel Spacing="2">
-                            <TextBlock Text="{Binding Localization[QuickOptimizationTitle]}" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>
-                            <TextBlock Text="{Binding Localization[QuickOptimizationSubtitle]}" Classes="muted" FontSize="12"/>
-                        </StackPanel>
-                        <Grid ColumnDefinitions="*,*,*,*">
-
-                            <Button Grid.Column="0" Classes="card outOfOrder" Margin="0,0,6,0" ToolTip.Tip="{Binding Localization[ComingSoon]}">
-                                <StackPanel Spacing="8">
-                                    <Grid ColumnDefinitions="*,Auto">
-                                        <iconPacks:PackIconPhosphorIcons Grid.Column="0" Kind="RocketLaunch" Width="20" Height="20" Foreground="{StaticResource AccentColor}" HorizontalAlignment="Left"/>
-                                        <iconPacks:PackIconPhosphorIcons Grid.Column="1" Kind="Barricade" Width="14" Height="14" Foreground="{DynamicResource TextMutedColor}"/>
-                                    </Grid>
-                                    <TextBlock Text="{Binding Localization[PresetPerformanceName]}" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
-                                    <TextBlock Text="{Binding Localization[PresetPerformanceDesc]}" Classes="muted" FontSize="11"/>
-                                </StackPanel>
-                            </Button>
-
-                            <Button Grid.Column="1" Classes="card outOfOrder" Margin="6,0,6,0" ToolTip.Tip="{Binding Localization[ComingSoon]}">
-                                <StackPanel Spacing="8">
-                                    <Grid ColumnDefinitions="*,Auto">
-                                        <iconPacks:PackIconPhosphorIcons Grid.Column="0" Kind="Scales" Width="20" Height="20" Foreground="{StaticResource NetworkColor}" HorizontalAlignment="Left"/>
-                                        <iconPacks:PackIconPhosphorIcons Grid.Column="1" Kind="Barricade" Width="14" Height="14" Foreground="{DynamicResource TextMutedColor}"/>
-                                    </Grid>
-                                    <TextBlock Text="{Binding Localization[PresetBalancedName]}" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
-                                    <TextBlock Text="{Binding Localization[PresetBalancedDesc]}" Classes="muted" FontSize="11"/>
-                                </StackPanel>
-                            </Button>
-
-                            <Button Grid.Column="2" Classes="card outOfOrder" Margin="6,0,6,0" ToolTip.Tip="{Binding Localization[ComingSoon]}">
-                                <StackPanel Spacing="8">
-                                    <Grid ColumnDefinitions="*,Auto">
-                                        <iconPacks:PackIconPhosphorIcons Grid.Column="0" Kind="Diamond" Width="20" Height="20" Foreground="{StaticResource GraphicsColor}" HorizontalAlignment="Left"/>
-                                        <iconPacks:PackIconPhosphorIcons Grid.Column="1" Kind="Barricade" Width="14" Height="14" Foreground="{DynamicResource TextMutedColor}"/>
-                                    </Grid>
-                                    <TextBlock Text="{Binding Localization[PresetQualityName]}" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
-                                    <TextBlock Text="{Binding Localization[PresetQualityDesc]}" Classes="muted" FontSize="11"/>
-                                </StackPanel>
-                            </Button>
-
-                            <Button Grid.Column="3" Classes="card outOfOrder" Margin="6,0,0,0" ToolTip.Tip="{Binding Localization[ComingSoon]}">
-                                <StackPanel Spacing="8">
-                                    <Grid ColumnDefinitions="*,Auto">
-                                        <iconPacks:PackIconPhosphorIcons Grid.Column="0" Kind="Sliders" Width="20" Height="20" Foreground="{DynamicResource TextMutedColor}" HorizontalAlignment="Left"/>
-                                        <iconPacks:PackIconPhosphorIcons Grid.Column="1" Kind="Barricade" Width="14" Height="14" Foreground="{DynamicResource TextMutedColor}"/>
-                                    </Grid>
-                                    <TextBlock Text="{Binding Localization[PresetCustomName]}" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
-                                    <TextBlock Text="{Binding Localization[PresetCustomDesc]}" Classes="muted" FontSize="11"/>
-                                </StackPanel>
-                            </Button>
-
-                        </Grid>
-                    </StackPanel>
-                </Border>
-
             </StackPanel>
         </ScrollViewer>
 
@@ -272,27 +215,37 @@
                     <StackPanel Spacing="10">
                         <TextBlock Text="{Binding Localization[PresetProfilesTitle]}" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>
 
-                        <Grid ColumnDefinitions="*,Auto">
-                            <TextBlock Grid.Column="0" Text="{Binding Localization[ProfileLowEndPc]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
-                            <Border Grid.Column="1" Classes="pill">
-                                <TextBlock Text="{Binding Localization[TagRecommended]}"/>
-                            </Border>
-                        </Grid>
+                        <Button Classes="listRow" Tag="LowEndPc" Command="{Binding ApplyPresetCommand}" CommandParameter="{Binding $self.Tag}">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBlock Grid.Column="0" Text="{Binding Localization[ProfileLowEndPc]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
+                                <Border Grid.Column="1" Classes="pill">
+                                    <TextBlock Text="{Binding Localization[TagRecommended]}"/>
+                                </Border>
+                            </Grid>
+                        </Button>
 
-                        <Grid ColumnDefinitions="*,Auto">
-                            <TextBlock Grid.Column="0" Text="{Binding Localization[ProfileCompetitive]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="1" Text="{Binding Localization[TagHighFps]}" Classes="muted" FontSize="12"/>
-                        </Grid>
+                        <Button Classes="listRow" Tag="Competitive" Command="{Binding ApplyPresetCommand}" CommandParameter="{Binding $self.Tag}">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBlock Grid.Column="0" Text="{Binding Localization[ProfileCompetitive]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" Text="{Binding Localization[TagHighFps]}" Classes="muted" FontSize="12"/>
+                            </Grid>
+                        </Button>
 
-                        <Grid ColumnDefinitions="*,Auto">
-                            <TextBlock Grid.Column="0" Text="{Binding Localization[ProfileStreamer]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="1" Text="{Binding Localization[TagBalanced]}" Classes="muted" FontSize="12"/>
-                        </Grid>
+                        <Button Classes="listRow" Tag="Streamer" Command="{Binding ApplyPresetCommand}" CommandParameter="{Binding $self.Tag}">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBlock Grid.Column="0" Text="{Binding Localization[ProfileStreamer]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" Text="{Binding Localization[TagBalanced]}" Classes="muted" FontSize="12"/>
+                            </Grid>
+                        </Button>
 
-                        <Grid ColumnDefinitions="*,Auto">
-                            <TextBlock Grid.Column="0" Text="{Binding Localization[ProfileCinematic]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="1" Text="{Binding Localization[TagBestQuality]}" Classes="muted" FontSize="12"/>
-                        </Grid>
+                        <Button Classes="listRow" Tag="Cinematic" Command="{Binding ApplyPresetCommand}" CommandParameter="{Binding $self.Tag}">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBlock Grid.Column="0" Text="{Binding Localization[ProfileCinematic]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" Text="{Binding Localization[TagBestQuality]}" Classes="muted" FontSize="12"/>
+                            </Grid>
+                        </Button>
+
+                        <TextBlock Text="{Binding PresetStatusText}" TextWrapping="Wrap" Classes="muted" FontSize="11"/>
 
                         <Button Classes="listRow outOfOrder" ToolTip.Tip="{Binding Localization[ComingSoon]}">
                             <Grid ColumnDefinitions="*,Auto">

@@ -46,17 +46,6 @@
   "StatusNotOptimized": "Ikke optimeret",
   "StatusGood": "God",
 
-  "QuickOptimizationTitle": "Hurtig optimering",
-  "QuickOptimizationSubtitle": "Anvend de bedste indstillinger til dit system med ét klik.",
-  "PresetPerformanceName": "Ydeevne",
-  "PresetPerformanceDesc": "Maksimal FPS",
-  "PresetBalancedName": "Balanceret",
-  "PresetBalancedDesc": "Anbefalet",
-  "PresetQualityName": "Kvalitet",
-  "PresetQualityDesc": "Bedre grafik",
-  "PresetCustomName": "Brugerdefineret",
-  "PresetCustomDesc": "Avanceret",
-
   "SystemInformationTitle": "Systemoplysninger",
   "CpuLabel": "CPU",
   "CpuUsageLabel": "CPU-forbrug",
@@ -83,6 +72,8 @@
   "TagBalanced": "Balanceret",
   "TagBestQuality": "Bedste kvalitet",
   "ManageProfiles": "Administrer profiler",
+  "PresetApplied": "Preset anvendt.",
+  "PresetApplyFailed": "Kunne ikke anvende preset. Luk Rust, og prøv igen.",
 
   "FooterJoinCommunity": "Deltag i vores fællesskab",
   "FooterOpenSource": "Open Source",

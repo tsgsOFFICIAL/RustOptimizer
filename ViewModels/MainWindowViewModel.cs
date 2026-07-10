@@ -16,6 +16,7 @@ public sealed class MainWindowViewModel : ViewModelBase
     private readonly IDialogService _dialogs;
     private readonly ISystemInfoService _systemInfo;
     private readonly IRustProcessService _rustProcess;
+    private readonly IConfigService _configService;
 
     private DashboardViewModel? _dashboard;
     private SettingsViewModel? _settings;
@@ -25,7 +26,7 @@ public sealed class MainWindowViewModel : ViewModelBase
     private ViewModelBase? _currentPage;
 
     public MainWindowViewModel(IThemeService theme, ILocalizationService localization, IUpdateService updates,
-        IRustProcessService rustProcess, ISystemInfoService systemInfo, IDialogService dialogs)
+        IRustProcessService rustProcess, ISystemInfoService systemInfo, IDialogService dialogs, IConfigService configService)
         : base(localization)
     {
         _theme = theme;
@@ -33,6 +34,7 @@ public sealed class MainWindowViewModel : ViewModelBase
         _dialogs = dialogs;
         _systemInfo = systemInfo;
         _rustProcess = rustProcess;
+        _configService = configService;
 
         Sidebar = new SidebarViewModel(localization, rustProcess);
         Sidebar.NavigationRequested += (_, page) => Navigate(page);
@@ -41,7 +43,7 @@ public sealed class MainWindowViewModel : ViewModelBase
         OpenGitHubCommand = new RelayCommand(() => Utility.OpenUrl(ProjectLinks.GitHub));
         OpenDiscordCommand = new RelayCommand(() => Utility.OpenUrl(ProjectLinks.Discord));
 
-        CurrentPage = _dashboard = new DashboardViewModel(localization, systemInfo, rustProcess);
+        CurrentPage = _dashboard = new DashboardViewModel(localization, systemInfo, rustProcess, configService);
     }
 
     public SidebarViewModel Sidebar { get; }
@@ -98,7 +100,7 @@ public sealed class MainWindowViewModel : ViewModelBase
     {
         CurrentPage = page switch
         {
-            SidebarPage.Dashboard => _dashboard ??= new DashboardViewModel(Localization, _systemInfo, _rustProcess),
+            SidebarPage.Dashboard => _dashboard ??= new DashboardViewModel(Localization, _systemInfo, _rustProcess, _configService),
             SidebarPage.Settings => _settings ??= new SettingsViewModel(_theme, Localization),
             SidebarPage.About => _about ??= new AboutViewModel(Localization, _updates, _dialogs),
             _ => ShowComingSoon(page)

@@ -46,17 +46,6 @@
   "StatusNotOptimized": "Not optimized",
   "StatusGood": "Good",
 
-  "QuickOptimizationTitle": "Quick Optimization",
-  "QuickOptimizationSubtitle": "Apply the best settings for your system with one click.",
-  "PresetPerformanceName": "Performance",
-  "PresetPerformanceDesc": "Maximum FPS",
-  "PresetBalancedName": "Balanced",
-  "PresetBalancedDesc": "Recommended",
-  "PresetQualityName": "Quality",
-  "PresetQualityDesc": "Better visuals",
-  "PresetCustomName": "Custom",
-  "PresetCustomDesc": "Advanced",
-
   "SystemInformationTitle": "System Information",
   "CpuLabel": "CPU",
   "CpuUsageLabel": "CPU Usage",
@@ -83,6 +72,8 @@
   "TagBalanced": "Balanced",
   "TagBestQuality": "Best Quality",
   "ManageProfiles": "Manage Profiles",
+  "PresetApplied": "Preset applied.",
+  "PresetApplyFailed": "Failed to apply preset. Close Rust and try again.",
 
   "FooterJoinCommunity": "Join our community",
   "FooterOpenSource": "Open Source",

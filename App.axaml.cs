@@ -33,11 +33,12 @@ namespace RustOptimizer
             IRustProcessService rustProcess = services.GetRequiredService<IRustProcessService>();
             ISystemInfoService systemInfo = services.GetRequiredService<ISystemInfoService>();
             IDialogService dialogs = services.GetRequiredService<IDialogService>();
+            IConfigService configService = services.GetRequiredService<IConfigService>();
 
             theme.Initialize();
             localization.Initialize();
 
-            MainWindowViewModel viewModel = new(theme, localization, updates, rustProcess, systemInfo, dialogs);
+            MainWindowViewModel viewModel = new(theme, localization, updates, rustProcess, systemInfo, dialogs, configService);
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
                 desktop.MainWindow = new MainWindow(viewModel);

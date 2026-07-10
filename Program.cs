@@ -29,6 +29,7 @@ namespace RustOptimizer
                     .AddSingleton<IRustProcessService, RustProcessService>()
                     .AddSingleton<ISystemInfoService, SystemInfoService>()
                     .AddSingleton<IDialogService, DialogService>()
+                    .AddSingleton<IConfigService, ConfigService>()
                     .BuildServiceProvider();
 #pragma warning restore CA1416
 

@@ -27,8 +27,9 @@ namespace RustOptimizer
             LocalizationService localization = new();
             localization.Initialize();
 
-            return new MainWindowViewModel(theme, localization, new UpdateService(), new RustProcessService(),
-                new SystemInfoService(localization), new DialogService());
+            RustProcessService rustProcess = new();
+            return new MainWindowViewModel(theme, localization, new UpdateService(), rustProcess,
+                new SystemInfoService(localization), new DialogService(), new ConfigService(rustProcess));
         }
 
         public MainWindow(MainWindowViewModel viewModel)
