@@ -4,6 +4,11 @@ All notable changes to Rust Optimizer are documented here.
 
 ## Unreleased
 
+## 0.8.4
+- Added real Rust install detection: the app now finds Rust's actual install folder via Steam, so "Launch Rust" and "Verify Game Files" correctly disable themselves (with a red status indicator in the sidebar) if Rust isn't installed, instead of assuming it always is.
+- Added working Preset Profiles: Low End PC, Competitive, Streamer, and Cinematic now actually rewrite Rust's graphics/performance settings in `client.cfg` (backing up the original first) instead of being non-functional placeholders.
+- Removed the "Quick Optimization" section, which duplicated Preset Profiles without adding anything new.
+
 ## 0.8.3
 - Fixed the Dashboard picking your integrated GPU instead of the discrete one (and reporting its usage) on systems with both, like an AMD APU paired with a Radeon card.
 - Moved CPU/GPU name and RAM detection off WMI and the Win32 memory API onto the same LibreHardwareMonitor backend already used for live usage.

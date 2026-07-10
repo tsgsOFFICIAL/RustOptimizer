@@ -4,6 +4,11 @@ Alle væsentlige ændringer i Rust Optimizer er dokumenteret her.
 
 ## Unreleased
 
+## 0.8.4
+- Tilføjet rigtig registrering af Rust-installationen: appen finder nu Rusts faktiske installationsmappe via Steam, så "Start Rust" og "Verificér spilfiler" korrekt deaktiverer sig selv (med en rød statusindikator i sidebaren), hvis Rust ikke er installeret, i stedet for at antage, at det altid er.
+- Tilføjet fungerende forudindstillede profiler: Svag PC, Konkurrence, Streamer og Filmisk ændrer nu faktisk Rusts grafik-/ydeevneindstillinger i `client.cfg` (med sikkerhedskopiering af originalen først) i stedet for at være ikke-funktionelle pladsholdere.
+- Fjernet "Hurtig optimering"-sektionen, som duplikerede forudindstillede profiler uden at tilføje noget nyt.
+
 ## 0.8.3
 - Rettet at Dashboardet valgte din integrerede GPU i stedet for den dedikerede (og viste dens forbrug) på systemer med begge dele, f.eks. en AMD APU sammen med et Radeon-kort.
 - Flyttet registrering af CPU-/GPU-navn og RAM fra WMI og Win32-hukommelses-API'et til den samme LibreHardwareMonitor-backend, der allerede bruges til aktuelt forbrug.
