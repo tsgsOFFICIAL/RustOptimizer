@@ -16,6 +16,7 @@ public sealed class SidebarViewModel : ViewModelBase
     private DispatcherTimer? _pollTimer;
 
     private bool _isRustRunning;
+    private bool _isRustInstalled = true;
     private bool _isLaunchButtonEnabled = true;
     private SidebarPage _activePage = SidebarPage.Dashboard;
 
@@ -32,6 +33,7 @@ public sealed class SidebarViewModel : ViewModelBase
 
         LaunchRustCommand = new RelayCommand(LaunchRust);
         NavigateCommand = new RelayCommand<string>(Navigate);
+        IsRustInstalled = _rustProcess.GetInstallPath() != null;
     }
 
     /// <summary>
@@ -52,6 +54,16 @@ public sealed class SidebarViewModel : ViewModelBase
         }
     }
 
+    public bool IsRustInstalled
+    {
+        get => _isRustInstalled;
+        private set
+        {
+            if (SetProperty(ref _isRustInstalled, value))
+                OnPropertyChanged(nameof(RustStatusText));
+        }
+    }
+
     public bool IsLaunchButtonEnabled
     {
         get => _isLaunchButtonEnabled;
@@ -64,7 +76,7 @@ public sealed class SidebarViewModel : ViewModelBase
         private set => SetProperty(ref _activePage, value);
     }
 
-    public string RustStatusText => Localization[IsRustRunning ? "RustRunning" : "RustNotRunning"];
+    public string RustStatusText => Localization[!IsRustInstalled ? "RustNotInstalled" : IsRustRunning ? "RustRunning" : "RustNotRunning"];
 
     /// <summary>
     /// Starts polling <see cref="IRustProcessService"/> every 3 seconds. Call from the view's
@@ -91,7 +103,7 @@ public sealed class SidebarViewModel : ViewModelBase
     private void Poll()
     {
         IsRustRunning = _rustProcess.IsRunning();
-        IsLaunchButtonEnabled = !IsRustRunning;
+        IsLaunchButtonEnabled = IsRustInstalled && !IsRustRunning;
     }
 
     private void LaunchRust()

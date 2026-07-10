@@ -25,6 +25,7 @@
   "NavAbout": "About",
   "RustNotRunning": "Rust is not running",
   "RustRunning": "Rust is running",
+  "RustNotInstalled": "Rust is not installed",
   "LaunchRust": "Launch Rust",
 
   "DashboardTitle": "Dashboard",
@@ -63,6 +64,7 @@
   "GpuUsageLabel": "GPU Usage",
   "RamLabel": "RAM",
   "OsLabel": "OS",
+  "RustInstallPath": "Install Path",
   "MoreDetails": "More Details",
   "UnknownHardware": "Unknown",
 

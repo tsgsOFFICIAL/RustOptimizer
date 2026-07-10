@@ -23,6 +23,8 @@ public sealed class DashboardViewModel : ViewModelBase
     private string _ramText = NotAvailable;
     private string _cpuUsageText = NotAvailable;
     private string _gpuUsageText = NotAvailable;
+    private string _installPathText = "";
+    private bool _isRustInstalled = true;
 
     public DashboardViewModel(ILocalizationService localization, ISystemInfoService systemInfo, IRustProcessService rustProcess)
         : base(localization)
@@ -37,12 +39,14 @@ public sealed class DashboardViewModel : ViewModelBase
 
         VerifyRustFilesCommand = new RelayCommand(VerifyRustFiles);
 
-        // Static identity strings never change, so these are resolved once here rather than on
-        // every poll tick.
         CpuName = _systemInfo.GetCpuName();
         GpuName = _systemInfo.GetGpuName();
         OsDescription = _systemInfo.GetOsDescription();
         RamText = FormatMemory(_systemInfo.GetMemoryInfo());
+
+        string? installPath = _rustProcess.GetInstallPath();
+        IsRustInstalled = installPath != null;
+        InstallPathText = installPath ?? Localization["RustNotInstalled"];
     }
 
     public RelayCommand RunSmartOptimizationCommand { get; }
@@ -54,6 +58,8 @@ public sealed class DashboardViewModel : ViewModelBase
     public string RamText { get => _ramText; private set => SetProperty(ref _ramText, value); }
     public string CpuUsageText { get => _cpuUsageText; private set => SetProperty(ref _cpuUsageText, value); }
     public string GpuUsageText { get => _gpuUsageText; private set => SetProperty(ref _gpuUsageText, value); }
+    public string InstallPathText { get => _installPathText; private set => SetProperty(ref _installPathText, value); }
+    public bool IsRustInstalled { get => _isRustInstalled; private set => SetProperty(ref _isRustInstalled, value); }
 
     /// <summary>
     /// Starts polling live usage every second. Call from the view's attach-to-visual-tree

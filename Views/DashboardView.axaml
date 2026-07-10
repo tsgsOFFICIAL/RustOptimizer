@@ -219,6 +219,14 @@
                             </StackPanel>
                         </Grid>
 
+                        <Grid ColumnDefinitions="Auto,*">
+                            <iconPacks:PackIconPhosphorIcons Grid.Column="0" Kind="FolderOpen" Width="20" Height="20" Margin="0,0,10,0" Foreground="{DynamicResource TextMutedColor}"/>
+                            <StackPanel Grid.Column="1" Spacing="0">
+                                <TextBlock Text="{Binding Localization[RustInstallPath]}" Classes="muted" FontSize="11"/>
+                                <TextBlock Text="{Binding InstallPathText}" FontSize="12" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
+                            </StackPanel>
+                        </Grid>
+
                         <Button Classes="listRow outOfOrder" ToolTip.Tip="{Binding Localization[ComingSoon]}">
                             <Grid ColumnDefinitions="*,Auto">
                                 <TextBlock Grid.Column="0" Text="{Binding Localization[MoreDetails]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
@@ -233,7 +241,7 @@
                     <StackPanel Spacing="4">
                         <TextBlock Text="{Binding Localization[QuickActionsTitle]}" FontWeight="Bold" Foreground="{DynamicResource TextColor}" Margin="0,0,0,6"/>
 
-                        <Button Classes="listRow" Command="{Binding VerifyRustFilesCommand}">
+                        <Button Classes="listRow" Command="{Binding VerifyRustFilesCommand}" IsEnabled="{Binding IsRustInstalled}">
                             <Grid ColumnDefinitions="Auto,*,Auto">
                                 <iconPacks:PackIconPhosphorIcons Grid.Column="0" Kind="ShieldCheck" Width="18" Height="18" Foreground="{DynamicResource TextMutedColor}" Margin="0,0,10,0"/>
                                 <TextBlock Grid.Column="1" Text="{Binding Localization[VerifyGameFiles]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>

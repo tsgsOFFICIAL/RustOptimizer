@@ -25,6 +25,7 @@
   "NavAbout": "О программе",
   "RustNotRunning": "Rust не запущен",
   "RustRunning": "Rust запущен",
+  "RustNotInstalled": "Rust не установлен",
   "LaunchRust": "Запустить Rust",
 
   "DashboardTitle": "Панель управления",
@@ -63,6 +64,7 @@
   "GpuUsageLabel": "Загрузка ГП",
   "RamLabel": "Память",
   "OsLabel": "ОС",
+  "RustInstallPath": "Путь установки",
   "MoreDetails": "Подробнее",
   "UnknownHardware": "Неизвестно",
 

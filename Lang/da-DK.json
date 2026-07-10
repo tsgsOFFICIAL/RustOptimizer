@@ -25,6 +25,7 @@
   "NavAbout": "Om",
   "RustNotRunning": "Rust kører ikke",
   "RustRunning": "Rust kører",
+  "RustNotInstalled": "Rust er ikke installeret",
   "LaunchRust": "Start Rust",
 
   "DashboardTitle": "Dashboard",
@@ -63,6 +64,7 @@
   "GpuUsageLabel": "GPU-forbrug",
   "RamLabel": "RAM",
   "OsLabel": "OS",
+  "RustInstallPath": "Installationssti",
   "MoreDetails": "Flere detaljer",
   "UnknownHardware": "Ukendt",
 
