@@ -60,9 +60,18 @@ public sealed class SidebarViewModel : ViewModelBase
         private set
         {
             if (SetProperty(ref _isRustInstalled, value))
+            {
                 OnPropertyChanged(nameof(RustStatusText));
+                OnPropertyChanged(nameof(IsRustNotInstalled));
+            }
         }
     }
+
+    /// <summary>
+    /// Inverse of <see cref="IsRustInstalled"/>, exposed for the sidebar's status dot styling
+    /// (Avalonia <c>Classes.x</c> bindings need a direct bool, not a negation).
+    /// </summary>
+    public bool IsRustNotInstalled => !IsRustInstalled;
 
     public bool IsLaunchButtonEnabled
     {

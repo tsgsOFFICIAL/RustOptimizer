@@ -122,6 +122,7 @@
                     <Ellipse x:Name="RustStatusDot"
                              Classes="rustStatusDot"
                              Classes.running="{Binding #Root.ViewModel.IsRustRunning}"
+                             Classes.notInstalled="{Binding #Root.ViewModel.IsRustNotInstalled}"
                              Width="8" Height="8"
                              VerticalAlignment="Center" />
                     <TextBlock Text="{Binding #Root.ViewModel.RustStatusText}"

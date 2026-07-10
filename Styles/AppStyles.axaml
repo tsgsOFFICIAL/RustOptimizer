@@ -196,6 +196,10 @@
         <Setter Property="Fill" Value="{DynamicResource SuccessColor}" />
     </Style>
 
+    <Style Selector="Ellipse.rustStatusDot.notInstalled">
+        <Setter Property="Fill" Value="{DynamicResource DangerColor}" />
+    </Style>
+
     <Style Selector="Button.listRow">
         <Setter Property="Background" Value="{DynamicResource BorderColorTransparent}" />
         <Setter Property="Foreground" Value="{DynamicResource TextColor}" />

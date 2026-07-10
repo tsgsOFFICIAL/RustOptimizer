@@ -23,7 +23,6 @@ public sealed class DashboardViewModel : ViewModelBase
     private string _ramText = NotAvailable;
     private string _cpuUsageText = NotAvailable;
     private string _gpuUsageText = NotAvailable;
-    private string _installPathText = "";
     private bool _isRustInstalled = true;
 
     public DashboardViewModel(ILocalizationService localization, ISystemInfoService systemInfo, IRustProcessService rustProcess)
@@ -44,9 +43,7 @@ public sealed class DashboardViewModel : ViewModelBase
         OsDescription = _systemInfo.GetOsDescription();
         RamText = FormatMemory(_systemInfo.GetMemoryInfo());
 
-        string? installPath = _rustProcess.GetInstallPath();
-        IsRustInstalled = installPath != null;
-        InstallPathText = installPath ?? Localization["RustNotInstalled"];
+        IsRustInstalled = _rustProcess.GetInstallPath() != null;
     }
 
     public RelayCommand RunSmartOptimizationCommand { get; }
@@ -58,7 +55,6 @@ public sealed class DashboardViewModel : ViewModelBase
     public string RamText { get => _ramText; private set => SetProperty(ref _ramText, value); }
     public string CpuUsageText { get => _cpuUsageText; private set => SetProperty(ref _cpuUsageText, value); }
     public string GpuUsageText { get => _gpuUsageText; private set => SetProperty(ref _gpuUsageText, value); }
-    public string InstallPathText { get => _installPathText; private set => SetProperty(ref _installPathText, value); }
     public bool IsRustInstalled { get => _isRustInstalled; private set => SetProperty(ref _isRustInstalled, value); }
 
     /// <summary>

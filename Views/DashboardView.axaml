@@ -219,14 +219,6 @@
                             </StackPanel>
                         </Grid>
 
-                        <Grid ColumnDefinitions="Auto,*">
-                            <iconPacks:PackIconPhosphorIcons Grid.Column="0" Kind="FolderOpen" Width="20" Height="20" Margin="0,0,10,0" Foreground="{DynamicResource TextMutedColor}"/>
-                            <StackPanel Grid.Column="1" Spacing="0">
-                                <TextBlock Text="{Binding Localization[RustInstallPath]}" Classes="muted" FontSize="11"/>
-                                <TextBlock Text="{Binding InstallPathText}" FontSize="12" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
-                            </StackPanel>
-                        </Grid>
-
                         <Button Classes="listRow outOfOrder" ToolTip.Tip="{Binding Localization[ComingSoon]}">
                             <Grid ColumnDefinitions="*,Auto">
                                 <TextBlock Grid.Column="0" Text="{Binding Localization[MoreDetails]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>

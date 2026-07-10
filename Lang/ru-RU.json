@@ -64,7 +64,6 @@
   "GpuUsageLabel": "Загрузка ГП",
   "RamLabel": "Память",
   "OsLabel": "ОС",
-  "RustInstallPath": "Путь установки",
   "MoreDetails": "Подробнее",
   "UnknownHardware": "Неизвестно",
 

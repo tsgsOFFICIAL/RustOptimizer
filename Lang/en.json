@@ -64,7 +64,6 @@
   "GpuUsageLabel": "GPU Usage",
   "RamLabel": "RAM",
   "OsLabel": "OS",
-  "RustInstallPath": "Install Path",
   "MoreDetails": "More Details",
   "UnknownHardware": "Unknown",
 
