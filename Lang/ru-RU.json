@@ -52,6 +52,8 @@
   "GpuLabel": "Видеокарта",
   "GpuUsageLabel": "Загрузка ГП",
   "RamLabel": "Память",
+  "MemorySpeedLabel": "Скорость памяти",
+  "MaxMemorySpeedLabel": "Макс. скорость памяти",
   "OsLabel": "ОС",
   "MoreDetails": "Подробнее",
   "UnknownHardware": "Неизвестно",

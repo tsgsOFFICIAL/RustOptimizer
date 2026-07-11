@@ -154,6 +154,22 @@
                             </StackPanel>
                         </StackPanel>
 
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <iconPacks:PackIconPhosphorIcons Kind="Lightning" Width="20" Height="20" Foreground="{DynamicResource TextMutedColor}"/>
+                            <StackPanel Spacing="0">
+                                <TextBlock Text="{Binding Localization[MemorySpeedLabel]}" Classes="muted" FontSize="11"/>
+                                <TextBlock Text="{Binding MemorySpeedText}" FontSize="12" Foreground="{DynamicResource TextColor}"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <iconPacks:PackIconPhosphorIcons Kind="LightningFill" Width="20" Height="20" Foreground="{DynamicResource TextMutedColor}"/>
+                            <StackPanel Spacing="0">
+                                <TextBlock Text="{Binding Localization[MaxMemorySpeedLabel]}" Classes="muted" FontSize="11"/>
+                                <TextBlock Text="{Binding MaxMemorySpeedText}" FontSize="12" Foreground="{DynamicResource TextColor}"/>
+                            </StackPanel>
+                        </StackPanel>
+
                         <Grid ColumnDefinitions="Auto,*">
                             <iconPacks:PackIconPhosphorIcons Grid.Column="0" Kind="Monitor" Width="20" Height="20" Margin="0,0,10,0" Foreground="{DynamicResource TextMutedColor}"/>
                             <StackPanel Grid.Column="1" Spacing="0">

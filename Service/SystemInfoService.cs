@@ -1,8 +1,9 @@
 using LibreHardwareMonitor.Hardware;
 using RustOptimizer.Service.Logging;
+using System.Collections.Generic;
 using System.Runtime.Versioning;
 using RustOptimizer.Interface;
-using System.Collections.Generic;
+using System.Management;
 using System.Linq;
 using System;
 
@@ -14,6 +15,8 @@ public sealed class SystemInfoService(ILocalizationService localization) : ISyst
 {
     private string? _cpuName;
     private string? _gpuName;
+    private MemorySpeedInfo _memorySpeedInfo;
+    private bool _memorySpeedResolved;
 
     private Computer? _hardwareMonitor;
     private IHardware? _cpuHardware;
@@ -121,6 +124,46 @@ public sealed class SystemInfoService(ILocalizationService localization) : ISyst
             AppLog.Warn("SystemInfoService", "Failed to read GPU load via LibreHardwareMonitor.", ex);
             return null;
         }
+    }
+
+    public MemorySpeedInfo GetMemorySpeedInfo()
+    {
+        if (_memorySpeedResolved)
+            return _memorySpeedInfo;
+
+        _memorySpeedResolved = true;
+        return _memorySpeedInfo = ReadMemorySpeedFromWmi();
+    }
+
+    /// <summary>
+    /// Reads current (<c>ConfiguredClockSpeed</c>) and maximum rated (<c>Speed</c>) DRAM speed via
+    /// WMI - the same source Task Manager's Performance tab uses.
+    /// </summary>
+    private static MemorySpeedInfo ReadMemorySpeedFromWmi()
+    {
+        try
+        {
+            using ManagementObjectSearcher searcher = new("SELECT ConfiguredClockSpeed, Speed FROM Win32_PhysicalMemory");
+            using ManagementObjectCollection modules = searcher.Get();
+
+            foreach (ManagementBaseObject module in modules)
+            {
+                using (module)
+                {
+                    int? current = module["ConfiguredClockSpeed"] is uint c && c > 0 ? (int)c : null;
+                    int? rated = module["Speed"] is uint r && r > 0 ? (int)r : null;
+
+                    if (current != null || rated != null)
+                        return new MemorySpeedInfo(current, rated);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            AppLog.Warn("SystemInfoService", "Failed to read memory speed via WMI.", ex);
+        }
+
+        return default;
     }
 
     /// <summary>

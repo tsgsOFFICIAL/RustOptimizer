@@ -22,6 +22,8 @@ public sealed class DashboardViewModel : ViewModelBase
     private string _gpuName = "";
     private string _osDescription = "";
     private string _ramText = NotAvailable;
+    private string _memorySpeedText = NotAvailable;
+    private string _maxMemorySpeedText = NotAvailable;
     private string _cpuUsageText = NotAvailable;
     private string _gpuUsageText = NotAvailable;
     private string _presetStatusText = "";
@@ -48,6 +50,10 @@ public sealed class DashboardViewModel : ViewModelBase
         GpuName = _systemInfo.GetGpuName();
         OsDescription = _systemInfo.GetOsDescription();
         RamText = FormatMemory(_systemInfo.GetMemoryInfo());
+
+        MemorySpeedInfo memorySpeed = _systemInfo.GetMemorySpeedInfo();
+        MemorySpeedText = FormatMemorySpeed(memorySpeed.CurrentMhz);
+        MaxMemorySpeedText = FormatMemorySpeed(memorySpeed.RatedMhz);
 
         IsRustInstalled = _rustProcess.GetInstallPath() != null;
     }
@@ -78,6 +84,18 @@ public sealed class DashboardViewModel : ViewModelBase
     {
         get => _ramText;
         private set => SetProperty(ref _ramText, value);
+    }
+
+    public string MemorySpeedText
+    {
+        get => _memorySpeedText;
+        private set => SetProperty(ref _memorySpeedText, value);
+    }
+
+    public string MaxMemorySpeedText
+    {
+        get => _maxMemorySpeedText;
+        private set => SetProperty(ref _maxMemorySpeedText, value);
     }
 
     public string CpuUsageText
@@ -168,4 +186,6 @@ public sealed class DashboardViewModel : ViewModelBase
     }
 
     private static string FormatPercent(double? percent) => percent is { } value ? $"{value:0}%" : NotAvailable;
+
+    private static string FormatMemorySpeed(int? mhz) => mhz is { } value ? $"{value} MHz" : NotAvailable;
 }

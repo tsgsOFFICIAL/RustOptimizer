@@ -6,6 +6,14 @@ namespace RustOptimizer.Interface;
 public readonly record struct MemoryInfo(ulong TotalBytes, ulong UsedBytes);
 
 /// <summary>
+/// RAM clock speed in MHz: <see cref="CurrentMhz"/> is what it's actually running at right now,
+/// <see cref="RatedMhz"/> is the module's maximum rated speed (e.g. its XMP/EXPO profile). They
+/// differ when the rated profile isn't enabled in BIOS, in which case RAM runs at a slower
+/// JEDEC default speed.
+/// </summary>
+public readonly record struct MemorySpeedInfo(int? CurrentMhz, int? RatedMhz);
+
+/// <summary>
 /// Reads real hardware identity strings and live usage figures for the Dashboard's System
 /// Information card.
 /// </summary>
@@ -35,4 +43,9 @@ public interface ISystemInfoService
     /// combinations).
     /// </summary>
     double? GetGpuUsagePercent();
+
+    /// <summary>
+    /// Gets the RAM's current and rated (max) clock speed, as reported by the OS. Fields are <see langword="null"/> if unavailable.
+    /// </summary>
+    MemorySpeedInfo GetMemorySpeedInfo();
 }

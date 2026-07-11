@@ -52,6 +52,8 @@
   "GpuLabel": "GPU",
   "GpuUsageLabel": "GPU-forbrug",
   "RamLabel": "RAM",
+  "MemorySpeedLabel": "Hukommelseshastighed",
+  "MaxMemorySpeedLabel": "Maks. hukommelseshastighed",
   "OsLabel": "OS",
   "MoreDetails": "Flere detaljer",
   "UnknownHardware": "Ukendt",
