@@ -12,12 +12,12 @@ namespace RustOptimizer;
 
 /// <summary>
 /// Renders a small, changelog-oriented subset of Markdown (headings, bullet lists, rules,
-/// bold/italic/code spans, links and images/GIFs) directly into Avalonia controls, without
-/// pulling in a full CommonMark dependency.
+/// bold/italic/strikethrough/code spans, links and images/GIFs) directly into Avalonia controls,
+/// without pulling in a full CommonMark dependency.
 /// </summary>
 public static partial class MarkdownRenderer
 {
-    [GeneratedRegex(@"\*\*(?<bold>.+?)\*\*|\*(?<italic>.+?)\*|`(?<code>.+?)`|\[(?<linktext>.+?)\]\((?<linkurl>.+?)\)")]
+    [GeneratedRegex(@"\*\*(?<bold>.+?)\*\*|~~(?<strike>.+?)~~|\*(?<italic>.+?)\*|`(?<code>.+?)`|\[(?<linktext>.+?)\]\((?<linkurl>.+?)\)")]
     private static partial Regex InlineTokenRegex();
 
     /// <summary>
@@ -205,7 +205,7 @@ public static partial class MarkdownRenderer
     }
 
     /// <summary>
-    /// Tokenizes a single line of Markdown into bold/italic/code/link/plain inline runs, in order.
+    /// Tokenizes a single line of Markdown into bold/strikethrough/italic/code/link/plain inline runs, in order.
     /// </summary>
     private static IEnumerable<Inline> ParseInlines(string text)
     {
@@ -219,6 +219,8 @@ public static partial class MarkdownRenderer
 
             if (match.Groups["bold"].Success)
                 inlines.Add(new Run { Text = match.Groups["bold"].Value, FontWeight = FontWeight.Bold });
+            else if (match.Groups["strike"].Success)
+                inlines.Add(new Run { Text = match.Groups["strike"].Value, TextDecorations = TextDecorations.Strikethrough });
             else if (match.Groups["italic"].Success)
                 inlines.Add(new Run { Text = match.Groups["italic"].Value, FontStyle = FontStyle.Italic });
             else if (match.Groups["code"].Success)

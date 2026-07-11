@@ -4,6 +4,7 @@ All notable changes to Rust Optimizer are documented here.
 
 ## Unreleased
 - Added **Memory Speed** and **Max Memory Speed** rows to the Dashboard's System Information card, read from Windows' `Win32_PhysicalMemory` info - the same source Task Manager uses.
+- Added ~~strikethrough~~ support to the changelog renderer.
 
 > If the two numbers differ, your RAM's XMP/EXPO profile probably isn't enabled in BIOS, so it's running at a slower default speed instead.
 

@@ -4,6 +4,7 @@ Alle væsentlige ændringer i Rust Optimizer er dokumenteret her.
 
 ## Unreleased
 - Tilføjet rækkerne **Hukommelseshastighed** og **Maks. hukommelseshastighed** til Dashboardets Systemoplysninger-kort, hentet fra Windows' `Win32_PhysicalMemory`-oplysninger - den samme kilde, som Jobliste bruger.
+- Tilføjet understøttelse af ~~gennemstregning~~ i ændringslog-visningen.
 
 > Hvis de to tal er forskellige, er din RAMs XMP/EXPO-profil sandsynligvis ikke aktiveret i BIOS, så den kører med en langsommere standardhastighed i stedet.
 
