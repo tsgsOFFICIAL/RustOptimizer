@@ -3,6 +3,9 @@
 Alle væsentlige ændringer i Rust Optimizer er dokumenteret her.
 
 ## Unreleased
+- Tilføjet rækkerne **Hukommelseshastighed** og **Maks. hukommelseshastighed** til Dashboardets Systemoplysninger-kort, hentet fra Windows' `Win32_PhysicalMemory`-oplysninger - den samme kilde, som Jobliste bruger.
+
+> Hvis de to tal er forskellige, er din RAMs XMP/EXPO-profil sandsynligvis ikke aktiveret i BIOS, så den kører med en langsommere standardhastighed i stedet.
 
 ## 0.8.4
 - Tilføjet rigtig registrering af Rust-installationen: appen finder nu Rusts faktiske installationsmappe via Steam, så "Start Rust" og "Verificér spilfiler" korrekt deaktiverer sig selv (med en rød statusindikator i sidebaren), hvis Rust ikke er installeret, i stedet for at antage, at det altid er.

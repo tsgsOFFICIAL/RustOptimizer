@@ -3,6 +3,9 @@
 All notable changes to Rust Optimizer are documented here.
 
 ## Unreleased
+- Added **Memory Speed** and **Max Memory Speed** rows to the Dashboard's System Information card, read from Windows' `Win32_PhysicalMemory` info - the same source Task Manager uses.
+
+> If the two numbers differ, your RAM's XMP/EXPO profile probably isn't enabled in BIOS, so it's running at a slower default speed instead.
 
 ## 0.8.4
 - Added real Rust install detection: the app now finds Rust's actual install folder via Steam, so "Launch Rust" and "Verify Game Files" correctly disable themselves (with a red status indicator in the sidebar) if Rust isn't installed, instead of assuming it always is.
