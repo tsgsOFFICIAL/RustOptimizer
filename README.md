@@ -40,7 +40,7 @@
 
 ## Screenshots
 
-![TODO](https://github.com/tsgsOFFICIAL/RustOptimizer/raw/master/Github-Assets/todo.png)  
+![Dashboard](https://github.com/tsgsOFFICIAL/RustOptimizer/raw/master/Github-Assets/Dashboard.png)  
 > *Main dashboard with optimization overview, quick actions, and preset profiles*
 
 ---

@@ -73,7 +73,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <AvaloniaResource Include="Assets\App\**" />
         <AvaloniaResource Include="Assets\**" />
     </ItemGroup>
 
