@@ -22,7 +22,6 @@
 - [Requirements](#requirements)
 - [Quick Start](#quick-start)
 - [Building from Source](#building-from-source)
-- [Important Notes](#important-notes)
 - [Support the Project](#support-the-project--the-creator)
 - [How to Contribute](#how-to-contribute)
 - [Star History](#star-history)
@@ -40,7 +39,7 @@
 
 ## Screenshots
 
-![Dashboard](https://github.com/tsgsOFFICIAL/RustOptimizer/raw/master/Github-Assets/Dashboard.png)  
+![Dashboard](https://github.com/tsgsOFFICIAL/RustOptimizer/raw/master/Assets/Github/Dashboard.png)
 > *Main dashboard with optimization overview, quick actions, and preset profiles*
 
 ---
