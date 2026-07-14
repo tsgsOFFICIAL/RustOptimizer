@@ -286,7 +286,7 @@
          
          TODO: Replace 'Barricade' with 'CaretRight'
           -->
-    <Style Selector="Button.outOfOrder">
+    <Style Selector="Button.outOfOrder, Border.outOfOrder">
         <Setter Property="Opacity" Value="0.55" />
         <Setter Property="Cursor" Value="No" />
     </Style>

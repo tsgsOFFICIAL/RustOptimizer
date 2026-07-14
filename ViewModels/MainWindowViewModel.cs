@@ -15,24 +15,29 @@ public sealed class MainWindowViewModel : ViewModelBase
     private readonly IUpdateService _updates;
     private readonly IDialogService _dialogs;
     private readonly ISystemInfoService _systemInfo;
+    private readonly ISystemTweaksService _systemTweaks;
     private readonly IRustProcessService _rustProcess;
     private readonly IConfigService _configService;
 
     private DashboardViewModel? _dashboard;
+    private SystemViewModel? _system;
     private SettingsViewModel? _settings;
     private AboutViewModel? _about;
     private ComingSoonViewModel? _comingSoon;
 
     private ViewModelBase? _currentPage;
 
+    /// <summary>Creates the shell, its sidebar, and the initial Dashboard page.</summary>
     public MainWindowViewModel(IThemeService theme, ILocalizationService localization, IUpdateService updates,
-        IRustProcessService rustProcess, ISystemInfoService systemInfo, IDialogService dialogs, IConfigService configService)
+        IRustProcessService rustProcess, ISystemInfoService systemInfo, ISystemTweaksService systemTweaks,
+        IDialogService dialogs, IConfigService configService)
         : base(localization)
     {
         _theme = theme;
         _updates = updates;
         _dialogs = dialogs;
         _systemInfo = systemInfo;
+        _systemTweaks = systemTweaks;
         _rustProcess = rustProcess;
         _configService = configService;
 
@@ -43,16 +48,24 @@ public sealed class MainWindowViewModel : ViewModelBase
         OpenGitHubCommand = new RelayCommand(() => Utility.OpenUrl(ProjectLinks.GitHub));
         OpenDiscordCommand = new RelayCommand(() => Utility.OpenUrl(ProjectLinks.Discord));
 
-        CurrentPage = _dashboard = new DashboardViewModel(localization, systemInfo, rustProcess, configService);
+        _dashboard = new DashboardViewModel(localization, systemInfo, systemTweaks, rustProcess, configService, Sidebar);
+        _dashboard.SystemDetailsRequested += (_, _) => Sidebar.NavigateTo(SidebarPage.System);
+        CurrentPage = _dashboard;
     }
 
+    /// <summary>The nav rail's view model.</summary>
     public SidebarViewModel Sidebar { get; }
 
+    /// <summary>The app's display version, shown in the sidebar footer.</summary>
     public string VersionText { get; }
 
+    /// <summary>Opens the project's GitHub page.</summary>
     public RelayCommand OpenGitHubCommand { get; }
+
+    /// <summary>Opens the project's Discord server.</summary>
     public RelayCommand OpenDiscordCommand { get; }
 
+    /// <summary>The view model of the page currently shown in the main content area.</summary>
     public ViewModelBase? CurrentPage
     {
         get => _currentPage;
@@ -93,20 +106,22 @@ public sealed class MainWindowViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Swaps <see cref="CurrentPage"/> to match the sidebar selection. Dashboard/Settings/About have
-    /// real content; every other page is still a "coming soon" placeholder pending later phases.
+    /// Swaps <see cref="CurrentPage"/> to match the sidebar selection. Dashboard/System/Settings/About
+    /// have real content; every other page is still a "coming soon" placeholder pending later phases.
     /// </summary>
     private void Navigate(SidebarPage page)
     {
         CurrentPage = page switch
         {
-            SidebarPage.Dashboard => _dashboard ??= new DashboardViewModel(Localization, _systemInfo, _rustProcess, _configService),
+            SidebarPage.Dashboard => _dashboard ??= new DashboardViewModel(Localization, _systemInfo, _systemTweaks, _rustProcess, _configService, Sidebar),
+            SidebarPage.System => _system ??= new SystemViewModel(Localization, _systemInfo, _systemTweaks, _rustProcess),
             SidebarPage.Settings => _settings ??= new SettingsViewModel(_theme, Localization),
             SidebarPage.About => _about ??= new AboutViewModel(Localization, _updates, _dialogs),
             _ => ShowComingSoon(page)
         };
     }
 
+    /// <summary>Returns the shared "coming soon" placeholder, retitled for the given page.</summary>
     private ComingSoonViewModel ShowComingSoon(SidebarPage page)
     {
         ComingSoonViewModel comingSoon = _comingSoon ??= new ComingSoonViewModel(Localization);

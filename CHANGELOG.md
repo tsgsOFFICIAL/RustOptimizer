@@ -3,10 +3,14 @@
 All notable changes to Rust Optimizer are documented here.
 
 ## Unreleased
-- Added **Memory Speed** and **Max Memory Speed** rows to the Dashboard's System Information card, read from Windows' `Win32_PhysicalMemory` info - the same source Task Manager uses.
+- Added a System page (reachable from the sidebar): CPU/GPU/RAM live usage and specs, motherboard/BIOS, storage, and OS details, plus OS-level tweaks - power plan, pointer precision, Game Mode, background recording, and fullscreen optimizations for Rust.
+- Added warning icons next to any System page setting that isn't at its recommended value, with a tooltip explaining why - including low RAM (under 16 GB), RAM running below its rated speed (XMP/EXPO not enabled in BIOS), and low free space on Rust's drive (under 10%).
+- Wired the Dashboard's Optimization Overview System tile to the System page's real settings instead of a hardcoded "12 / 16 settings" placeholder, and gave it a three-stage red/yellow/green status instead of a plain good/not-optimized split.
+- Dimmed the Optimization Overview's Performance, Network, and Graphics tiles, still mock data, to match the "coming soon" treatment already used on other unfinished features, so only the System tile reads as interactive.
+- Made the Optimization Overview's System tile clickable, jumping straight to the System page, the same destination as the System Information card's "More Details" row.
+- Fixed warning-icon tooltips sometimes needing the mouse moved back and forth before they'd show.
+- Fixed the Dashboard's System score not refreshing after changing a setting on the System page until the app was restarted.
 - Added ~~strikethrough~~ support to the changelog renderer.
-
-> If the two numbers differ, your RAM's XMP/EXPO profile probably isn't enabled in BIOS, so it's running at a slower default speed instead.
 
 ## 0.8.4
 - Added real Rust install detection: the app now finds Rust's actual install folder via Steam, so "Launch Rust" and "Verify Game Files" correctly disable themselves (with a red status indicator in the sidebar) if Rust isn't installed, instead of assuming it always is.

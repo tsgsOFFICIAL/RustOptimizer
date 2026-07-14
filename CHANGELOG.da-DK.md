@@ -3,10 +3,14 @@
 Alle væsentlige ændringer i Rust Optimizer er dokumenteret her.
 
 ## Unreleased
-- Tilføjet rækkerne **Hukommelseshastighed** og **Maks. hukommelseshastighed** til Dashboardets Systemoplysninger-kort, hentet fra Windows' `Win32_PhysicalMemory`-oplysninger - den samme kilde, som Jobliste bruger.
+- Tilføjet en Systemside (tilgængelig fra sidebaren): CPU-/GPU-/RAM-forbrug og specifikationer, bundkort/BIOS, lagerplads og OS-oplysninger, samt OS-niveau-justeringer - strømplan, markørpræcision, Spilfunktion, baggrundsoptagelse og fuldskærmsoptimeringer for Rust.
+- Tilføjet advarselsikoner ved enhver indstilling på Systemsiden, der ikke står på den anbefalede værdi, med et tooltip, der forklarer hvorfor - herunder for lidt RAM (under 16 GB), RAM der kører under sin vurderede hastighed (XMP/EXPO ikke aktiveret i BIOS), og lidt ledig plads på Rusts drev (under 10%).
+- Koblet Dashboardets Optimeringsoversigt-System-kort til Systemsidens rigtige indstillinger i stedet for en hardkodet "12 / 16 settings"-pladsholder, og givet det en tre-trins rød/gul/grøn status i stedet for en simpel god/ikke-optimeret-opdeling.
+- Nedtonet Optimeringsoversigtens Ydeevne-, Netværk- og Grafik-kort, som stadig er testdata, så de matcher "kommer snart"-stilen, der allerede bruges til andre ufærdige funktioner, så kun System-kortet fremstår interaktivt.
+- Gjort Optimeringsoversigtens System-kort klikbart, så det springer direkte til Systemsiden - samme destination som Systemoplysninger-kortets "Flere detaljer"-række.
+- Rettet at advarselsikonernes tooltip nogle gange krævede, at musen blev flyttet frem og tilbage, før det viste sig.
+- Rettet at Dashboardets System-score ikke opdaterede sig, efter en indstilling på Systemsiden blev ændret, før appen blev genstartet.
 - Tilføjet understøttelse af ~~gennemstregning~~ i ændringslog-visningen.
-
-> Hvis de to tal er forskellige, er din RAMs XMP/EXPO-profil sandsynligvis ikke aktiveret i BIOS, så den kører med en langsommere standardhastighed i stedet.
 
 ## 0.8.4
 - Tilføjet rigtig registrering af Rust-installationen: appen finder nu Rusts faktiske installationsmappe via Steam, så "Start Rust" og "Verificér spilfiler" korrekt deaktiverer sig selv (med en rød statusindikator i sidebaren), hvis Rust ikke er installeret, i stedet for at antage, at det altid er.

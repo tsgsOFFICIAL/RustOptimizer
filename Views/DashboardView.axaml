@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:iconPacks="https://github.com/MahApps/IconPacks.Avalonia"
              xmlns:vm="using:RustOptimizer.ViewModels"
+             xmlns:converters="using:RustOptimizer.Converters"
+             xmlns:avconverters="using:Avalonia.Data.Converters"
              mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="760"
              x:Class="RustOptimizer.Views.DashboardView"
              x:DataType="vm:DashboardViewModel">
@@ -52,7 +54,7 @@
                     <TextBlock Text="{Binding Localization[OptimizationOverviewTitle]}" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>
                     <Grid ColumnDefinitions="*,*,*,*">
 
-                        <Border Grid.Column="0" Classes="card" Margin="0,0,6,0">
+                        <Border Grid.Column="0" Classes="card outOfOrder" Margin="0,0,6,0" ToolTip.Tip="{Binding Localization[ComingSoon]}">
                             <StackPanel Spacing="10">
                                 <iconPacks:PackIconPhosphorIcons Kind="Gauge" Width="24" Height="24" Foreground="{StaticResource AccentColor}"/>
                                 <StackPanel Spacing="0">
@@ -64,19 +66,26 @@
                             </StackPanel>
                         </Border>
 
-                        <Border Grid.Column="1" Classes="card" Margin="6,0,6,0">
+                        <Button Grid.Column="1" Classes="card" Padding="16" Margin="6,0,6,0" Command="{Binding ViewSystemDetailsCommand}">
                             <StackPanel Spacing="10">
-                                <iconPacks:PackIconPhosphorIcons Kind="ShieldCheck" Width="24" Height="24" Foreground="{StaticResource SuccessColor}"/>
+                                <iconPacks:PackIconPhosphorIcons Kind="ShieldCheck" Width="24" Height="24"
+                                                                  Foreground="{Binding SystemScore.Status, Converter={x:Static converters:OptimizationStatusColorConverter.Instance}}"/>
                                 <StackPanel Spacing="0">
                                     <TextBlock Text="{Binding Localization[SystemLabel]}" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
-                                    <TextBlock Text="{Binding Localization[StatusGood]}" FontSize="12" Foreground="{StaticResource SuccessColor}"/>
+                                    <TextBlock Text="{Binding Localization[StatusGood]}" FontSize="12" Foreground="{StaticResource SuccessColor}"
+                                               IsVisible="{Binding SystemScore.Status, Converter={x:Static avconverters:ObjectConverters.Equal}, ConverterParameter={x:Static vm:OptimizationStatus.Optimized}}"/>
+                                    <TextBlock Text="{Binding Localization[StatusPartiallyOptimized]}" FontSize="12" Foreground="{StaticResource AccentColor}"
+                                               IsVisible="{Binding SystemScore.Status, Converter={x:Static avconverters:ObjectConverters.Equal}, ConverterParameter={x:Static vm:OptimizationStatus.PartiallyOptimized}}"/>
+                                    <TextBlock Text="{Binding Localization[StatusNotOptimized]}" FontSize="12" Foreground="{StaticResource DangerColor}"
+                                               IsVisible="{Binding SystemScore.Status, Converter={x:Static avconverters:ObjectConverters.Equal}, ConverterParameter={x:Static vm:OptimizationStatus.NotOptimized}}"/>
                                 </StackPanel>
-                                <TextBlock Text="12 / 16 settings" Classes="muted" FontSize="11"/>
-                                <ProgressBar Classes="thinBar" Minimum="0" Maximum="16" Value="12" Foreground="{StaticResource SuccessColor}"/>
+                                <TextBlock Text="{Binding SystemScore.SettingsText}" Classes="muted" FontSize="11"/>
+                                <ProgressBar Classes="thinBar" Minimum="0" Maximum="{Binding SystemScore.Total}" Value="{Binding SystemScore.Optimized}"
+                                             Foreground="{Binding SystemScore.Status, Converter={x:Static converters:OptimizationStatusColorConverter.Instance}}"/>
                             </StackPanel>
-                        </Border>
+                        </Button>
 
-                        <Border Grid.Column="2" Classes="card" Margin="6,0,6,0">
+                        <Border Grid.Column="2" Classes="card outOfOrder" Margin="6,0,6,0" ToolTip.Tip="{Binding Localization[ComingSoon]}">
                             <StackPanel Spacing="10">
                                 <iconPacks:PackIconPhosphorIcons Kind="WifiHigh" Width="24" Height="24" Foreground="{StaticResource NetworkColor}"/>
                                 <StackPanel Spacing="0">
@@ -88,7 +97,7 @@
                             </StackPanel>
                         </Border>
 
-                        <Border Grid.Column="3" Classes="card" Margin="6,0,0,0">
+                        <Border Grid.Column="3" Classes="card outOfOrder" Margin="6,0,0,0" ToolTip.Tip="{Binding Localization[ComingSoon]}">
                             <StackPanel Spacing="10">
                                 <iconPacks:PackIconPhosphorIcons Kind="Monitor" Width="24" Height="24" Foreground="{StaticResource GraphicsColor}"/>
                                 <StackPanel Spacing="0">
@@ -122,14 +131,6 @@
                             </StackPanel>
                         </Grid>
 
-                        <StackPanel Orientation="Horizontal" Spacing="10">
-                            <iconPacks:PackIconPhosphorIcons Kind="ChartLine" Width="20" Height="20" Foreground="{DynamicResource TextMutedColor}"/>
-                            <StackPanel Spacing="0">
-                                <TextBlock Text="{Binding Localization[CpuUsageLabel]}" Classes="muted" FontSize="11"/>
-                                <TextBlock Text="{Binding CpuUsageText}" FontSize="12" Foreground="{DynamicResource TextColor}"/>
-                            </StackPanel>
-                        </StackPanel>
-
                         <Grid ColumnDefinitions="Auto,*">
                             <iconPacks:PackIconPhosphorIcons Grid.Column="0" Kind="GraphicsCard" Width="20" Height="20" Margin="0,0,10,0" Foreground="{DynamicResource TextMutedColor}"/>
                             <StackPanel Grid.Column="1" Spacing="0">
@@ -139,34 +140,10 @@
                         </Grid>
 
                         <StackPanel Orientation="Horizontal" Spacing="10">
-                            <iconPacks:PackIconPhosphorIcons Kind="ChartLine" Width="20" Height="20" Foreground="{DynamicResource TextMutedColor}"/>
-                            <StackPanel Spacing="0">
-                                <TextBlock Text="{Binding Localization[GpuUsageLabel]}" Classes="muted" FontSize="11"/>
-                                <TextBlock Text="{Binding GpuUsageText}" FontSize="12" Foreground="{DynamicResource TextColor}"/>
-                            </StackPanel>
-                        </StackPanel>
-
-                        <StackPanel Orientation="Horizontal" Spacing="10">
                             <iconPacks:PackIconPhosphorIcons Kind="Memory" Width="20" Height="20" Foreground="{DynamicResource TextMutedColor}"/>
                             <StackPanel Spacing="0">
                                 <TextBlock Text="{Binding Localization[RamLabel]}" Classes="muted" FontSize="11"/>
                                 <TextBlock Text="{Binding RamText}" FontSize="12" Foreground="{DynamicResource TextColor}"/>
-                            </StackPanel>
-                        </StackPanel>
-
-                        <StackPanel Orientation="Horizontal" Spacing="10">
-                            <iconPacks:PackIconPhosphorIcons Kind="Lightning" Width="20" Height="20" Foreground="{DynamicResource TextMutedColor}"/>
-                            <StackPanel Spacing="0">
-                                <TextBlock Text="{Binding Localization[MemorySpeedLabel]}" Classes="muted" FontSize="11"/>
-                                <TextBlock Text="{Binding MemorySpeedText}" FontSize="12" Foreground="{DynamicResource TextColor}"/>
-                            </StackPanel>
-                        </StackPanel>
-
-                        <StackPanel Orientation="Horizontal" Spacing="10">
-                            <iconPacks:PackIconPhosphorIcons Kind="LightningFill" Width="20" Height="20" Foreground="{DynamicResource TextMutedColor}"/>
-                            <StackPanel Spacing="0">
-                                <TextBlock Text="{Binding Localization[MaxMemorySpeedLabel]}" Classes="muted" FontSize="11"/>
-                                <TextBlock Text="{Binding MaxMemorySpeedText}" FontSize="12" Foreground="{DynamicResource TextColor}"/>
                             </StackPanel>
                         </StackPanel>
 
@@ -178,10 +155,10 @@
                             </StackPanel>
                         </Grid>
 
-                        <Button Classes="listRow outOfOrder" ToolTip.Tip="{Binding Localization[ComingSoon]}">
+                        <Button Classes="listRow" Command="{Binding ViewSystemDetailsCommand}">
                             <Grid ColumnDefinitions="*,Auto">
                                 <TextBlock Grid.Column="0" Text="{Binding Localization[MoreDetails]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
-                                <iconPacks:PackIconPhosphorIcons Grid.Column="1" Kind="Barricade" Width="16" Height="16" Foreground="{DynamicResource TextMutedColor}" VerticalAlignment="Center"/>
+                                <iconPacks:PackIconPhosphorIcons Grid.Column="1" Kind="CaretRight" Width="16" Height="16" Foreground="{DynamicResource TextMutedColor}" VerticalAlignment="Center"/>
                             </Grid>
                         </Button>
                     </StackPanel>
@@ -192,7 +169,7 @@
                     <StackPanel Spacing="4">
                         <TextBlock Text="{Binding Localization[QuickActionsTitle]}" FontWeight="Bold" Foreground="{DynamicResource TextColor}" Margin="0,0,0,6"/>
 
-                        <Button Classes="listRow" Command="{Binding VerifyRustFilesCommand}" IsEnabled="{Binding IsRustInstalled}">
+                        <Button Classes="listRow" Command="{Binding VerifyRustFilesCommand}" IsEnabled="{Binding CanVerifyRustFiles}">
                             <Grid ColumnDefinitions="Auto,*,Auto">
                                 <iconPacks:PackIconPhosphorIcons Grid.Column="0" Kind="ShieldCheck" Width="18" Height="18" Foreground="{DynamicResource TextMutedColor}" Margin="0,0,10,0"/>
                                 <TextBlock Grid.Column="1" Text="{Binding Localization[VerifyGameFiles]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>

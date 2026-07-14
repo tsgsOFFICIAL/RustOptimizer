@@ -20,6 +20,7 @@ public sealed class SidebarViewModel : ViewModelBase
     private bool _isLaunchButtonEnabled = true;
     private SidebarPage _activePage = SidebarPage.Dashboard;
 
+    /// <summary>Creates the view model and resolves whether Rust is installed.</summary>
     public SidebarViewModel(ILocalizationService localization, IRustProcessService rustProcess)
         : base(localization)
     {
@@ -41,9 +42,13 @@ public sealed class SidebarViewModel : ViewModelBase
     /// </summary>
     public event EventHandler<SidebarPage>? NavigationRequested;
 
+    /// <summary>Launches Rust via Steam.</summary>
     public RelayCommand LaunchRustCommand { get; }
+
+    /// <summary>Navigates to the page named by its parameter.</summary>
     public RelayCommand<string> NavigateCommand { get; }
 
+    /// <summary>Whether the Rust process is currently running.</summary>
     public bool IsRustRunning
     {
         get => _isRustRunning;
@@ -54,6 +59,7 @@ public sealed class SidebarViewModel : ViewModelBase
         }
     }
 
+    /// <summary>Whether Rust's install path could be resolved.</summary>
     public bool IsRustInstalled
     {
         get => _isRustInstalled;
@@ -73,18 +79,21 @@ public sealed class SidebarViewModel : ViewModelBase
     /// </summary>
     public bool IsRustNotInstalled => !IsRustInstalled;
 
+    /// <summary>Whether the "Launch Rust" button is enabled - false while installed-but-not-running is unconfirmed or Rust is already running.</summary>
     public bool IsLaunchButtonEnabled
     {
         get => _isLaunchButtonEnabled;
         private set => SetProperty(ref _isLaunchButtonEnabled, value);
     }
 
+    /// <summary>The page currently selected in the nav list.</summary>
     public SidebarPage ActivePage
     {
         get => _activePage;
         private set => SetProperty(ref _activePage, value);
     }
 
+    /// <summary>Localized status text reflecting whether Rust is installed, running, or neither.</summary>
     public string RustStatusText => Localization[!IsRustInstalled ? "RustNotInstalled" : IsRustRunning ? "RustRunning" : "RustNotRunning"];
 
     /// <summary>
@@ -109,12 +118,14 @@ public sealed class SidebarViewModel : ViewModelBase
         _pollTimer = null;
     }
 
+    /// <summary>Refreshes <see cref="IsRustRunning"/> and <see cref="IsLaunchButtonEnabled"/>.</summary>
     private void Poll()
     {
         IsRustRunning = _rustProcess.IsRunning();
         IsLaunchButtonEnabled = IsRustInstalled && !IsRustRunning;
     }
 
+    /// <summary>Launches Rust and disables the launch button until the next poll confirms it started.</summary>
     private void LaunchRust()
     {
         // Disable immediately so a slow Steam boot can't be spammed into multiple launches; the
@@ -123,12 +134,21 @@ public sealed class SidebarViewModel : ViewModelBase
         _rustProcess.Launch();
     }
 
-    private void Navigate(string? tag)
+    /// <summary>
+    /// Programmatically selects a page, the same way clicking its nav button would - used by
+    /// in-page links (e.g. the Dashboard's "More Details" row) that jump elsewhere without going
+    /// through the nav rail itself.
+    /// </summary>
+    public void NavigateTo(SidebarPage page)
     {
-        if (!Enum.TryParse(tag, out SidebarPage page))
-            return;
-
         ActivePage = page;
         NavigationRequested?.Invoke(this, page);
+    }
+
+    /// <summary>Parses <paramref name="tag"/> as a <see cref="SidebarPage"/> and navigates to it.</summary>
+    private void Navigate(string? tag)
+    {
+        if (Enum.TryParse(tag, out SidebarPage page))
+            NavigateTo(page);
     }
 }

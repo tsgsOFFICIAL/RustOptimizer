@@ -9,8 +9,10 @@ namespace RustOptimizer
 {
     internal class Program
     {
+        /// <summary>The app's DI container, built once at startup.</summary>
         public static IServiceProvider Services { get; private set; } = null!;
 
+        /// <summary>Builds the DI container and starts the Avalonia application.</summary>
         [STAThread]
         public static void Main(string[] args)
         {
@@ -28,6 +30,7 @@ namespace RustOptimizer
                     .AddSingleton<IUpdateService, UpdateService>()
                     .AddSingleton<IRustProcessService, RustProcessService>()
                     .AddSingleton<ISystemInfoService, SystemInfoService>()
+                    .AddSingleton<ISystemTweaksService, SystemTweaksService>()
                     .AddSingleton<IDialogService, DialogService>()
                     .AddSingleton<IConfigService, ConfigService>()
                     .BuildServiceProvider();
@@ -46,6 +49,7 @@ namespace RustOptimizer
             }
         }
 
+        /// <summary>Configures the Avalonia <see cref="AppBuilder"/> used to start the application.</summary>
         public static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<App>()
                 .UsePlatformDetect()

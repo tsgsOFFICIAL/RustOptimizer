@@ -1,0 +1,32 @@
+using RustOptimizer.ViewModels;
+using Avalonia.Controls;
+using Avalonia;
+
+namespace RustOptimizer.Views;
+
+/// <summary>
+/// The System page. All state lives in <see cref="SystemViewModel"/>; this class just forwards
+/// visual-tree lifecycle events so the live usage poll pauses while the page isn't visible.
+/// </summary>
+public partial class SystemView : UserControl
+{
+    /// <summary>Creates the view.</summary>
+    public SystemView()
+    {
+        InitializeComponent();
+    }
+
+    /// <summary>Starts the view model's live-usage polling.</summary>
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+        (DataContext as SystemViewModel)?.StartPolling();
+    }
+
+    /// <summary>Stops the view model's live-usage polling.</summary>
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        (DataContext as SystemViewModel)?.StopPolling();
+    }
+}

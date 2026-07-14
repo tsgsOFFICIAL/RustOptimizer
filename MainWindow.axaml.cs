@@ -10,6 +10,7 @@ namespace RustOptimizer
     {
         private readonly MainWindowViewModel _viewModel;
 
+        /// <summary>Creates the window with a design-time view model, for the Avalonia previewer.</summary>
         [SupportedOSPlatform("windows")]
         public MainWindow() : this(CreateDesignViewModel()) { }
 
@@ -29,9 +30,10 @@ namespace RustOptimizer
 
             RustProcessService rustProcess = new();
             return new MainWindowViewModel(theme, localization, new UpdateService(), rustProcess,
-                new SystemInfoService(localization), new DialogService(), new ConfigService(rustProcess));
+                new SystemInfoService(localization), new SystemTweaksService(rustProcess), new DialogService(), new ConfigService(rustProcess));
         }
 
+        /// <summary>Creates the window bound to the given view model and wires up the startup update check.</summary>
         public MainWindow(MainWindowViewModel viewModel)
         {
             _viewModel = viewModel;

@@ -1,0 +1,365 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:iconPacks="https://github.com/MahApps/IconPacks.Avalonia"
+             xmlns:vm="using:RustOptimizer.ViewModels"
+             xmlns:interfaces="using:RustOptimizer.Interface"
+             xmlns:converters="using:Avalonia.Data.Converters"
+             mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="1000"
+             x:Class="RustOptimizer.Views.SystemView"
+             x:DataType="vm:SystemViewModel">
+
+    <UserControl.Styles>
+        <Style Selector="TextBlock.infoValue">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextColor}"/>
+        </Style>
+        <Style Selector="TextBlock.infoLabel">
+            <Setter Property="Foreground" Value="{DynamicResource TextMutedColor}"/>
+            <Setter Property="FontSize" Value="11"/>
+        </Style>
+        <Style Selector="TextBlock.statValue">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextColor}"/>
+        </Style>
+        <Style Selector="TextBlock.cardTitle">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextColor}"/>
+        </Style>
+        <Style Selector="TextBlock.sectionTitle">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextColor}"/>
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer>
+        <StackPanel Margin="24" Spacing="24">
+
+            <StackPanel Spacing="4">
+                <TextBlock Text="{Binding Localization[NavSystem]}" FontSize="26" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>
+                <TextBlock Text="{Binding Localization[SystemPageSubtitle]}" Classes="muted"/>
+            </StackPanel>
+
+            <!-- Live Usage -->
+            <StackPanel Spacing="12">
+                <TextBlock Text="{Binding Localization[LiveUsageTitle]}" Classes="sectionTitle"/>
+
+                <Grid ColumnDefinitions="*,*,*">
+
+                    <!-- CPU -->
+                    <Border Grid.Column="0" Classes="card" Margin="0,0,8,0">
+                        <StackPanel Spacing="14">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <iconPacks:PackIconPhosphorIcons Kind="Cpu" Width="20" Height="20" Foreground="{StaticResource AccentColor}"/>
+                                <TextBlock Text="{Binding Localization[CpuLabel]}" Classes="cardTitle"/>
+                            </StackPanel>
+                            <TextBlock Text="{Binding CpuName}" FontSize="11" TextWrapping="Wrap" Classes="muted"/>
+
+                            <StackPanel Spacing="6">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TextBlock Grid.Column="0" Text="{Binding Localization[CpuUsageLabel]}" Classes="infoLabel" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding CpuUsageText}" Classes="statValue"/>
+                                </Grid>
+                                <ProgressBar Classes="thinBar" Minimum="0" Maximum="100" Value="{Binding CpuUsagePercent}" Foreground="{StaticResource AccentColor}"/>
+                            </StackPanel>
+
+                            <StackPanel Spacing="0">
+                                <TextBlock Text="{Binding Localization[CpuCoresLabel]}" Classes="infoLabel"/>
+                                <TextBlock Text="{Binding CpuCoresText}" Classes="infoValue"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- GPU -->
+                    <Border Grid.Column="1" Classes="card" Margin="8,0,8,0">
+                        <StackPanel Spacing="14">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <iconPacks:PackIconPhosphorIcons Kind="GraphicsCard" Width="20" Height="20" Foreground="{StaticResource GraphicsColor}"/>
+                                <TextBlock Text="{Binding Localization[GpuLabel]}" Classes="cardTitle"/>
+                            </StackPanel>
+                            <TextBlock Text="{Binding GpuName}" FontSize="11" TextWrapping="Wrap" Classes="muted"/>
+
+                            <StackPanel Spacing="6">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TextBlock Grid.Column="0" Text="{Binding Localization[GpuUsageLabel]}" Classes="infoLabel" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding GpuUsageText}" Classes="statValue"/>
+                                </Grid>
+                                <ProgressBar Classes="thinBar" Minimum="0" Maximum="100" Value="{Binding GpuUsagePercent}" Foreground="{StaticResource GraphicsColor}"/>
+                            </StackPanel>
+
+                            <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto">
+                                <StackPanel Grid.Row="0" Grid.Column="0" Spacing="0">
+                                    <TextBlock Text="{Binding Localization[GpuTemperatureLabel]}" Classes="infoLabel"/>
+                                    <TextBlock Text="{Binding GpuTemperatureText}" Classes="infoValue"/>
+                                </StackPanel>
+                                <StackPanel Grid.Row="0" Grid.Column="1" Spacing="0">
+                                    <TextBlock Text="{Binding Localization[GpuFanLabel]}" Classes="infoLabel"/>
+                                    <TextBlock Text="{Binding GpuFanText}" Classes="infoValue"/>
+                                </StackPanel>
+                                <StackPanel Grid.Row="1" Grid.Column="0" Spacing="0" Margin="0,8,0,0">
+                                    <TextBlock Text="{Binding Localization[GpuClockLabel]}" Classes="infoLabel"/>
+                                    <TextBlock Classes="infoValue">
+                                        <Run Text="{Binding GpuCoreClockText}"/>
+                                        <Run Text=" / "/>
+                                        <Run Text="{Binding GpuMemoryClockText}"/>
+                                    </TextBlock>
+                                </StackPanel>
+                                <StackPanel Grid.Row="1" Grid.Column="1" Spacing="0" Margin="0,8,0,0">
+                                    <TextBlock Text="{Binding Localization[GpuPowerLabel]}" Classes="infoLabel"/>
+                                    <TextBlock Text="{Binding GpuPowerText}" Classes="infoValue"/>
+                                </StackPanel>
+                                <StackPanel Grid.Row="2" Grid.Column="0" Spacing="0" Margin="0,8,0,0">
+                                    <TextBlock Text="{Binding Localization[GpuVramLabel]}" Classes="infoLabel"/>
+                                    <TextBlock Text="{Binding GpuVramText}" Classes="infoValue"/>
+                                </StackPanel>
+                                <StackPanel Grid.Row="2" Grid.Column="1" Spacing="0" Margin="0,8,0,0">
+                                    <TextBlock Text="{Binding Localization[GpuDriverLabel]}" Classes="infoLabel"/>
+                                    <TextBlock Text="{Binding GpuDriverVersionText}" Classes="infoValue" TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Memory -->
+                    <Border Grid.Column="2" Classes="card" Margin="8,0,0,0">
+                        <StackPanel Spacing="14">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <iconPacks:PackIconPhosphorIcons Kind="Memory" Width="20" Height="20" Foreground="{StaticResource SuccessColor}"/>
+                                <TextBlock Text="{Binding Localization[RamLabel]}" Classes="cardTitle"/>
+                                <Border Background="Transparent" VerticalAlignment="Center"
+                                        IsVisible="{Binding MemorySizeWarningVisible}"
+                                        ToolTip.Tip="{Binding Localization[MemorySizeWarningTooltip]}">
+                                    <iconPacks:PackIconPhosphorIcons Kind="Warning" Width="16" Height="16" Foreground="{StaticResource AccentColor}"/>
+                                </Border>
+                            </StackPanel>
+
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="{Binding RamText}" Classes="statValue"/>
+                                <ProgressBar Classes="thinBar" Minimum="0" Maximum="100" Value="{Binding RamUsagePercent}" Foreground="{StaticResource SuccessColor}"/>
+                            </StackPanel>
+
+                            <Grid ColumnDefinitions="*,*">
+                                <StackPanel Grid.Column="0" Spacing="0">
+                                    <TextBlock Text="{Binding Localization[MemorySpeedLabel]}" Classes="infoLabel"/>
+                                    <Grid ColumnDefinitions="Auto,Auto">
+                                        <TextBlock Grid.Column="0" Text="{Binding MemorySpeedText}" Classes="infoValue" VerticalAlignment="Center"/>
+                                        <Border Grid.Column="1" Background="Transparent" Margin="6,0,0,0" VerticalAlignment="Center"
+                                                IsVisible="{Binding MemorySpeedWarningVisible}"
+                                                ToolTip.Tip="{Binding Localization[MemorySpeedWarningTooltip]}">
+                                            <iconPacks:PackIconPhosphorIcons Kind="Warning" Width="14" Height="14" Foreground="{StaticResource AccentColor}"/>
+                                        </Border>
+                                    </Grid>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Spacing="0">
+                                    <TextBlock Text="{Binding Localization[MaxMemorySpeedLabel]}" Classes="infoLabel"/>
+                                    <TextBlock Text="{Binding MaxMemorySpeedText}" Classes="infoValue"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="{Binding Localization[RamModulesLabel]}" Classes="infoLabel"/>
+                                <ItemsControl ItemsSource="{Binding RamModules}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate x:DataType="vm:RamModuleRow">
+                                            <Grid ColumnDefinitions="Auto,*,Auto" Margin="0,3,0,0">
+                                                <TextBlock Grid.Column="0" Text="{Binding Slot}" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextColor}"/>
+                                                <TextBlock Grid.Column="1" Text="{Binding Manufacturer}" Classes="muted" FontSize="11" Margin="8,0,8,0" TextTrimming="CharacterEllipsis"/>
+                                                <TextBlock Grid.Column="2" Text="{Binding CapacityText}" FontSize="11" Foreground="{DynamicResource TextColor}"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                </Grid>
+            </StackPanel>
+
+            <Grid ColumnDefinitions="*,*">
+
+                <!-- Operating System -->
+                <Border Grid.Column="0" Classes="card" Margin="0,0,10,0">
+                    <StackPanel Spacing="12">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <iconPacks:PackIconPhosphorIcons Kind="Monitor" Width="20" Height="20" Foreground="{StaticResource AccentColor}"/>
+                            <TextBlock Text="{Binding Localization[OsLabel]}" Classes="cardTitle"/>
+                        </StackPanel>
+                        <TextBlock Text="{Binding OsDescription}" FontSize="13" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
+                        <Grid ColumnDefinitions="*,*,*">
+                            <StackPanel Grid.Column="0" Spacing="0">
+                                <TextBlock Text="{Binding Localization[OsBuildLabel]}" Classes="infoLabel"/>
+                                <TextBlock Text="{Binding OsBuildText}" Classes="infoValue"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Spacing="0">
+                                <TextBlock Text="{Binding Localization[OsInstallDateLabel]}" Classes="infoLabel"/>
+                                <TextBlock Text="{Binding OsInstallDateText}" Classes="infoValue"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2" Spacing="0">
+                                <TextBlock Text="{Binding Localization[OsUptimeLabel]}" Classes="infoLabel"/>
+                                <TextBlock Text="{Binding OsUptimeText}" Classes="infoValue"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Motherboard & BIOS -->
+                <Border Grid.Column="1" Classes="card" Margin="10,0,0,0">
+                    <StackPanel Spacing="12">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <iconPacks:PackIconPhosphorIcons Kind="Circuitry" Width="20" Height="20" Foreground="{StaticResource AccentColor}"/>
+                            <TextBlock Text="{Binding Localization[MotherboardTitle]}" Classes="cardTitle"/>
+                        </StackPanel>
+                        <Grid ColumnDefinitions="*,*">
+                            <StackPanel Grid.Column="0" Spacing="0">
+                                <TextBlock Text="{Binding Localization[MotherboardLabel]}" Classes="infoLabel"/>
+                                <TextBlock Text="{Binding MotherboardText}" Classes="infoValue" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Spacing="0">
+                                <TextBlock Text="{Binding Localization[BiosLabel]}" Classes="infoLabel"/>
+                                <TextBlock Text="{Binding BiosText}" Classes="infoValue" TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+            </Grid>
+
+            <!-- Storage -->
+            <Border Classes="card">
+                <StackPanel Spacing="16">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <iconPacks:PackIconPhosphorIcons Kind="HardDrives" Width="20" Height="20" Foreground="{StaticResource AccentColor}"/>
+                        <TextBlock Text="{Binding Localization[StorageTitle]}" Classes="cardTitle"/>
+                        <Border Background="Transparent" VerticalAlignment="Center"
+                                IsVisible="{Binding StorageSpaceWarningVisible}"
+                                ToolTip.Tip="{Binding StorageSpaceWarningTooltip}">
+                            <iconPacks:PackIconPhosphorIcons Kind="Warning" Width="16" Height="16" Foreground="{StaticResource AccentColor}"/>
+                        </Border>
+                    </StackPanel>
+
+                    <ItemsControl ItemsSource="{Binding StorageDevices}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:StorageDeviceRow">
+                                <StackPanel Spacing="10" Margin="0,0,0,16">
+                                    <Grid ColumnDefinitions="*,Auto,Auto">
+                                        <TextBlock Grid.Column="0" Text="{Binding Model}" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                                        <Border Grid.Column="1" Classes="pill" Margin="12,0,12,0" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding MediaType}"/>
+                                        </Border>
+                                        <TextBlock Grid.Column="2" Text="{Binding CapacityText}" Classes="muted" FontSize="12" VerticalAlignment="Center"/>
+                                    </Grid>
+
+                                    <!-- Drive letters that live on this disk, indented underneath it. -->
+                                    <ItemsControl ItemsSource="{Binding Drives}" Margin="16,0,0,0">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate x:DataType="vm:LogicalDriveRow">
+                                                <StackPanel Spacing="6" Margin="0,8,0,0">
+                                                    <Grid ColumnDefinitions="Auto,*">
+                                                        <TextBlock Grid.Column="0" Text="{Binding Name}" FontWeight="SemiBold" FontSize="12" Foreground="{DynamicResource TextColor}"/>
+                                                        <TextBlock Grid.Column="1" Text="{Binding UsageText}" Classes="muted" FontSize="11" HorizontalAlignment="Right"/>
+                                                    </Grid>
+                                                    <ProgressBar Classes="thinBar" Minimum="0" Maximum="100" Value="{Binding PercentUsed}" Foreground="{StaticResource AccentColor}"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <!-- Tweaks -->
+            <StackPanel Spacing="12">
+                <TextBlock Text="{Binding Localization[TweaksTitle]}" Classes="sectionTitle"/>
+
+                <Grid ColumnDefinitions="*,*">
+
+                    <!-- Power Plan -->
+                    <Border Grid.Column="0" Classes="card" Margin="0,0,10,0">
+                        <StackPanel Spacing="12">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <iconPacks:PackIconPhosphorIcons Kind="BatteryCharging" Width="20" Height="20" Foreground="{StaticResource AccentColor}"/>
+                                <TextBlock Text="{Binding Localization[PowerPlanTitle]}" Classes="cardTitle"/>
+                            </StackPanel>
+                            <Grid ColumnDefinitions="*,Auto">
+                                <ComboBox Grid.Column="0" ItemsSource="{Binding PowerPlans}" SelectedItem="{Binding SelectedPowerPlan}" HorizontalAlignment="Stretch">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate x:DataType="interfaces:PowerPlanInfo">
+                                            <TextBlock Text="{Binding Name}"/>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                                <Border Grid.Column="1" Background="Transparent" Margin="8,0,0,0" VerticalAlignment="Center"
+                                        IsVisible="{Binding PowerPlanWarningVisible}"
+                                        ToolTip.Tip="{Binding Localization[PowerPlanWarningTooltip]}">
+                                    <iconPacks:PackIconPhosphorIcons Kind="Warning" Width="18" Height="18" Foreground="{StaticResource AccentColor}"/>
+                                </Border>
+                            </Grid>
+                            <TextBlock Text="{Binding PowerPlanStatusText}" Foreground="{StaticResource DangerColor}" FontSize="11" TextWrapping="Wrap"
+                                       IsVisible="{Binding PowerPlanStatusText, Converter={x:Static converters:StringConverters.IsNotNullOrEmpty}}"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Gaming -->
+                    <Border Grid.Column="1" Classes="card" Margin="10,0,0,0">
+                        <StackPanel Spacing="14">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <iconPacks:PackIconPhosphorIcons Kind="GameController" Width="20" Height="20" Foreground="{StaticResource AccentColor}"/>
+                                <TextBlock Text="{Binding Localization[GamingTweaksTitle]}" Classes="cardTitle"/>
+                            </StackPanel>
+
+                            <Grid ColumnDefinitions="*,Auto,Auto">
+                                <TextBlock Grid.Column="0" Text="{Binding Localization[PointerPrecisionLabel]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
+                                <Border Grid.Column="1" Background="Transparent" Margin="0,0,8,0" VerticalAlignment="Center"
+                                        IsVisible="{Binding PointerPrecisionWarningVisible}"
+                                        ToolTip.Tip="{Binding Localization[PointerPrecisionWarningTooltip]}">
+                                    <iconPacks:PackIconPhosphorIcons Kind="Warning" Width="18" Height="18" Foreground="{StaticResource AccentColor}"/>
+                                </Border>
+                                <ToggleSwitch Grid.Column="2" IsChecked="{Binding PointerPrecisionEnabled}" OnContent="" OffContent=""/>
+                            </Grid>
+
+                            <Grid ColumnDefinitions="*,Auto,Auto">
+                                <TextBlock Grid.Column="0" Text="{Binding Localization[GameModeLabel]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
+                                <Border Grid.Column="1" Background="Transparent" Margin="0,0,8,0" VerticalAlignment="Center"
+                                        IsVisible="{Binding GameModeWarningVisible}"
+                                        ToolTip.Tip="{Binding Localization[GameModeWarningTooltip]}">
+                                    <iconPacks:PackIconPhosphorIcons Kind="Warning" Width="18" Height="18" Foreground="{StaticResource AccentColor}"/>
+                                </Border>
+                                <ToggleSwitch Grid.Column="2" IsChecked="{Binding GameModeEnabled}" OnContent="" OffContent=""/>
+                            </Grid>
+
+                            <Grid ColumnDefinitions="*,Auto,Auto">
+                                <TextBlock Grid.Column="0" Text="{Binding Localization[BackgroundRecordingLabel]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                                <Border Grid.Column="1" Background="Transparent" Margin="0,0,8,0" VerticalAlignment="Center"
+                                        IsVisible="{Binding BackgroundRecordingWarningVisible}"
+                                        ToolTip.Tip="{Binding Localization[BackgroundRecordingWarningTooltip]}">
+                                    <iconPacks:PackIconPhosphorIcons Kind="Warning" Width="18" Height="18" Foreground="{StaticResource AccentColor}"/>
+                                </Border>
+                                <ToggleSwitch Grid.Column="2" IsChecked="{Binding BackgroundRecordingEnabled}" OnContent="" OffContent=""/>
+                            </Grid>
+
+                            <Grid ColumnDefinitions="*,Auto,Auto" IsVisible="{Binding ShowFullscreenOptimizationsToggle}">
+                                <TextBlock Grid.Column="0" Text="{Binding Localization[FullscreenOptimizationsLabel]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                                <Border Grid.Column="1" Background="Transparent" Margin="0,0,8,0" VerticalAlignment="Center"
+                                        IsVisible="{Binding FullscreenOptimizationsWarningVisible}"
+                                        ToolTip.Tip="{Binding Localization[FullscreenOptimizationsWarningTooltip]}">
+                                    <iconPacks:PackIconPhosphorIcons Kind="Warning" Width="18" Height="18" Foreground="{StaticResource AccentColor}"/>
+                                </Border>
+                                <ToggleSwitch Grid.Column="2" IsChecked="{Binding FullscreenOptimizationsDisabledForRust}" OnContent="" OffContent=""/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                </Grid>
+            </StackPanel>
+
+        </StackPanel>
+    </ScrollViewer>
+
+</UserControl>
