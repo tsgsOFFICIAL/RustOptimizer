@@ -6,7 +6,6 @@ using System.Runtime.Versioning;
 using RustOptimizer.Interface;
 using System.Diagnostics;
 using Microsoft.Win32;
-using System.Linq;
 using System.IO;
 using System;
 
@@ -126,21 +125,22 @@ public sealed partial class SystemTweaksService(IRustProcessService rustProcess)
         {
             using RegistryKey key = Registry.CurrentUser.CreateSubKey(AppCompatFlagsLayersKeyPath, writable: true);
 
-            // The value is a space-separated list of compatibility flags for this exe - only touch
-            // our one flag, in case something else already set others.
-            string[] flags = (key.GetValue(exePath) as string ?? "")
-                .Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            bool hasFlag = flags.Contains(DisableFullscreenOptimizationsFlag);
+            // DisableFullscreenOptimizationsFlag itself contains a space ("~ DISABLEDXMAXIMIZEDWINDOWEDMODE"
+            // is one token), so it can't be found by splitting the raw value on every space - only
+            // touch our one flag, in case something else already set others.
+            string raw = (key.GetValue(exePath) as string ?? "").Trim();
+            bool hasFlag = raw.Contains(DisableFullscreenOptimizationsFlag, StringComparison.Ordinal);
 
+            string updated = raw;
             if (disabled && !hasFlag)
-                flags = [.. flags, DisableFullscreenOptimizationsFlag];
+                updated = raw.Length == 0 ? DisableFullscreenOptimizationsFlag : $"{raw} {DisableFullscreenOptimizationsFlag}";
             else if (!disabled && hasFlag)
-                flags = flags.Where(f => f != DisableFullscreenOptimizationsFlag).ToArray();
+                updated = raw.Replace(DisableFullscreenOptimizationsFlag, "").Trim();
 
-            if (flags.Length == 0)
+            if (updated.Length == 0)
                 key.DeleteValue(exePath, throwOnMissingValue: false);
             else
-                key.SetValue(exePath, string.Join(' ', flags), RegistryValueKind.String);
+                key.SetValue(exePath, updated, RegistryValueKind.String);
 
             return true;
         }
@@ -157,8 +157,8 @@ public sealed partial class SystemTweaksService(IRustProcessService rustProcess)
         try
         {
             using RegistryKey? key = Registry.CurrentUser.OpenSubKey(AppCompatFlagsLayersKeyPath);
-            string[] flags = (key?.GetValue(exePath) as string ?? "").Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            return flags.Contains(DisableFullscreenOptimizationsFlag);
+            string raw = key?.GetValue(exePath) as string ?? "";
+            return raw.Contains(DisableFullscreenOptimizationsFlag, StringComparison.Ordinal);
         }
         catch (Exception ex)
         {
