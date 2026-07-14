@@ -46,6 +46,7 @@
   "StatusNotOptimized": "Не оптимизировано",
   "StatusPartiallyOptimized": "Частично оптимизировано",
   "StatusGood": "Хорошо",
+  "SystemIssuesMoreFormat": "{0} +{1} ещё",
 
   "SystemPageSubtitle": "Подробная информация об оборудовании и ОС.",
 

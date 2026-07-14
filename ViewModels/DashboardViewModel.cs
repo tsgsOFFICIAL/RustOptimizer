@@ -31,6 +31,11 @@ public sealed class DashboardViewModel : ViewModelBase
     private string _presetStatusText = "";
     private bool _isRustInstalled = true;
     private OptimizationCategoryScore _systemScore;
+    private IReadOnlyList<string> _systemOutstandingLabelKeys = [];
+
+    // Keeps the System tile's "what's wrong" summary compact - beyond this many, the rest are
+    // only a click away on the full System page anyway.
+    private const int MaxSystemIssuesShown = 2;
 
     /// <summary>Creates the view model, resolves the card's hardware identity strings once, and kicks off the System score's async load.</summary>
     public DashboardViewModel(ILocalizationService localization, ISystemInfoService systemInfo, ISystemTweaksService systemTweaks,
@@ -43,6 +48,14 @@ public sealed class DashboardViewModel : ViewModelBase
         _systemInfo = systemInfo;
         _sidebar = sidebar;
         _sidebar.PropertyChanged += OnSidebarPropertyChanged;
+
+        // SystemIssuesSummaryText is built from localized strings in C#, not a plain
+        // {Binding Localization[Key]} lookup, so it needs to be manually re-raised on language switch.
+        Localization.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName is "Item" or null)
+                OnPropertyChanged(nameof(SystemIssuesSummaryText));
+        };
 
         RunSmartOptimizationCommand = new RelayCommand(() =>
         {
@@ -145,6 +158,25 @@ public sealed class DashboardViewModel : ViewModelBase
         private set => SetProperty(ref _systemScore, value);
     }
 
+    /// <summary>
+    /// A short, comma-separated preview of what's not optimized yet (e.g. "Game Mode, Power Plan
+    /// +1 more"), or "" once every applicable check passes. Capped at <see cref="MaxSystemIssuesShown"/>
+    /// so the tile stays compact - the System page itself lists every check with its own warning icon.
+    /// </summary>
+    public string SystemIssuesSummaryText
+    {
+        get
+        {
+            if (_systemOutstandingLabelKeys.Count == 0)
+                return "";
+
+            string shown = string.Join(", ", _systemOutstandingLabelKeys.Take(MaxSystemIssuesShown).Select(key => Localization[key]));
+            int remaining = _systemOutstandingLabelKeys.Count - MaxSystemIssuesShown;
+
+            return remaining > 0 ? string.Format(Localization["SystemIssuesMoreFormat"], shown, remaining) : shown;
+        }
+    }
+
     /// <summary>Re-evaluates <see cref="CanVerifyRustFiles"/> whenever the sidebar's Rust-running state changes.</summary>
     private void OnSidebarPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
@@ -167,8 +199,11 @@ public sealed class DashboardViewModel : ViewModelBase
 
         string? activePlanId = plans.FirstOrDefault(p => p.IsActive).Id;
         double? rustDriveFreePercent = SystemOptimizationRecommendations.FindRustDriveFreePercent(_rustProcess.GetInstallPath(), storageDevices);
-        SystemScore = SystemOptimizationRecommendations.Score(
-            new SystemOptimizationInputs(gaming, activePlanId, _systemInfo.GetMemoryInfo(), memorySpeed, rustDriveFreePercent));
+        SystemOptimizationInputs inputs = new(gaming, activePlanId, _systemInfo.GetMemoryInfo(), memorySpeed, rustDriveFreePercent);
+
+        SystemScore = SystemOptimizationRecommendations.Score(inputs);
+        _systemOutstandingLabelKeys = SystemOptimizationRecommendations.GetOutstandingLabelKeys(inputs);
+        OnPropertyChanged(nameof(SystemIssuesSummaryText));
     }
 
     /// <summary>Triggers Steam's file verification for Rust.</summary>

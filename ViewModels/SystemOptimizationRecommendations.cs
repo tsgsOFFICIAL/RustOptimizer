@@ -108,39 +108,51 @@ public static class SystemOptimizationRecommendations
     }
 
     /// <summary>
-    /// Scores every applicable check. The fullscreen-optimizations, memory-speed, and storage-space
-    /// checks are skipped when their underlying data isn't available (Rust not installed, or the
-    /// OS/WMI didn't report a rated memory speed).
+    /// Every applicable check for the given inputs, paired with whether it's currently at its
+    /// recommended value and the localization key for its short display name. The fullscreen-
+    /// optimizations, memory-speed, and storage-space checks are only included when their
+    /// underlying data is available (Rust not installed, or the OS/WMI didn't report a rated
+    /// memory speed, both leave them out). One definition shared by <see cref="Score"/> and
+    /// <see cref="GetOutstandingLabelKeys"/> so they can never disagree.
     /// </summary>
-    public static OptimizationCategoryScore Score(SystemOptimizationInputs inputs)
+    private static IEnumerable<(bool Recommended, string LabelKey)> EvaluateChecks(SystemOptimizationInputs inputs)
     {
-        int total = 5;
-        int optimized = 0;
-
-        if (IsPointerPrecisionRecommended(inputs.Gaming.PointerPrecisionEnabled)) optimized++;
-        if (IsGameModeRecommended(inputs.Gaming.GameModeEnabled)) optimized++;
-        if (IsBackgroundRecordingRecommended(inputs.Gaming.BackgroundRecordingEnabled)) optimized++;
-        if (IsPowerPlanRecommended(inputs.ActivePowerPlanId)) optimized++;
-        if (IsMemorySizeRecommended(inputs.Memory.TotalBytes)) optimized++;
+        yield return (IsPointerPrecisionRecommended(inputs.Gaming.PointerPrecisionEnabled), "PointerPrecisionLabel");
+        yield return (IsGameModeRecommended(inputs.Gaming.GameModeEnabled), "GameModeLabel");
+        yield return (IsBackgroundRecordingRecommended(inputs.Gaming.BackgroundRecordingEnabled), "BackgroundRecordingLabel");
+        yield return (IsPowerPlanRecommended(inputs.ActivePowerPlanId), "PowerPlanTitle");
+        yield return (IsMemorySizeRecommended(inputs.Memory.TotalBytes), "RamLabel");
 
         if (inputs.Gaming.FullscreenOptimizationsDisabledForRust is { } disabled)
-        {
-            total++;
-            if (IsFullscreenOptimizationsRecommended(disabled)) optimized++;
-        }
+            yield return (IsFullscreenOptimizationsRecommended(disabled), "FullscreenOptimizationsLabel");
 
         if (inputs.MemorySpeed is { CurrentMhz: { } currentMhz, RatedMhz: { } ratedMhz })
-        {
-            total++;
-            if (IsMemorySpeedRecommended(currentMhz, ratedMhz)) optimized++;
-        }
+            yield return (IsMemorySpeedRecommended(currentMhz, ratedMhz), "MemorySpeedLabel");
 
         if (inputs.RustDriveFreePercent is { } freePercent)
+            yield return (IsStorageSpaceRecommended(freePercent), "StorageTitle");
+    }
+
+    /// <summary>Scores every applicable check - how many are at their recommended value, out of how many apply.</summary>
+    public static OptimizationCategoryScore Score(SystemOptimizationInputs inputs)
+    {
+        int total = 0;
+        int optimized = 0;
+
+        foreach ((bool recommended, _) in EvaluateChecks(inputs))
         {
             total++;
-            if (IsStorageSpaceRecommended(freePercent)) optimized++;
+            if (recommended) optimized++;
         }
 
         return new OptimizationCategoryScore(optimized, total);
     }
+
+    /// <summary>
+    /// The localization keys of every applicable check that isn't currently at its recommended
+    /// value, in the same fixed order <see cref="Score"/> tallies them - for a short "what's wrong"
+    /// summary without sending the user hunting through the System page's warning icons.
+    /// </summary>
+    public static IReadOnlyList<string> GetOutstandingLabelKeys(SystemOptimizationInputs inputs) =>
+        EvaluateChecks(inputs).Where(check => !check.Recommended).Select(check => check.LabelKey).ToList();
 }

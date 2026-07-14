@@ -46,6 +46,7 @@
   "StatusNotOptimized": "Ikke optimeret",
   "StatusPartiallyOptimized": "Delvist optimeret",
   "StatusGood": "God",
+  "SystemIssuesMoreFormat": "{0} +{1} mere",
 
   "SystemPageSubtitle": "Detaljerede hardware- og OS-oplysninger.",
 

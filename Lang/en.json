@@ -46,6 +46,7 @@
   "StatusNotOptimized": "Not optimized",
   "StatusPartiallyOptimized": "Partially optimized",
   "StatusGood": "Good",
+  "SystemIssuesMoreFormat": "{0} +{1} more",
 
   "SystemPageSubtitle": "Detailed hardware and OS information.",
 

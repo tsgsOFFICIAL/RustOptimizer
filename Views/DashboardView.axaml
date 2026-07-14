@@ -82,6 +82,8 @@
                                 <TextBlock Text="{Binding SystemScore.SettingsText}" Classes="muted" FontSize="11"/>
                                 <ProgressBar Classes="thinBar" Minimum="0" Maximum="{Binding SystemScore.Total}" Value="{Binding SystemScore.Optimized}"
                                              Foreground="{Binding SystemScore.Status, Converter={x:Static converters:OptimizationStatusColorConverter.Instance}}"/>
+                                <TextBlock Text="{Binding SystemIssuesSummaryText}" Classes="muted" FontSize="11" TextWrapping="Wrap"
+                                           IsVisible="{Binding SystemIssuesSummaryText, Converter={x:Static avconverters:StringConverters.IsNotNullOrEmpty}}"/>
                             </StackPanel>
                         </Button>
 
