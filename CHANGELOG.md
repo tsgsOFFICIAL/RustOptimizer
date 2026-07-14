@@ -3,6 +3,8 @@
 All notable changes to Rust Optimizer are documented here.
 
 ## Unreleased
+
+## 0.8.5
 - Added a System page (reachable from the sidebar): CPU/GPU/RAM live usage and specs, motherboard/BIOS, storage, and OS details, plus OS-level tweaks - power plan, pointer precision, Game Mode, background recording, and fullscreen optimizations for Rust.
 - Added warning icons next to any System page setting that isn't at its recommended value, with a tooltip explaining why - including low RAM (under 16 GB), RAM running below its rated speed (XMP/EXPO not enabled in BIOS), and low free space on Rust's drive (under 10%).
 - Wired the Dashboard's Optimization Overview System tile to the System page's real settings instead of a hardcoded "12 / 16 settings" placeholder, and gave it a three-stage red/yellow/green status instead of a plain good/not-optimized split.

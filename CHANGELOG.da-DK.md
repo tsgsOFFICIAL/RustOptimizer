@@ -3,6 +3,8 @@
 Alle væsentlige ændringer i Rust Optimizer er dokumenteret her.
 
 ## Unreleased
+
+## 8.0.5
 - Tilføjet en Systemside (tilgængelig fra sidebaren): CPU-/GPU-/RAM-forbrug og specifikationer, bundkort/BIOS, lagerplads og OS-oplysninger, samt OS-niveau-justeringer - strømplan, markørpræcision, Spilfunktion, baggrundsoptagelse og fuldskærmsoptimeringer for Rust.
 - Tilføjet advarselsikoner ved enhver indstilling på Systemsiden, der ikke står på den anbefalede værdi, med et tooltip, der forklarer hvorfor - herunder for lidt RAM (under 16 GB), RAM der kører under sin vurderede hastighed (XMP/EXPO ikke aktiveret i BIOS), og lidt ledig plads på Rusts drev (under 10%).
 - Koblet Dashboardets Optimeringsoversigt-System-kort til Systemsidens rigtige indstillinger i stedet for en hardkodet "12 / 16 settings"-pladsholder, og givet det en tre-trins rød/gul/grøn status i stedet for en simpel god/ikke-optimeret-opdeling.
