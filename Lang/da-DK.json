@@ -50,6 +50,19 @@
 
   "SystemPageSubtitle": "Detaljerede hardware- og OS-oplysninger.",
 
+  "UtilitiesPageSubtitle": "Praktiske eksterne værktøjer og ressourcer til Rust.",
+  "ExternalResourcesTitle": "Eksterne ressourcer",
+  "UtilitiesDisclaimer": "Rust Optimizer er ikke tilknyttet, godkendt af eller ansvarlig for indholdet på nogen af disse tredjepartssider.",
+  "UtilityRustHelpDescription": "Fællesskabsdrevet wiki og værktøjskasse med skins og monumenter samt værktøjer som en raid-beregner og tech tree-planlægger.",
+  "UtilityRustBreederDescription": "Krydsavlsberegner til at optimere plantegenetik som hamp og bær.",
+  "UtilityBattleMetricsDescription": "Serverbrowser, spillersporing og RCON-baseret serveradministration.",
+  "UtilityRustStatsDescription": "Spillerstatistik og ranglister sporet via Steam API'et, med Discord-integration.",
+  "UtilityRustMapsDescription": "Kortviser og -generator til at forhåndsvise procedurelle Rust-kort og monumenter.",
+  "UtilityCorrosionHourDescription": "Rust-nyheder, guides og fællesskabsindhold.",
+  "UtilityOfficialWikiDescription": "Facepunchs officielle wiki om items, mekanik og opdateringer.",
+  "UtilityOfficialCommitsDescription": "Live feed af Facepunchs udviklings-commits til Rust.",
+  "UtilityRustricianDescription": "Elektricitetssimulator til at designe, teste og dele kredsløb i spillet.",
+
   "LiveUsageTitle": "Live forbrug",
   "SystemInformationTitle": "Systemoplysninger",
   "CpuLabel": "CPU",

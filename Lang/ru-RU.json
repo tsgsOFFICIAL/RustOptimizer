@@ -50,6 +50,19 @@
 
   "SystemPageSubtitle": "Подробная информация об оборудовании и ОС.",
 
+  "UtilitiesPageSubtitle": "Полезные внешние инструменты и ресурсы для Rust.",
+  "ExternalResourcesTitle": "Внешние ресурсы",
+  "UtilitiesDisclaimer": "Rust Optimizer не аффилирован ни с одним из этих сторонних сайтов, не поддерживает их и не несёт ответственности за их содержимое.",
+  "UtilityRustHelpDescription": "Вики и набор инструментов от сообщества: скины, монументы, калькулятор рейдов и планировщик технологического древа.",
+  "UtilityRustBreederDescription": "Калькулятор скрещивания для оптимизации генетики растений, таких как конопля и ягоды.",
+  "UtilityBattleMetricsDescription": "Браузер серверов, отслеживание игроков и администрирование сервера через RCON.",
+  "UtilityRustStatsDescription": "Статистика игроков и таблицы лидеров через Steam API, с интеграцией Discord.",
+  "UtilityRustMapsDescription": "Просмотр и генерация процедурных карт Rust с предпросмотром монументов.",
+  "UtilityCorrosionHourDescription": "Новости, гайды и материалы сообщества Rust.",
+  "UtilityOfficialWikiDescription": "Официальная вики Facepunch о предметах, механике и обновлениях.",
+  "UtilityOfficialCommitsDescription": "Живая лента коммитов разработки Rust от Facepunch.",
+  "UtilityRustricianDescription": "Симулятор электричества для проектирования, тестирования и обмена схемами в игре.",
+
   "LiveUsageTitle": "Текущая нагрузка",
   "SystemInformationTitle": "Информация о системе",
   "CpuLabel": "Процессор",

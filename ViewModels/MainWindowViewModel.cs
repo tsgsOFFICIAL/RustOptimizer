@@ -23,6 +23,7 @@ public sealed class MainWindowViewModel : ViewModelBase
     private SystemViewModel? _system;
     private SettingsViewModel? _settings;
     private AboutViewModel? _about;
+    private UtilitiesViewModel? _utilities;
     private ComingSoonViewModel? _comingSoon;
 
     private ViewModelBase? _currentPage;
@@ -106,8 +107,8 @@ public sealed class MainWindowViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Swaps <see cref="CurrentPage"/> to match the sidebar selection. Dashboard/System/Settings/About
-    /// have real content; every other page is still a "coming soon" placeholder pending later phases.
+    /// Swaps <see cref="CurrentPage"/> to match the sidebar selection. Dashboard/System/Settings/About/
+    /// Utilities have real content; every other page is still a "coming soon" placeholder pending later phases.
     /// </summary>
     private void Navigate(SidebarPage page)
     {
@@ -117,6 +118,7 @@ public sealed class MainWindowViewModel : ViewModelBase
             SidebarPage.System => _system ??= new SystemViewModel(Localization, _systemInfo, _systemTweaks, _rustProcess),
             SidebarPage.Settings => _settings ??= new SettingsViewModel(_theme, Localization),
             SidebarPage.About => _about ??= new AboutViewModel(Localization, _updates, _dialogs),
+            SidebarPage.Utilities => _utilities ??= new UtilitiesViewModel(Localization),
             _ => ShowComingSoon(page)
         };
     }
