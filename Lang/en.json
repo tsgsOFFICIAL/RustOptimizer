@@ -49,6 +49,19 @@
 
   "SystemPageSubtitle": "Detailed hardware and OS information.",
 
+  "UtilitiesPageSubtitle": "Handy external tools and resources for Rust.",
+  "ExternalResourcesTitle": "External Resources",
+  "UtilitiesDisclaimer": "Rust Optimizer is not affiliated with, endorsed by, or responsible for the content of any of these third-party sites.",
+  "UtilityRustHelpDescription": "Community wiki and toolkit covering skins and monuments, with tools like a raid calculator and tech tree planner.",
+  "UtilityRustBreederDescription": "Crossbreeding calculator for optimizing plant genetics like hemp and berries.",
+  "UtilityBattleMetricsDescription": "Server browser, player tracking, and RCON-based server administration.",
+  "UtilityRustStatsDescription": "Player statistics and leaderboards tracked via the Steam API, with Discord integration.",
+  "UtilityRustMapsDescription": "Map viewer and generator for previewing procedural Rust maps and monuments.",
+  "UtilityCorrosionHourDescription": "Rust news, guides, and community content.",
+  "UtilityOfficialWikiDescription": "Facepunch's official wiki covering items, mechanics, and updates.",
+  "UtilityOfficialCommitsDescription": "Live feed of Facepunch's development commits for Rust.",
+  "UtilityRustricianDescription": "Electricity simulator for designing, testing, and sharing in-game circuits.",
+
   "LiveUsageTitle": "Live Usage",
   "SystemInformationTitle": "System Information",
   "CpuLabel": "CPU",
