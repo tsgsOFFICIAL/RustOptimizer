@@ -26,6 +26,13 @@ public sealed class SystemViewModel : ViewModelBase
     private readonly IRustProcessService _rustProcess;
     private DispatcherTimer? _pollTimer;
     private bool _isPolling;
+    private int _storagePollTickCount;
+
+    // Free space changes far more slowly than CPU/GPU/RAM usage, and re-enumerating physical
+    // disks via WMI (MSFT_PhysicalDisk plus the disk-to-partition joins) is comparatively
+    // expensive, so storage only refreshes every Nth tick of the 1-second poll timer rather than
+    // every tick.
+    private const int StoragePollEveryNTicks = 5;
 
     private string _cpuName = "";
     private string _cpuCoresText = Loading;
@@ -166,8 +173,11 @@ public sealed class SystemViewModel : ViewModelBase
 
     /// <summary>Loads physical storage devices and their drive letters, and resolves free space on Rust's drive.</summary>
     private async Task LoadStorageDevicesAsync()
+        => ApplyStorageDevices(await Task.Run(_systemInfo.GetStorageDevices));
+
+    /// <summary>Applies a storage devices reading to the bound rows and re-derives Rust's drive free-space warning.</summary>
+    private void ApplyStorageDevices(IReadOnlyList<StorageDeviceInfo> devices)
     {
-        IReadOnlyList<StorageDeviceInfo> devices = await Task.Run(_systemInfo.GetStorageDevices);
         StorageDevices = devices.Select(ToRow).ToList();
 
         _rustDriveFreePercent = SystemOptimizationRecommendations.FindRustDriveFreePercent(_rustProcess.GetInstallPath(), devices);
@@ -565,7 +575,9 @@ public sealed class SystemViewModel : ViewModelBase
     /// <summary>
     /// Reads CPU/RAM/GPU sensors off the UI thread and updates the bound text - batched into one
     /// <see cref="Task.Run(Action)"/> rather than three, since concurrent calls into the shared
-    /// LibreHardwareMonitor <c>Computer</c> instance aren't known to be thread-safe.
+    /// LibreHardwareMonitor <c>Computer</c> instance aren't known to be thread-safe. Every
+    /// <see cref="StoragePollEveryNTicks"/>th tick also re-reads storage devices, so free space
+    /// stays live-ish without re-enumerating physical disks every second.
     /// <see cref="_isPolling"/> skips a tick if the previous one is still running.
     /// </summary>
     private async Task PollAsync()
@@ -576,8 +588,16 @@ public sealed class SystemViewModel : ViewModelBase
         _isPolling = true;
         try
         {
-            (MemoryInfo memory, double? cpuPercent, GpuSensorInfo gpu) = await Task.Run(() =>
-                (_systemInfo.GetMemoryInfo(), _systemInfo.GetCpuUsagePercent(), _systemInfo.GetGpuSensors()));
+            bool refreshStorage = ++_storagePollTickCount >= StoragePollEveryNTicks;
+            if (refreshStorage)
+                _storagePollTickCount = 0;
+
+            (MemoryInfo memory, double? cpuPercent, GpuSensorInfo gpu, IReadOnlyList<StorageDeviceInfo>? storageDevices) = await Task.Run(() =>
+                (_systemInfo.GetMemoryInfo(), _systemInfo.GetCpuUsagePercent(), _systemInfo.GetGpuSensors(),
+                    refreshStorage ? _systemInfo.GetStorageDevices() : null));
+
+            if (storageDevices is not null)
+                ApplyStorageDevices(storageDevices);
 
             RamText = FormatMemory(memory);
             RamUsagePercent = ComputeUsagePercent(memory);

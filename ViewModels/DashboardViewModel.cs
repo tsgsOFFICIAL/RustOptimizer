@@ -134,7 +134,10 @@ public sealed class DashboardViewModel : ViewModelBase
         set
         {
             if (SetProperty(ref _isRustInstalled, value))
+            {
                 OnPropertyChanged(nameof(CanVerifyRustFiles));
+                OnPropertyChanged(nameof(CanApplyPreset));
+            }
         }
     }
 
@@ -143,6 +146,12 @@ public sealed class DashboardViewModel : ViewModelBase
     /// verifying/repairing its files while the game has them open wouldn't work.
     /// </summary>
     public bool CanVerifyRustFiles => IsRustInstalled && !_sidebar.IsRustRunning;
+
+    /// <summary>
+    /// Whether preset profiles can be applied - there's no config to write to without a Rust
+    /// install, so the Preset Profiles buttons stay disabled until one is found.
+    /// </summary>
+    public bool CanApplyPreset => IsRustInstalled;
 
     /// <summary>
     /// The System category's optimization tally for the Optimization Overview - how many of the
@@ -215,7 +224,7 @@ public sealed class DashboardViewModel : ViewModelBase
     /// <summary>Applies the preset profile named by <paramref name="tag"/>.</summary>
     private void ApplyPreset(string? tag)
     {
-        if (!Enum.TryParse(tag, out ConfigPreset preset))
+        if (!CanApplyPreset || !Enum.TryParse(tag, out ConfigPreset preset))
             return;
 
         bool success = _configService.ApplyPreset(preset);

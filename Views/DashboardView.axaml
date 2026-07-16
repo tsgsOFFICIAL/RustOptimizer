@@ -210,7 +210,8 @@
                     <StackPanel Spacing="10">
                         <TextBlock Text="{Binding Localization[PresetProfilesTitle]}" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>
 
-                        <Button Classes="listRow" Tag="LowEndPc" Command="{Binding ApplyPresetCommand}" CommandParameter="{Binding $self.Tag}">
+                        <Button Classes="listRow" Tag="LowEndPc" Command="{Binding ApplyPresetCommand}" CommandParameter="{Binding $self.Tag}"
+                                IsEnabled="{Binding CanApplyPreset}">
                             <Grid ColumnDefinitions="*,Auto">
                                 <TextBlock Grid.Column="0" Text="{Binding Localization[ProfileLowEndPc]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
                                 <Border Grid.Column="1" Classes="pill">
@@ -219,21 +220,24 @@
                             </Grid>
                         </Button>
 
-                        <Button Classes="listRow" Tag="Competitive" Command="{Binding ApplyPresetCommand}" CommandParameter="{Binding $self.Tag}">
+                        <Button Classes="listRow" Tag="Competitive" Command="{Binding ApplyPresetCommand}" CommandParameter="{Binding $self.Tag}"
+                                IsEnabled="{Binding CanApplyPreset}">
                             <Grid ColumnDefinitions="*,Auto">
                                 <TextBlock Grid.Column="0" Text="{Binding Localization[ProfileCompetitive]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
                                 <TextBlock Grid.Column="1" Text="{Binding Localization[TagHighFps]}" Classes="muted" FontSize="12"/>
                             </Grid>
                         </Button>
 
-                        <Button Classes="listRow" Tag="Streamer" Command="{Binding ApplyPresetCommand}" CommandParameter="{Binding $self.Tag}">
+                        <Button Classes="listRow" Tag="Streamer" Command="{Binding ApplyPresetCommand}" CommandParameter="{Binding $self.Tag}"
+                                IsEnabled="{Binding CanApplyPreset}">
                             <Grid ColumnDefinitions="*,Auto">
                                 <TextBlock Grid.Column="0" Text="{Binding Localization[ProfileStreamer]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
                                 <TextBlock Grid.Column="1" Text="{Binding Localization[TagBalanced]}" Classes="muted" FontSize="12"/>
                             </Grid>
                         </Button>
 
-                        <Button Classes="listRow" Tag="Cinematic" Command="{Binding ApplyPresetCommand}" CommandParameter="{Binding $self.Tag}">
+                        <Button Classes="listRow" Tag="Cinematic" Command="{Binding ApplyPresetCommand}" CommandParameter="{Binding $self.Tag}"
+                                IsEnabled="{Binding CanApplyPreset}">
                             <Grid ColumnDefinitions="*,Auto">
                                 <TextBlock Grid.Column="0" Text="{Binding Localization[ProfileCinematic]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
                                 <TextBlock Grid.Column="1" Text="{Binding Localization[TagBestQuality]}" Classes="muted" FontSize="12"/>
