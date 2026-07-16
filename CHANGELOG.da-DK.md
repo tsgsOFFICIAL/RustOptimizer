@@ -3,6 +3,7 @@
 Alle væsentlige ændringer i Rust Optimizer er dokumenteret her.
 
 ## Unreleased
+- Tilføjet Raidboi-1129 (iOS og Android) til Værktøjer-sidens ressourceliste - en mobil raid-omkostnings- og loot-beregner til Rust.
 
 ## 0.8.6
 - Fjernet den separate Configs-side og lagt den ind i en ny Sikkerhedskopi & Gendan-side, da de begge reelt handlede om det samme: at administrere Rusts cfg-filer.

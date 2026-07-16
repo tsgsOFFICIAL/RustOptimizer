@@ -3,6 +3,7 @@
 All notable changes to Rust Optimizer are documented here.
 
 ## Unreleased
+- Added Raidboi-1129 (iOS and Android) to the Utilities page's resource list, a mobile raid cost and loot calculator for Rust.
 
 ## 0.8.6
 - Removed the standalone Configs page and folded it into a new Backup & Restore page, since both were really about the same thing: managing Rust's cfg files.

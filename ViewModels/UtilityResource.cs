@@ -29,6 +29,8 @@ public static class UtilityResourceCatalog
         new("Corrosion Hour", "UtilityCorrosionHourDescription", "https://corrosionhour.com", PackIconPhosphorIconsKind.Newspaper),
         new("Official Rust Wiki", "UtilityOfficialWikiDescription", "https://wiki.facepunch.com/rust", PackIconPhosphorIconsKind.BookBookmark),
         new("Official Rust Commits", "UtilityOfficialCommitsDescription", "https://commits.facepunch.com", PackIconPhosphorIconsKind.GitBranch),
-        new("Rustrician", "UtilityRustricianDescription", "https://www.rustrician.io", PackIconPhosphorIconsKind.CarBattery)
+        new("Rustrician", "UtilityRustricianDescription", "https://www.rustrician.io", PackIconPhosphorIconsKind.CarBattery),
+        new("Raidboi-1129 (iOS)", "UtilityRaidboi1129Description", "https://apps.apple.com/us/app/raidboi-1129-rust-calculator/id6478394279", PackIconPhosphorIconsKind.AppleLogo),
+        new("Raidboi-1129 (Android)", "UtilityRaidboi1129Description", "https://play.google.com/store/apps/details?id=com.wantapps.rust", PackIconPhosphorIconsKind.GooglePlayLogo)
     ];
 }
