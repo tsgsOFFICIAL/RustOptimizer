@@ -79,6 +79,7 @@ public sealed class SystemViewModel : ViewModelBase
     private bool _gameModeEnabled = true;
     private bool _backgroundRecordingEnabled = true;
     private bool? _fullscreenOptimizationsDisabledForRust;
+    private bool _medalRunning;
 
     /// <summary>Creates the view model and kicks off every async load for the page's sections.</summary>
     public SystemViewModel(ILocalizationService localization, ISystemInfoService systemInfo,
@@ -207,6 +208,9 @@ public sealed class SystemViewModel : ViewModelBase
         _gameModeEnabled = settings.GameModeEnabled;
         OnPropertyChanged(nameof(GameModeEnabled));
         OnPropertyChanged(nameof(GameModeWarningVisible));
+
+        _medalRunning = settings.MedalRunning;
+        OnPropertyChanged(nameof(GameModeOverriddenByMedal));
 
         _backgroundRecordingEnabled = settings.BackgroundRecordingEnabled;
         OnPropertyChanged(nameof(BackgroundRecordingEnabled));
@@ -494,6 +498,12 @@ public sealed class SystemViewModel : ViewModelBase
     /// <summary>Whether the Game Mode warning icon should show - true when it's not at its recommended value.</summary>
     public bool GameModeWarningVisible => !SystemOptimizationRecommendations.IsGameModeRecommended(GameModeEnabled);
 
+    /// <summary>
+    /// Whether Medal's clip recorder is running, which can set Game Mode back off itself a few
+    /// seconds after login.
+    /// </summary>
+    public bool GameModeOverriddenByMedal => _medalRunning;
+
     /// <summary>Whether Xbox Game Bar's background recording (both the master switch and the instant-replay buffer) is enabled.</summary>
     public bool BackgroundRecordingEnabled
     {
@@ -562,6 +572,14 @@ public sealed class SystemViewModel : ViewModelBase
         _pollTimer.Tick += async (_, _) => await PollAsync();
         _pollTimer.Start();
     }
+
+    /// <summary>
+    /// Re-reads every gaming tweak from the registry. The view model is cached across visits (see
+    /// <c>MainWindowViewModel.Navigate</c>), so without this, a tweak changed outside the app - by
+    /// Windows, Medal, or hand-editing the registry - would keep showing whatever this instance
+    /// last knew. Call from the view's attach-to-visual-tree lifecycle so it's current on every visit.
+    /// </summary>
+    public void RefreshGamingTweaks() => _ = LoadGamingTweaksAsync();
 
     /// <summary>
     /// Stops polling. Call from the view's detach-from-visual-tree lifecycle.

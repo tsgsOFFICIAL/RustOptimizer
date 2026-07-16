@@ -9,13 +9,15 @@ public readonly record struct PowerPlanInfo(string Id, string Name, bool IsActiv
 /// The subset of gaming-relevant Windows settings this app can toggle without admin rights.
 /// <see cref="FullscreenOptimizationsDisabledForRust"/> is <see langword="null"/> when Rust's
 /// install path can't be resolved (not installed, or Steam itself can't be found) - there's
-/// nothing to toggle it for in that case.
+/// nothing to toggle it for in that case. <see cref="MedalRunning"/> flags Medal's clip recorder,
+/// which resets <see cref="GameModeEnabled"/> back off a few seconds after it launches, unless toggled off in Medal
 /// </summary>
 public readonly record struct GamingTweaksSettings(
     bool PointerPrecisionEnabled,
     bool GameModeEnabled,
     bool BackgroundRecordingEnabled,
-    bool? FullscreenOptimizationsDisabledForRust);
+    bool? FullscreenOptimizationsDisabledForRust,
+    bool MedalRunning);
 
 /// <summary>
 /// Reads and applies OS-level tweaks that don't require administrator rights. Unlike

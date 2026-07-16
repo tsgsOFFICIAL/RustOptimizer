@@ -324,14 +324,19 @@
                                 <ToggleSwitch Grid.Column="2" IsChecked="{Binding PointerPrecisionEnabled}" OnContent="" OffContent=""/>
                             </Grid>
 
-                            <Grid ColumnDefinitions="*,Auto,Auto">
+                            <Grid ColumnDefinitions="*,Auto,Auto,Auto">
                                 <TextBlock Grid.Column="0" Text="{Binding Localization[GameModeLabel]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
                                 <Border Grid.Column="1" Background="Transparent" Margin="0,0,8,0" VerticalAlignment="Center"
+                                        IsVisible="{Binding GameModeOverriddenByMedal}"
+                                        ToolTip.Tip="{Binding Localization[GameModeMedalDetectedTooltip]}">
+                                    <iconPacks:PackIconPhosphorIcons Kind="Info" Width="18" Height="18" Foreground="{StaticResource AccentColor}"/>
+                                </Border>
+                                <Border Grid.Column="2" Background="Transparent" Margin="0,0,8,0" VerticalAlignment="Center"
                                         IsVisible="{Binding GameModeWarningVisible}"
                                         ToolTip.Tip="{Binding Localization[GameModeWarningTooltip]}">
                                     <iconPacks:PackIconPhosphorIcons Kind="Warning" Width="18" Height="18" Foreground="{StaticResource AccentColor}"/>
                                 </Border>
-                                <ToggleSwitch Grid.Column="2" IsChecked="{Binding GameModeEnabled}" OnContent="" OffContent=""/>
+                                <ToggleSwitch Grid.Column="3" IsChecked="{Binding GameModeEnabled}" OnContent="" OffContent=""/>
                             </Grid>
 
                             <Grid ColumnDefinitions="*,Auto,Auto">

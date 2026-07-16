@@ -26,6 +26,11 @@ public sealed partial class SystemTweaksService(IRustProcessService rustProcess)
     private const string GameDvrKeyPath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\GameDVR";
     private const string AppCompatFlagsLayersKeyPath = @"Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers";
 
+    // Medal's background encoder resets AutoGameModeEnabled/AllowAutoGameMode itself shortly
+    // after launch - checked under both names since either the encoder or the main UI process
+    // being up means it's active.
+    private static readonly string[] MedalProcessNames = ["MedalEncoder", "Medal"];
+
     // The flag Windows writes when you check "Disable fullscreen optimizations" on an exe's
     // Properties > Compatibility tab - applied to Rust specifically instead of by hand.
     private const string DisableFullscreenOptimizationsFlag = "~ DISABLEDXMAXIMIZEDWINDOWEDMODE";
@@ -86,7 +91,8 @@ public sealed partial class SystemTweaksService(IRustProcessService rustProcess)
         // buffer under a different key - reported "on" only when both are.
         BackgroundRecordingEnabled: ReadDword(GameConfigStoreKeyPath, "GameDVR_Enabled", defaultValue: 1) != 0
             && ReadDword(GameDvrKeyPath, "HistoricalCaptureEnabled", defaultValue: 1) != 0,
-        FullscreenOptimizationsDisabledForRust: GetRustExePath() is { } exePath ? ReadFullscreenOptimizationsFlag(exePath) : null);
+        FullscreenOptimizationsDisabledForRust: GetRustExePath() is { } exePath ? ReadFullscreenOptimizationsFlag(exePath) : null,
+        MedalRunning: IsMedalRunning());
 
     /// <inheritdoc />
     public bool SetPointerPrecisionEnabled(bool enabled)
@@ -165,6 +171,22 @@ public sealed partial class SystemTweaksService(IRustProcessService rustProcess)
             AppLog.Warn("SystemTweaksService", "Failed to read fullscreen-optimizations flag for Rust.", ex);
             return null;
         }
+    }
+
+    /// <summary>Whether Medal's clip recorder is currently running.</summary>
+    private static bool IsMedalRunning()
+    {
+        foreach (string name in MedalProcessNames)
+        {
+            Process[] processes = Process.GetProcessesByName(name);
+            foreach (Process process in processes)
+                process.Dispose();
+
+            if (processes.Length > 0)
+                return true;
+        }
+
+        return false;
     }
 
     /// <summary>Resolves Rust's exe path from its install directory, or <see langword="null"/> if Rust isn't installed.</summary>
