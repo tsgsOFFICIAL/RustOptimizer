@@ -19,7 +19,6 @@ public enum SidebarPage
     System,
     Network,
     Gameplay,
-    Configs,
     Utilities,
     BackupRestore,
     Settings,
@@ -93,7 +92,7 @@ public partial class Sidebar : UserControl
     private Button[] NavButtons =>
     [
         NavDashboard, NavOptimizer, NavGraphics, NavSystem, NavNetwork,
-        NavGameplay, NavConfigs, NavUtilities, NavBackupRestore, NavSettings, NavAbout
+        NavGameplay, NavUtilities, NavBackupRestore, NavSettings, NavAbout
     ];
 
     /// <summary>

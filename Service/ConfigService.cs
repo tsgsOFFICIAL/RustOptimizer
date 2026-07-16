@@ -11,7 +11,7 @@ namespace RustOptimizer.Service;
 
 /// <inheritdoc cref="IConfigService" />
 [SupportedOSPlatform("windows")]
-public sealed class ConfigService(IRustProcessService rustProcess) : IConfigService
+public sealed class ConfigService(IRustProcessService rustProcess, IConfigBackupService configBackup) : IConfigService
 {
     public bool ApplyPreset(ConfigPreset preset)
     {
@@ -47,7 +47,8 @@ public sealed class ConfigService(IRustProcessService rustProcess) : IConfigServ
                 }
             }
 
-            File.Copy(configPath, configPath + ".bak", overwrite: true);
+            if (!configBackup.CreateBackup(ConfigBackupType.Settings, label: null))
+                return false;
 
             IEnumerable<string> finalLines = remaining.Count == 0
                 ? lines

@@ -4,6 +4,14 @@ All notable changes to Rust Optimizer are documented here.
 
 ## Unreleased
 
+## 0.8.6
+- Removed the standalone Configs page and folded it into a new Backup & Restore page, since both were really about the same thing: managing Rust's cfg files.
+- Added a Backup & Restore page: switch between Settings (`client.cfg`) and Keybinds (`keys.cfg`), see each one's backup history, create a manually named backup (or leave it blank for a timestamp), and restore or delete any entry - both ask for confirmation first, since a delete can't be undone.
+- Backups are now taken automatically before a Preset Profile is applied and before a restore overwrites the live file, replacing the old single `client.cfg.bak` that only ever kept one copy.
+- Locked the Dashboard's Preset Profiles behind Rust being installed, instead of letting them be clicked with no effect.
+- The System page's Storage card now refreshes every few seconds instead of only loading once when the page opens.
+- Fixed button hover backgrounds across the app showing hard square corners instead of matching the button's own rounded shape.
+
 ## 0.8.5
 - Added a System page (reachable from the sidebar): CPU/GPU/RAM live usage and specs, motherboard/BIOS, storage, and OS details, plus OS-level tweaks - power plan, pointer precision, Game Mode, background recording, and fullscreen optimizations for Rust.
 - Added warning icons next to any System page setting that isn't at its recommended value, with a tooltip explaining why - including low RAM (under 16 GB), RAM running below its rated speed (XMP/EXPO not enabled in BIOS), and low free space on Rust's drive (under 10%).

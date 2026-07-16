@@ -4,6 +4,14 @@ Alle væsentlige ændringer i Rust Optimizer er dokumenteret her.
 
 ## Unreleased
 
+## 0.8.6
+- Fjernet den separate Configs-side og lagt den ind i en ny Sikkerhedskopi & Gendan-side, da de begge reelt handlede om det samme: at administrere Rusts cfg-filer.
+- Tilføjet en Sikkerhedskopi & Gendan-side: skift mellem Indstillinger (`client.cfg`) og Tastebindinger (`keys.cfg`), se hver enkelts sikkerhedskopihistorik, opret en manuelt navngivet sikkerhedskopi (eller lad navnet stå tomt for et tidsstempel), og gendan eller slet enhver post - begge dele beder om bekræftelse først, da en sletning ikke kan fortrydes.
+- Sikkerhedskopier tages nu automatisk, før en forudindstillet profil anvendes, og før en gendannelse overskriver den aktive fil, hvilket erstatter den gamle enkelte `client.cfg.bak`, der kun nogensinde gemte én kopi.
+- Låst Dashboardets forudindstillede profiler, medmindre Rust er installeret, i stedet for at de kunne klikkes uden effekt.
+- Systemsidens Lagerplads-kort opdaterer nu hvert par sekunder i stedet for kun at indlæse én gang, når siden åbnes.
+- Rettet at knappers hover-baggrunde i hele appen viste skarpe firkantede hjørner i stedet for at følge knappens egen afrundede form.
+
 ## 8.0.5
 - Tilføjet en Systemside (tilgængelig fra sidebaren): CPU-/GPU-/RAM-forbrug og specifikationer, bundkort/BIOS, lagerplads og OS-oplysninger, samt OS-niveau-justeringer - strømplan, markørpræcision, Spilfunktion, baggrundsoptagelse og fuldskærmsoptimeringer for Rust.
 - Tilføjet advarselsikoner ved enhver indstilling på Systemsiden, der ikke står på den anbefalede værdi, med et tooltip, der forklarer hvorfor - herunder for lidt RAM (under 16 GB), RAM der kører under sin vurderede hastighed (XMP/EXPO ikke aktiveret i BIOS), og lidt ledig plads på Rusts drev (under 10%).

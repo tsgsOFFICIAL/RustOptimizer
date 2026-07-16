@@ -18,12 +18,14 @@ public sealed class MainWindowViewModel : ViewModelBase
     private readonly ISystemTweaksService _systemTweaks;
     private readonly IRustProcessService _rustProcess;
     private readonly IConfigService _configService;
+    private readonly IConfigBackupService _configBackup;
 
     private DashboardViewModel? _dashboard;
     private SystemViewModel? _system;
     private SettingsViewModel? _settings;
     private AboutViewModel? _about;
     private UtilitiesViewModel? _utilities;
+    private BackupRestoreViewModel? _backupRestore;
     private ComingSoonViewModel? _comingSoon;
 
     private ViewModelBase? _currentPage;
@@ -31,7 +33,7 @@ public sealed class MainWindowViewModel : ViewModelBase
     /// <summary>Creates the shell, its sidebar, and the initial Dashboard page.</summary>
     public MainWindowViewModel(IThemeService theme, ILocalizationService localization, IUpdateService updates,
         IRustProcessService rustProcess, ISystemInfoService systemInfo, ISystemTweaksService systemTweaks,
-        IDialogService dialogs, IConfigService configService)
+        IDialogService dialogs, IConfigService configService, IConfigBackupService configBackup)
         : base(localization)
     {
         _theme = theme;
@@ -41,6 +43,7 @@ public sealed class MainWindowViewModel : ViewModelBase
         _systemTweaks = systemTweaks;
         _rustProcess = rustProcess;
         _configService = configService;
+        _configBackup = configBackup;
 
         Sidebar = new SidebarViewModel(localization, rustProcess);
         Sidebar.NavigationRequested += (_, page) => Navigate(page);
@@ -108,7 +111,7 @@ public sealed class MainWindowViewModel : ViewModelBase
 
     /// <summary>
     /// Swaps <see cref="CurrentPage"/> to match the sidebar selection. Dashboard/System/Settings/About/
-    /// Utilities have real content; every other page is still a "coming soon" placeholder pending later phases.
+    /// Utilities/BackupRestore have real content; every other page is still a "coming soon" placeholder pending later phases.
     /// </summary>
     private void Navigate(SidebarPage page)
     {
@@ -119,6 +122,7 @@ public sealed class MainWindowViewModel : ViewModelBase
             SidebarPage.Settings => _settings ??= new SettingsViewModel(_theme, Localization),
             SidebarPage.About => _about ??= new AboutViewModel(Localization, _updates, _dialogs),
             SidebarPage.Utilities => _utilities ??= new UtilitiesViewModel(Localization),
+            SidebarPage.BackupRestore => _backupRestore ??= new BackupRestoreViewModel(Localization, _configBackup, _rustProcess, Sidebar, _dialogs),
             _ => ShowComingSoon(page)
         };
     }

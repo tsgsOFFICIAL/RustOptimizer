@@ -8,7 +8,7 @@
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
         <ApplicationIcon>Assets\App\logo.ico</ApplicationIcon>
         <DefaultItemExcludes>$(DefaultItemExcludes);externals/**</DefaultItemExcludes>
-        <FileVersion>0.8.5</FileVersion>
+        <FileVersion>0.8.6</FileVersion>
         <InformationalVersion>$(FileVersion)</InformationalVersion>
         <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
         <IsPackable>false</IsPackable>
@@ -20,6 +20,16 @@
         <DebugType>none</DebugType>
     </PropertyGroup>
 
+    <Target Name="CleanupPublish"
+            AfterTargets="Publish"
+            Condition="'$(Configuration)' == 'Release'">
+        <ItemGroup>
+            <PdbFiles Include="$(PublishDir)**\*.pdb" />
+        </ItemGroup>
+
+        <Delete Files="@(PdbFiles)" />
+    </Target>
+    
     <ItemGroup>
         <ProjectReference Include="externals\IconPacks.Avalonia\src\IconPacks.Avalonia.PhosphorIcons\IconPacks.Avalonia.PhosphorIcons.csproj" />
         <ProjectReference Include="externals\IconPacks.Avalonia\src\IconPacks.Avalonia.SimpleIcons\IconPacks.Avalonia.SimpleIcons.csproj" />
@@ -74,16 +84,5 @@
 
     <ItemGroup>
         <AvaloniaResource Include="Assets\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <Compile Update="Windows\ChangelogWindow.axaml.cs">
-            <DependentUpon>ChangelogWindow.axaml</DependentUpon>
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Windows\UpdateAvailableWindow.axaml.cs">
-            <DependentUpon>UpdateAvailableWindow.axaml</DependentUpon>
-            <SubType>Code</SubType>
-        </Compile>
     </ItemGroup>
 </Project>

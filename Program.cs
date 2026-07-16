@@ -32,6 +32,7 @@ namespace RustOptimizer
                     .AddSingleton<ISystemInfoService, SystemInfoService>()
                     .AddSingleton<ISystemTweaksService, SystemTweaksService>()
                     .AddSingleton<IDialogService, DialogService>()
+                    .AddSingleton<IConfigBackupService, ConfigBackupService>()
                     .AddSingleton<IConfigService, ConfigService>()
                     .BuildServiceProvider();
 #pragma warning restore CA1416

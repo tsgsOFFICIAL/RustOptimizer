@@ -1,0 +1,120 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:iconPacks="https://github.com/MahApps/IconPacks.Avalonia"
+             xmlns:vm="using:RustOptimizer.ViewModels"
+             xmlns:converters="using:RustOptimizer.Converters"
+             xmlns:avconverters="using:Avalonia.Data.Converters"
+             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="700"
+             x:Class="RustOptimizer.Views.BackupRestoreView"
+             x:DataType="vm:BackupRestoreViewModel">
+
+    <ScrollViewer>
+        <StackPanel Margin="24" Spacing="20" MaxWidth="640">
+
+            <StackPanel Spacing="4">
+                <TextBlock Text="{Binding Localization[NavBackupRestore]}" FontSize="26" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>
+                <TextBlock Text="{Binding Localization[BackupRestorePageSubtitle]}" Classes="muted"/>
+            </StackPanel>
+
+            <Border Classes="card">
+                <StackPanel Spacing="14">
+                    <TextBlock Text="{Binding Localization[BackupTypeLabel]}" FontWeight="SemiBold" Foreground="{DynamicResource TextColor}"/>
+                    <Border Classes="segmentGroup" HorizontalAlignment="Left">
+                        <StackPanel Orientation="Horizontal" Spacing="2">
+                            <Button Classes="segment" Tag="Settings"
+                                    Classes.active="{Binding SelectedType, Converter={x:Static converters:EnumEqualsConverter.Instance}, ConverterParameter=Settings}"
+                                    Command="{Binding SelectTypeCommand}" CommandParameter="{Binding $self.Tag}">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <iconPacks:PackIconPhosphorIcons Kind="SlidersHorizontal" Width="16" Height="16"/>
+                                    <TextBlock Text="{Binding Localization[BackupTypeSettings]}"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Classes="segment" Tag="Keybinds"
+                                    Classes.active="{Binding SelectedType, Converter={x:Static converters:EnumEqualsConverter.Instance}, ConverterParameter=Keybinds}"
+                                    Command="{Binding SelectTypeCommand}" CommandParameter="{Binding $self.Tag}">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <iconPacks:PackIconPhosphorIcons Kind="Keyboard" Width="16" Height="16"/>
+                                    <TextBlock Text="{Binding Localization[BackupTypeKeybinds]}"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <Border Classes="card">
+                <StackPanel Spacing="14">
+                    <TextBlock Text="{Binding Localization[CreateBackupTitle]}" FontWeight="SemiBold" Foreground="{DynamicResource TextColor}"/>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBox Text="{Binding NewBackupLabel}" PlaceholderText="{Binding Localization[NewBackupLabelWatermark]}"
+                                 IsEnabled="{Binding IsRustInstalled}" Width="280"/>
+                        <Button Content="{Binding Localization[CreateBackup]}" Command="{Binding CreateBackupCommand}"
+                                IsEnabled="{Binding IsRustInstalled}"/>
+                    </StackPanel>
+                    <TextBlock Text="{Binding StatusText}" TextWrapping="Wrap" Classes="muted" FontSize="11"
+                               IsVisible="{Binding StatusText, Converter={x:Static avconverters:StringConverters.IsNotNullOrEmpty}}"/>
+                </StackPanel>
+            </Border>
+
+            <Border Classes="card">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="{Binding Localization[BackupHistoryTitle]}" FontWeight="SemiBold" Foreground="{DynamicResource TextColor}"/>
+
+                    <TextBlock Text="{Binding Localization[NoBackupsYet]}" Classes="muted" FontSize="12"
+                               IsVisible="{Binding !HasBackups}"/>
+
+                    <ItemsControl ItemsSource="{Binding Backups}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Spacing="8"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:ConfigBackupRow">
+                                <Border Classes="listItem">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <StackPanel Grid.Column="0" Spacing="6">
+                                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                                <TextBlock Text="{Binding Label}" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextColor}"/>
+                                                <Border Classes="tag" Classes.automatic="{Binding IsAutomatic}" Classes.manual="{Binding !IsAutomatic}">
+                                                    <TextBlock Text="{Binding TagText}"/>
+                                                </Border>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal" Spacing="10">
+                                                <StackPanel Orientation="Horizontal" Spacing="4">
+                                                    <iconPacks:PackIconPhosphorIcons Kind="Clock" Width="12" Height="12" Foreground="{DynamicResource TextMutedColor}"/>
+                                                    <TextBlock Text="{Binding CreatedText}" Classes="muted" FontSize="11"/>
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal" Spacing="4">
+                                                    <iconPacks:PackIconPhosphorIcons Kind="FloppyDisk" Width="12" Height="12" Foreground="{DynamicResource TextMutedColor}"/>
+                                                    <TextBlock Text="{Binding SizeText}" Classes="muted" FontSize="11"/>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="2" VerticalAlignment="Center">
+                                            <Button Classes="linkIcon" ToolTip.Tip="Restore"
+                                                    IsEnabled="{Binding $parent[ItemsControl].((vm:BackupRestoreViewModel)DataContext).CanRestore}"
+                                                    Command="{Binding $parent[ItemsControl].((vm:BackupRestoreViewModel)DataContext).RestoreCommand}"
+                                                    CommandParameter="{Binding FileName}">
+                                                <iconPacks:PackIconPhosphorIcons Kind="ArrowCounterClockwise" Width="16" Height="16"/>
+                                            </Button>
+                                            <Button Classes="linkIcon" ToolTip.Tip="Delete"
+                                                    Command="{Binding $parent[ItemsControl].((vm:BackupRestoreViewModel)DataContext).DeleteCommand}"
+                                                    CommandParameter="{Binding FileName}">
+                                                <iconPacks:PackIconPhosphorIcons Kind="Trash" Width="16" Height="16"/>
+                                            </Button>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+
+</UserControl>

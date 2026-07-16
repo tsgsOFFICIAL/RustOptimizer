@@ -44,6 +44,34 @@
 
     <Style Selector="Button.accentButton:pointerover /template/ ContentPresenter">
         <Setter Property="Background" Value="{DynamicResource AccentColorHover}" />
+        <Setter Property="CornerRadius" Value="8" />
+    </Style>
+
+    <Style Selector="Button.dangerButton">
+        <Setter Property="Background" Value="{DynamicResource DangerColor}" />
+        <Setter Property="Foreground" Value="{DynamicResource WhiteColor}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Padding" Value="16,8" />
+    </Style>
+
+    <Style Selector="Button.dangerButton:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource DangerColorHover}" />
+        <Setter Property="CornerRadius" Value="8" />
+    </Style>
+    
+    <Style Selector="Button.secondaryButton">
+        <Setter Property="Background" Value="{DynamicResource BorderColorTransparent}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextColor}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Padding" Value="16,8" />
+    </Style>
+
+    <Style Selector="Button.secondaryButton:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource BorderColor}" />
+        <Setter Property="CornerRadius" Value="8" />
     </Style>
 
     <Style Selector="Border.card">
@@ -66,6 +94,7 @@
 
     <Style Selector="Button.card:pointerover /template/ ContentPresenter">
         <Setter Property="Background" Value="{DynamicResource BorderColor}" />
+        <Setter Property="CornerRadius" Value="12" />
     </Style>
 
     <Style Selector="Button.captionButton">
@@ -175,6 +204,7 @@
 
     <Style Selector="Button.navItem:pointerover /template/ ContentPresenter">
         <Setter Property="Background" Value="{DynamicResource BorderColor}" />
+        <Setter Property="CornerRadius" Value="8" />
     </Style>
 
     <Style Selector="Button.navItem.active">
@@ -184,6 +214,7 @@
 
     <Style Selector="Button.navItem.active:pointerover /template/ ContentPresenter">
         <Setter Property="Background" Value="{DynamicResource AccentSurfaceColor}" />
+        <Setter Property="CornerRadius" Value="8" />
     </Style>
 
     <Style Selector="Ellipse.rustStatusDot">
@@ -210,6 +241,7 @@
 
     <Style Selector="Button.listRow:pointerover /template/ ContentPresenter">
         <Setter Property="Background" Value="{DynamicResource BorderColor}" />
+        <Setter Property="CornerRadius" Value="8" />
     </Style>
 
     <Style Selector="Border.pill">
@@ -222,6 +254,40 @@
         <Setter Property="Foreground" Value="{DynamicResource SuccessColor}" />
         <Setter Property="FontSize" Value="11" />
         <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+    
+    <Style Selector="Border.listItem">
+        <Setter Property="Background" Value="{DynamicResource BorderColorTransparent}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="10" />
+        <Setter Property="Padding" Value="12,10" />
+    </Style>
+    
+    <Style Selector="Border.tag">
+        <Setter Property="CornerRadius" Value="10" />
+        <Setter Property="Padding" Value="7,2" />
+    </Style>
+
+    <Style Selector="Border.tag TextBlock">
+        <Setter Property="FontSize" Value="10" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+
+    <Style Selector="Border.tag.automatic">
+        <Setter Property="Background" Value="{DynamicResource BorderColorMuted}" />
+    </Style>
+
+    <Style Selector="Border.tag.automatic TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource TextMutedColor}" />
+    </Style>
+
+    <Style Selector="Border.tag.manual">
+        <Setter Property="Background" Value="{DynamicResource AccentSurfaceColor}" />
+    </Style>
+
+    <Style Selector="Border.tag.manual TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource AccentColor}" />
     </Style>
 
     <Style Selector="ProgressBar.thinBar">
@@ -257,6 +323,7 @@
 
     <Style Selector="Button.segment:pointerover /template/ ContentPresenter">
         <Setter Property="Background" Value="{DynamicResource BorderColor}" />
+        <Setter Property="CornerRadius" Value="8" />
     </Style>
 
     <Style Selector="Button.segment.active">
@@ -266,6 +333,7 @@
 
     <Style Selector="Button.segment.active:pointerover /template/ ContentPresenter">
         <Setter Property="Background" Value="{DynamicResource AccentColorHover}" />
+        <Setter Property="CornerRadius" Value="8" />
     </Style>
 
     <Style Selector="Button.linkIcon">
@@ -278,6 +346,7 @@
 
     <Style Selector="Button.linkIcon:pointerover /template/ ContentPresenter">
         <Setter Property="Background" Value="{DynamicResource BorderColor}" />
+        <Setter Property="CornerRadius" Value="6" />
     </Style>
 
     <!-- "Out of order" marker for buttons whose feature isn't wired up yet: dims the button and

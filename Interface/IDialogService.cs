@@ -13,4 +13,11 @@ public interface IDialogService
 
     /// <summary>Shows the "update available" prompt for the given release.</summary>
     Task ShowUpdateAvailableAsync(ILocalizationService localization, IUpdateService updates, UpdateInfo update, string changelog);
+
+    /// <summary>
+    /// Shows a generic Yes/No confirmation prompt for an action that shouldn't happen from a
+    /// single accidental click (e.g. restoring over or deleting a backup). Returns <see langword="true"/>
+    /// only if the user picked the confirm option; closing the window any other way counts as "no".
+    /// </summary>
+    Task<bool> ShowConfirmAsync(ILocalizationService localization, string title, string message, string confirmLabel, bool isDestructive);
 }

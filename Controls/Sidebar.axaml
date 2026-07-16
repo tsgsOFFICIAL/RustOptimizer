@@ -75,14 +75,6 @@
                         <TextBlock Text="{Binding #Root.ViewModel.Localization[NavGameplay]}" />
                     </StackPanel>
                 </Button>
-                <Button x:Name="NavConfigs" Tag="Configs" Classes="navItem"
-                        Classes.active="{Binding #Root.ViewModel.ActivePage, Converter={x:Static converters:EnumEqualsConverter.Instance}, ConverterParameter=Configs}"
-                        Command="{Binding #Root.ViewModel.NavigateCommand}" CommandParameter="{Binding $self.Tag}">
-                    <StackPanel Orientation="Horizontal" Spacing="10">
-                        <iconPacks:PackIconPhosphorIcons Kind="Folder" Width="18" Height="18" />
-                        <TextBlock Text="{Binding #Root.ViewModel.Localization[NavConfigs]}" />
-                    </StackPanel>
-                </Button>
                 <Button x:Name="NavUtilities" Tag="Utilities" Classes="navItem"
                         Classes.active="{Binding #Root.ViewModel.ActivePage, Converter={x:Static converters:EnumEqualsConverter.Instance}, ConverterParameter=Utilities}"
                         Command="{Binding #Root.ViewModel.NavigateCommand}" CommandParameter="{Binding $self.Tag}">
