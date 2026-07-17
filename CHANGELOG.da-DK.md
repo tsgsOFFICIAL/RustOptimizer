@@ -4,6 +4,8 @@ Alle væsentlige ændringer i Rust Optimizer er dokumenteret her.
 
 ## Unreleased
 - Tilføjet Raidboi-1129 (iOS og Android) til Værktøjer-sidens ressourceliste - en mobil raid-omkostnings- og loot-beregner til Rust.
+- Fjernet Streamer-profilen fra Forudindstillede profiler (nu Svag PC, Konkurrence og Filmisk) for at reducere antallet af valgmuligheder.
+- Tilføjet et Skærm-kort til Systemsiden: nuværende vs. maksimal opdateringsfrekvens og opløsning, markeret med et advarselsikon og værktøjstip, når en af delene kører under det, skærmen faktisk understøtter - f.eks. en 144Hz-skærm der sidder fast på 60Hz, eller en 4K-skærm der kører i 1080p.
 
 ## 0.8.6
 - Fjernet den separate Configs-side og lagt den ind i en ny Sikkerhedskopi & Gendan-side, da de begge reelt handlede om det samme: at administrere Rusts cfg-filer.

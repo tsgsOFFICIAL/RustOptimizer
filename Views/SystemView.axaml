@@ -179,10 +179,10 @@
                 </Grid>
             </StackPanel>
 
-            <Grid ColumnDefinitions="*,*">
+            <Grid ColumnDefinitions="*,*,*">
 
                 <!-- Operating System -->
-                <Border Grid.Column="0" Classes="card" Margin="0,0,10,0">
+                <Border Grid.Column="0" Classes="card" Margin="0,0,8,0">
                     <StackPanel Spacing="12">
                         <StackPanel Orientation="Horizontal" Spacing="8">
                             <iconPacks:PackIconPhosphorIcons Kind="Monitor" Width="20" Height="20" Foreground="{StaticResource AccentColor}"/>
@@ -206,8 +206,52 @@
                     </StackPanel>
                 </Border>
 
+                <!-- Display -->
+                <Border Grid.Column="1" Classes="card" Margin="8,0,8,0">
+                    <StackPanel Spacing="12">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <iconPacks:PackIconPhosphorIcons Kind="MonitorFill" Width="20" Height="20" Foreground="{StaticResource AccentColor}"/>
+                            <TextBlock Text="{Binding Localization[DisplayTitle]}" Classes="cardTitle"/>
+                        </StackPanel>
+                        <Grid ColumnDefinitions="*,*">
+                            <StackPanel Grid.Column="0" Spacing="0">
+                                <TextBlock Text="{Binding Localization[RefreshRateLabel]}" Classes="infoLabel"/>
+                                <Grid ColumnDefinitions="Auto,Auto">
+                                    <TextBlock Grid.Column="0" Text="{Binding RefreshRateText}" Classes="infoValue" VerticalAlignment="Center"/>
+                                    <Border Grid.Column="1" Background="Transparent" Margin="6,0,0,0" VerticalAlignment="Center"
+                                            IsVisible="{Binding RefreshRateWarningVisible}"
+                                            ToolTip.Tip="{Binding Localization[RefreshRateWarningTooltip]}">
+                                        <iconPacks:PackIconPhosphorIcons Kind="Warning" Width="14" Height="14" Foreground="{StaticResource AccentColor}"/>
+                                    </Border>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Spacing="0">
+                                <TextBlock Text="{Binding Localization[MaxRefreshRateLabel]}" Classes="infoLabel"/>
+                                <TextBlock Text="{Binding MaxRefreshRateText}" Classes="infoValue"/>
+                            </StackPanel>
+                        </Grid>
+                        <Grid ColumnDefinitions="*,*">
+                            <StackPanel Grid.Column="0" Spacing="0">
+                                <TextBlock Text="{Binding Localization[ResolutionLabel]}" Classes="infoLabel"/>
+                                <Grid ColumnDefinitions="Auto,Auto">
+                                    <TextBlock Grid.Column="0" Text="{Binding ResolutionText}" Classes="infoValue" VerticalAlignment="Center"/>
+                                    <Border Grid.Column="1" Background="Transparent" Margin="6,0,0,0" VerticalAlignment="Center"
+                                            IsVisible="{Binding ResolutionWarningVisible}"
+                                            ToolTip.Tip="{Binding Localization[ResolutionWarningTooltip]}">
+                                        <iconPacks:PackIconPhosphorIcons Kind="Warning" Width="14" Height="14" Foreground="{StaticResource AccentColor}"/>
+                                    </Border>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Spacing="0">
+                                <TextBlock Text="{Binding Localization[MaxResolutionLabel]}" Classes="infoLabel"/>
+                                <TextBlock Text="{Binding MaxResolutionText}" Classes="infoValue"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
                 <!-- Motherboard & BIOS -->
-                <Border Grid.Column="1" Classes="card" Margin="10,0,0,0">
+                <Border Grid.Column="2" Classes="card" Margin="8,0,0,0">
                     <StackPanel Spacing="12">
                         <StackPanel Orientation="Horizontal" Spacing="8">
                             <iconPacks:PackIconPhosphorIcons Kind="Circuitry" Width="20" Height="20" Foreground="{StaticResource AccentColor}"/>

@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using LibreHardwareMonitor.Hardware;
 using RustOptimizer.Service.Logging;
 using System.Collections.Generic;
@@ -13,6 +14,32 @@ namespace RustOptimizer.Service;
 [SupportedOSPlatform("windows")]
 public sealed class SystemInfoService(ILocalizationService localization) : ISystemInfoService
 {
+    // DEVMODE (wingdi.h): https://learn.microsoft.com/windows/win32/api/wingdi/ns-wingdi-devmodea
+    // We only read dmPelsWidth/dmPelsHeight/dmDisplayFrequency, but EnumDisplaySettings writes into
+    // this by byte offset, not by field name, so every member before them has to be declared too.
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+    private struct DEVMODE
+    {
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
+        public string dmDeviceName;
+        public short dmSpecVersion, dmDriverVersion, dmSize, dmDriverExtra;
+        public int dmFields, dmPositionX, dmPositionY, dmDisplayOrientation, dmDisplayFixedOutput;
+        public short dmColor, dmDuplex, dmYResolution, dmTTOption, dmCollate;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
+        public string dmFormName;
+        public short dmLogPixels;
+        public int dmBitsPerPel, dmPelsWidth, dmPelsHeight, dmDisplayFlags, dmDisplayFrequency;
+        public int dmICMMethod, dmICMIntent, dmMediaType, dmDitherType, dmReserved1, dmReserved2, dmPanningWidth, dmPanningHeight;
+    }
+
+    // EnumDisplaySettings (winuser.h): https://learn.microsoft.com/windows/win32/api/winuser/nf-winuser-enumdisplaysettingsa
+    [DllImport("user32.dll", CharSet = CharSet.Auto)]
+    private static extern bool EnumDisplaySettings(string? deviceName, int modeNum, ref DEVMODE devMode);
+
+    // -1 = ENUM_CURRENT_SETTINGS, per the docs above: gives the active mode instead of the next
+    // entry in the supported-modes list.
+    private const int EnumCurrentSettings = -1;
+
     private string? _cpuName;
     private string? _gpuName;
     private MemorySpeedInfo _memorySpeedInfo;
@@ -401,6 +428,49 @@ public sealed class SystemInfoService(ILocalizationService localization) : ISyst
         }
 
         return _gpuDriverVersion;
+    }
+
+    /// <inheritdoc />
+    public DisplayModeInfo GetDisplayModeInfo()
+    {
+        try
+        {
+            DEVMODE current = default;
+            current.dmSize = (short)Marshal.SizeOf<DEVMODE>();
+            if (!EnumDisplaySettings(null, EnumCurrentSettings, ref current) || current.dmPelsWidth == 0)
+                return default;
+
+            // Max resolution/Hz aren't reported anywhere directly - only found by walking every mode
+            // the driver lists. Hz search stays scoped to the current resolution: a lower res can
+            // unlock a higher Hz that has nothing to do with what's actually on screen.
+            int maxWidth = current.dmPelsWidth;
+            int maxHeight = current.dmPelsHeight;
+            int maxHz = current.dmDisplayFrequency;
+
+            for (int i = 0; ; i++)
+            {
+                DEVMODE mode = default;
+                mode.dmSize = (short)Marshal.SizeOf<DEVMODE>();
+                if (!EnumDisplaySettings(null, i, ref mode))
+                    break;
+
+                if ((long)mode.dmPelsWidth * mode.dmPelsHeight > (long)maxWidth * maxHeight)
+                    (maxWidth, maxHeight) = (mode.dmPelsWidth, mode.dmPelsHeight);
+
+                if (mode.dmPelsWidth == current.dmPelsWidth && mode.dmPelsHeight == current.dmPelsHeight
+                    && mode.dmDisplayFrequency > maxHz)
+                    maxHz = mode.dmDisplayFrequency;
+            }
+
+            // 0 or 1 means "use the display's default rate" per the docs above, not a real Hz value.
+            int? currentHz = current.dmDisplayFrequency > 1 ? current.dmDisplayFrequency : null;
+            return new DisplayModeInfo(current.dmPelsWidth, current.dmPelsHeight, currentHz, maxWidth, maxHeight, maxHz > 1 ? maxHz : null);
+        }
+        catch (Exception ex)
+        {
+            AppLog.Warn("SystemInfoService", "Failed to read display mode via EnumDisplaySettings.", ex);
+            return default;
+        }
     }
 
     /// <summary>Maps a Storage Management API <c>MediaType</c> code to "SSD"/"HDD"/"SCM".</summary>

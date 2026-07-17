@@ -59,6 +59,19 @@ public readonly record struct StorageDeviceInfo(string Model, string MediaType, 
 public readonly record struct OsDetails(int? BuildNumber, DateTime? InstallDate, DateTime? LastBootUpTime);
 
 /// <summary>
+/// The primary monitor's current resolution/refresh rate versus the highest it supports - e.g. to
+/// catch a 144Hz-capable panel left running at 60Hz, or a 4K panel running at 1080p. All fields are
+/// <see langword="null"/> together if the display driver couldn't be queried.
+/// </summary>
+public readonly record struct DisplayModeInfo(
+    int? CurrentWidth,
+    int? CurrentHeight,
+    int? CurrentHz,
+    int? MaxWidth,
+    int? MaxHeight,
+    int? MaxHz);
+
+/// <summary>
 /// Reads real hardware identity strings and live usage figures for the Dashboard's System
 /// Information card and the full System page.
 /// </summary>
@@ -115,4 +128,7 @@ public interface ISystemInfoService
 
     /// <summary>Gets the primary GPU's driver version (e.g. "32.0.15.8160"), or <see langword="null"/> if unavailable.</summary>
     string? GetGpuDriverVersion();
+
+    /// <summary>Gets the primary monitor's current resolution/refresh rate and the highest it supports.</summary>
+    DisplayModeInfo GetDisplayModeInfo();
 }

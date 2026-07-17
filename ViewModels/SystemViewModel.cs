@@ -45,6 +45,10 @@ public sealed class SystemViewModel : ViewModelBase
     private string _ramText = NotAvailable;
     private string _memorySpeedText = Loading;
     private string _maxMemorySpeedText = Loading;
+    private string _refreshRateText = Loading;
+    private string _maxRefreshRateText = Loading;
+    private string _resolutionText = Loading;
+    private string _maxResolutionText = Loading;
     private string _cpuUsageText = NotAvailable;
     private string _gpuUsageText = NotAvailable;
     private double _cpuUsagePercent;
@@ -66,6 +70,12 @@ public sealed class SystemViewModel : ViewModelBase
 
     private int? _currentMemorySpeedMhz;
     private int? _ratedMemorySpeedMhz;
+    private int? _currentRefreshRateHz;
+    private int? _maxRefreshRateHz;
+    private int? _currentResolutionWidth;
+    private int? _currentResolutionHeight;
+    private int? _maxResolutionWidth;
+    private int? _maxResolutionHeight;
     private double? _rustDriveFreePercent;
     private bool _memorySizeWarningVisible;
 
@@ -303,6 +313,45 @@ public sealed class SystemViewModel : ViewModelBase
     public bool MemorySpeedWarningVisible =>
         _currentMemorySpeedMhz is { } current && _ratedMemorySpeedMhz is { } rated
         && !SystemOptimizationRecommendations.IsMemorySpeedRecommended(current, rated);
+
+    /// <summary>Formatted current refresh rate of the primary monitor.</summary>
+    public string RefreshRateText
+    {
+        get => _refreshRateText;
+        private set => SetProperty(ref _refreshRateText, value);
+    }
+
+    /// <summary>Formatted highest refresh rate the primary monitor supports at its current resolution.</summary>
+    public string MaxRefreshRateText
+    {
+        get => _maxRefreshRateText;
+        private set => SetProperty(ref _maxRefreshRateText, value);
+    }
+
+    /// <summary>Whether the refresh-rate warning icon should show - true once loaded and running below the monitor's own maximum.</summary>
+    public bool RefreshRateWarningVisible =>
+        _currentRefreshRateHz is { } current && _maxRefreshRateHz is { } max
+        && !SystemOptimizationRecommendations.IsRefreshRateRecommended(current, max);
+
+    /// <summary>Formatted current resolution of the primary monitor.</summary>
+    public string ResolutionText
+    {
+        get => _resolutionText;
+        private set => SetProperty(ref _resolutionText, value);
+    }
+
+    /// <summary>Formatted highest resolution the primary monitor supports (typically its native resolution).</summary>
+    public string MaxResolutionText
+    {
+        get => _maxResolutionText;
+        private set => SetProperty(ref _maxResolutionText, value);
+    }
+
+    /// <summary>Whether the resolution warning icon should show - true once loaded and running below the monitor's own maximum.</summary>
+    public bool ResolutionWarningVisible =>
+        _currentResolutionWidth is { } currentWidth && _currentResolutionHeight is { } currentHeight
+        && _maxResolutionWidth is { } maxWidth && _maxResolutionHeight is { } maxHeight
+        && !SystemOptimizationRecommendations.IsResolutionRecommended(currentWidth, currentHeight, maxWidth, maxHeight);
 
     /// <summary>Formatted CPU load percentage.</summary>
     public string CpuUsageText
@@ -595,7 +644,9 @@ public sealed class SystemViewModel : ViewModelBase
     /// <see cref="Task.Run(Action)"/> rather than three, since concurrent calls into the shared
     /// LibreHardwareMonitor <c>Computer</c> instance aren't known to be thread-safe. Every
     /// <see cref="StoragePollEveryNTicks"/>th tick also re-reads storage devices, so free space
-    /// stays live-ish without re-enumerating physical disks every second.
+    /// stays live-ish without re-enumerating physical disks every second. Display mode is cheap
+    /// (a couple of EnumDisplaySettings calls, no WMI) so it's re-read every tick, unlike storage -
+    /// catches a resolution/Hz change made while this page is open instead of only on next visit.
     /// <see cref="_isPolling"/> skips a tick if the previous one is still running.
     /// </summary>
     private async Task PollAsync()
@@ -610,9 +661,9 @@ public sealed class SystemViewModel : ViewModelBase
             if (refreshStorage)
                 _storagePollTickCount = 0;
 
-            (MemoryInfo memory, double? cpuPercent, GpuSensorInfo gpu, IReadOnlyList<StorageDeviceInfo>? storageDevices) = await Task.Run(() =>
+            (MemoryInfo memory, double? cpuPercent, GpuSensorInfo gpu, IReadOnlyList<StorageDeviceInfo>? storageDevices, DisplayModeInfo display) = await Task.Run(() =>
                 (_systemInfo.GetMemoryInfo(), _systemInfo.GetCpuUsagePercent(), _systemInfo.GetGpuSensors(),
-                    refreshStorage ? _systemInfo.GetStorageDevices() : null));
+                    refreshStorage ? _systemInfo.GetStorageDevices() : null, _systemInfo.GetDisplayModeInfo()));
 
             if (storageDevices is not null)
                 ApplyStorageDevices(storageDevices);
@@ -622,6 +673,20 @@ public sealed class SystemViewModel : ViewModelBase
             CpuUsageText = FormatPercent(cpuPercent);
             CpuUsagePercent = cpuPercent ?? 0;
             OsUptimeText = FormatUptime(_lastBootUpTime);
+
+            RefreshRateText = FormatRefreshRate(display.CurrentHz);
+            MaxRefreshRateText = FormatRefreshRate(display.MaxHz);
+            _currentRefreshRateHz = display.CurrentHz;
+            _maxRefreshRateHz = display.MaxHz;
+            OnPropertyChanged(nameof(RefreshRateWarningVisible));
+
+            ResolutionText = FormatResolution(display.CurrentWidth, display.CurrentHeight);
+            MaxResolutionText = FormatResolution(display.MaxWidth, display.MaxHeight);
+            _currentResolutionWidth = display.CurrentWidth;
+            _currentResolutionHeight = display.CurrentHeight;
+            _maxResolutionWidth = display.MaxWidth;
+            _maxResolutionHeight = display.MaxHeight;
+            OnPropertyChanged(nameof(ResolutionWarningVisible));
 
             GpuUsageText = FormatPercent(gpu.LoadPercent);
             GpuUsagePercent = gpu.LoadPercent ?? 0;
@@ -663,6 +728,13 @@ public sealed class SystemViewModel : ViewModelBase
 
     /// <summary>Formats a nullable clock speed in MHz, or <see cref="NotAvailable"/> if unset.</summary>
     private static string FormatMemorySpeed(int? mhz) => mhz is { } value ? $"{value} MHz" : NotAvailable;
+
+    /// <summary>Formats a nullable refresh rate in Hz, or <see cref="NotAvailable"/> if unset.</summary>
+    private static string FormatRefreshRate(int? hz) => hz is { } value ? $"{value} Hz" : NotAvailable;
+
+    /// <summary>Formats a nullable width/height pair as e.g. "1920 x 1080", or <see cref="NotAvailable"/> if either is unset.</summary>
+    private static string FormatResolution(int? width, int? height) =>
+        width is { } w && height is { } h ? $"{w} x {h}" : NotAvailable;
 
     /// <summary>Formats core/thread counts as one string, or <see cref="NotAvailable"/> if either is unknown.</summary>
     private static string FormatCpuCores(CpuDetails details) =>

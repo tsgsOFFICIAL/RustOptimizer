@@ -45,7 +45,8 @@ public readonly record struct SystemOptimizationInputs(
     string? ActivePowerPlanId,
     MemoryInfo Memory,
     MemorySpeedInfo MemorySpeed,
-    double? RustDriveFreePercent);
+    double? RustDriveFreePercent,
+    DisplayModeInfo Display);
 
 /// <summary>
 /// The recommended value for each System-page setting this app can score. Shared between
@@ -88,6 +89,13 @@ public static class SystemOptimizationRecommendations
     /// <summary>At least 10% free space on Rust's drive is recommended, since Rust's updates need room to download and unpack.</summary>
     public static bool IsStorageSpaceRecommended(double freePercent) => freePercent >= MinimumFreeStoragePercent;
 
+    /// <summary>Running at the monitor's own maximum refresh rate is recommended - anything lower leaves smoothness on the table.</summary>
+    public static bool IsRefreshRateRecommended(int currentHz, int maxHz) => currentHz >= maxHz;
+
+    /// <summary>Running at the monitor's own maximum (typically native) resolution is recommended - anything lower leaves clarity on the table.</summary>
+    public static bool IsResolutionRecommended(int currentWidth, int currentHeight, int maxWidth, int maxHeight) =>
+        currentWidth >= maxWidth && currentHeight >= maxHeight;
+
     /// <summary>
     /// Finds the free-space percentage of the drive Rust is installed on, or <see langword="null"/>
     /// if Rust isn't installed or that drive isn't among <paramref name="storageDevices"/>.
@@ -110,9 +118,10 @@ public static class SystemOptimizationRecommendations
     /// <summary>
     /// Every applicable check for the given inputs, paired with whether it's currently at its
     /// recommended value and the localization key for its short display name. The fullscreen-
-    /// optimizations, memory-speed, and storage-space checks are only included when their
-    /// underlying data is available (Rust not installed, or the OS/WMI didn't report a rated
-    /// memory speed, both leave them out). One definition shared by <see cref="Score"/> and
+    /// optimizations, memory-speed, storage-space, refresh-rate, and resolution checks are only
+    /// included when their underlying data is available (Rust not installed, the OS/WMI didn't
+    /// report a rated memory speed, or the display driver didn't report a mode all leave them out).
+    /// One definition shared by <see cref="Score"/> and
     /// <see cref="GetOutstandingLabelKeys"/> so they can never disagree.
     /// </summary>
     private static IEnumerable<(bool Recommended, string LabelKey)> EvaluateChecks(SystemOptimizationInputs inputs)
@@ -131,6 +140,12 @@ public static class SystemOptimizationRecommendations
 
         if (inputs.RustDriveFreePercent is { } freePercent)
             yield return (IsStorageSpaceRecommended(freePercent), "StorageTitle");
+
+        if (inputs.Display.CurrentHz is { } currentHz && inputs.Display.MaxHz is { } maxHz)
+            yield return (IsRefreshRateRecommended(currentHz, maxHz), "RefreshRateLabel");
+
+        if (inputs.Display is { CurrentWidth: { } currentWidth, CurrentHeight: { } currentHeight, MaxWidth: { } maxWidth, MaxHeight: { } maxHeight })
+            yield return (IsResolutionRecommended(currentWidth, currentHeight, maxWidth, maxHeight), "ResolutionLabel");
     }
 
     /// <summary>Scores every applicable check - how many are at their recommended value, out of how many apply.</summary>

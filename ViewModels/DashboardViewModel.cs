@@ -202,13 +202,13 @@ public sealed class DashboardViewModel : ViewModelBase
     /// <summary>Loads the System score off the UI thread, independent of whether the System page itself has ever been visited.</summary>
     private async Task LoadSystemScoreAsync()
     {
-        (GamingTweaksSettings gaming, IReadOnlyList<PowerPlanInfo> plans, MemorySpeedInfo memorySpeed, IReadOnlyList<StorageDeviceInfo> storageDevices)
+        (GamingTweaksSettings gaming, IReadOnlyList<PowerPlanInfo> plans, MemorySpeedInfo memorySpeed, IReadOnlyList<StorageDeviceInfo> storageDevices, DisplayModeInfo display)
             = await Task.Run(() => (_systemTweaks.GetGamingTweaksSettings(), _systemTweaks.GetPowerPlans(),
-                _systemInfo.GetMemorySpeedInfo(), _systemInfo.GetStorageDevices()));
+                _systemInfo.GetMemorySpeedInfo(), _systemInfo.GetStorageDevices(), _systemInfo.GetDisplayModeInfo()));
 
         string? activePlanId = plans.FirstOrDefault(p => p.IsActive).Id;
         double? rustDriveFreePercent = SystemOptimizationRecommendations.FindRustDriveFreePercent(_rustProcess.GetInstallPath(), storageDevices);
-        SystemOptimizationInputs inputs = new(gaming, activePlanId, _systemInfo.GetMemoryInfo(), memorySpeed, rustDriveFreePercent);
+        SystemOptimizationInputs inputs = new(gaming, activePlanId, _systemInfo.GetMemoryInfo(), memorySpeed, rustDriveFreePercent, display);
 
         SystemScore = SystemOptimizationRecommendations.Score(inputs);
         _systemOutstandingLabelKeys = SystemOptimizationRecommendations.GetOutstandingLabelKeys(inputs);

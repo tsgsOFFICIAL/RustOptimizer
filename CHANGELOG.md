@@ -4,6 +4,8 @@ All notable changes to Rust Optimizer are documented here.
 
 ## Unreleased
 - Added Raidboi-1129 (iOS and Android) to the Utilities page's resource list, a mobile raid cost and loot calculator for Rust.
+- Removed the Streamer preset from Preset Profiles (now Low End PC, Competitive, and Cinematic) to cut decision fatigue.
+- Added a Display card to the System page: current vs. maximum refresh rate and resolution, flagged with a warning icon and tooltip whenever either is running below what the monitor actually supports - e.g. a 144Hz panel stuck at 60Hz, or a 4K panel running at 1080p.
 
 ## 0.8.6
 - Removed the standalone Configs page and folded it into a new Backup & Restore page, since both were really about the same thing: managing Rust's cfg files.
