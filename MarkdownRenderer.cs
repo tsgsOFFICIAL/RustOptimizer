@@ -17,7 +17,8 @@ namespace RustOptimizer;
 /// </summary>
 public static partial class MarkdownRenderer
 {
-    [GeneratedRegex(@"\*\*(?<bold>.+?)\*\*|~~(?<strike>.+?)~~|\*(?<italic>.+?)\*|`(?<code>.+?)`|\[(?<linktext>.+?)\]\((?<linkurl>.+?)\)")]
+    [GeneratedRegex(
+        @"\*\*(?<bold>.+?)\*\*|~~(?<strike>.+?)~~|\*(?<italic>.+?)\*|`(?<code>.+?)`|\[(?<linktext>.+?)\]\((?<linkurl>.+?)\)")]
     private static partial Regex InlineTokenRegex();
 
     /// <summary>
@@ -69,7 +70,8 @@ public static partial class MarkdownRenderer
             Match imageMatch = ImageLineRegex().Match(line);
             if (imageMatch.Success)
             {
-                panel.Children.Add(AnimatedImage.Create(imageMatch.Groups["url"].Value, imageMatch.Groups["alt"].Value));
+                panel.Children.Add(AnimatedImage.Create(imageMatch.Groups["url"].Value,
+                    imageMatch.Groups["alt"].Value));
                 continue;
             }
 
@@ -220,7 +222,8 @@ public static partial class MarkdownRenderer
             if (match.Groups["bold"].Success)
                 inlines.Add(new Run { Text = match.Groups["bold"].Value, FontWeight = FontWeight.Bold });
             else if (match.Groups["strike"].Success)
-                inlines.Add(new Run { Text = match.Groups["strike"].Value, TextDecorations = TextDecorations.Strikethrough });
+                inlines.Add(new Run
+                    { Text = match.Groups["strike"].Value, TextDecorations = TextDecorations.Strikethrough });
             else if (match.Groups["italic"].Success)
                 inlines.Add(new Run { Text = match.Groups["italic"].Value, FontStyle = FontStyle.Italic });
             else if (match.Groups["code"].Success)
@@ -266,6 +269,6 @@ public static partial class MarkdownRenderer
         Border chip = new() { Child = block };
         chip.Classes.Add("changelogInlineCode");
 
-        return new InlineUIContainer { Child = chip };
+        return new InlineUIContainer { Child = chip, BaselineAlignment = BaselineAlignment.TextBottom };
     }
 }
