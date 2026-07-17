@@ -14,8 +14,7 @@ public sealed record UtilityResource(string Name, string DescriptionKey, string 
 public sealed record UtilityResourceRow(string Name, string Description, string Url, PackIconPhosphorIconsKind IconKind);
 
 /// <summary>
-/// The starter set of well-known Rust resources shown on the Utilities page. A static list for
-/// now; move to a service if this ever needs to be user-editable or fetched remotely.
+/// A list of all the resources shown on the Utilities page.
 /// </summary>
 public static class UtilityResourceCatalog
 {
