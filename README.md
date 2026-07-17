@@ -30,7 +30,7 @@
 ## Features
 
 - **One-Click Smart Optimization**: Automatically tunes your system and Rust for peak performance
-- **Preset Profiles**: Low-End PC (Recommended), Competitive (High FPS), Streamer (Balanced), Cinematic (Best Quality), Custom
+- **Preset Profiles**: Low-End PC (Potato Quality), Competitive (Recommended For Most), Cinematic (Best Quality), Custom
 - **Optimization Overview**: Real-time status for Performance, System, Network, and Graphics
 - **Quick Actions**: Verify Game Files, Clear Cache, Optimize Startup, Update Drivers
 - **Direct Rust Launch**: Start the game with optimized settings from the app

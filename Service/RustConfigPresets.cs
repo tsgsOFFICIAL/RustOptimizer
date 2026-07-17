@@ -15,7 +15,6 @@ internal static class RustConfigPresets
     {
         ConfigPreset.LowEndPc => LowEndPc,
         ConfigPreset.Competitive => Competitive,
-        ConfigPreset.Streamer => Streamer,
         ConfigPreset.Cinematic => Cinematic,
         _ => throw new ArgumentOutOfRangeException(nameof(preset))
     };
@@ -31,20 +30,34 @@ internal static class RustConfigPresets
 
     private static readonly Dictionary<string, string> Competitive = new()
     {
+        ["effects.antialiasing"] = "3",
+        ["effects.bloom"] = "False",
+        ["effects.ao"] = "True",
+        ["effects.sharpen"] = "True",
+        ["effects.vignet"] = "False",
+        ["graphics.dof"] = "False",
+        ["effects.lensdirt"] = "False",
+        ["effects.motionblur"] = "False",
+        ["system.auto_cpu_affinity"] = "True",
+        ["graphics.contactshadows"] = "False",
+        ["culling.toggle"] = "True", // TODO: Verify "Occlusion Culling" & Find "Ambient Occlusion" in CFG file + God Rays
+        ["gc.buffer"] = "4096",
+        ["graphics.fov"] = "90",
+        ["graphics.drawdistance"] = "1000",
+        ["decor.quality"] = "0",
+        ["effects.shafts"] = "False", // TODO: What is this?
+        ["fps.limit"] = "0",
+        ["global.perf"] = "4", // TODO: Verify what this correlates to
+        ["graphics.af"] = "8", // TODO: What is this
+        ["graphics.lodbias"] = "1",
+        [""] = "",
+        
+            
         ["graphics.shadowmode"] = "1", ["graphics.contactshadows"] = "False", ["graphics.dof"] = "False",
         ["graphics.drawdistance"] = "2000", ["graphics.af"] = "4", ["graphics.shaderlod"] = "3",
         ["graphics.renderscale"] = "1", ["graphics.volumetric_clouds"] = "0", ["water.quality"] = "0",
         ["water.reflections"] = "0", ["grass.quality"] = "0", ["grass.distance"] = "80",
         ["grass.displacement"] = "False", ["client.camfov"] = "90", ["client.crosshair"] = "True",
-    };
-
-    private static readonly Dictionary<string, string> Streamer = new()
-    {
-        ["graphics.shadowmode"] = "2", ["graphics.contactshadows"] = "False", ["graphics.dof"] = "False",
-        ["graphics.drawdistance"] = "2500", ["graphics.af"] = "8", ["graphics.shaderlod"] = "4",
-        ["graphics.renderscale"] = "1", ["graphics.volumetric_clouds"] = "0", ["water.quality"] = "1",
-        ["water.reflections"] = "1", ["grass.quality"] = "50", ["grass.distance"] = "100",
-        ["grass.displacement"] = "True", ["client.camfov"] = "80",
     };
 
     private static readonly Dictionary<string, string> Cinematic = new()

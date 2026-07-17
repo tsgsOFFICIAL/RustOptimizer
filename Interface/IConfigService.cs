@@ -4,7 +4,6 @@ public enum ConfigPreset
 {
     LowEndPc,
     Competitive,
-    Streamer,
     Cinematic
 }
 
