@@ -1,7 +1,7 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Design.PreviewWith>
-            <!-- Add Controls for Previewer Here -->
+        <!-- Add Controls for Previewer Here -->
     </Design.PreviewWith>
 
     <Style Selector="Window">
