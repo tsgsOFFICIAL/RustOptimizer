@@ -214,9 +214,7 @@
                                 IsEnabled="{Binding CanApplyPreset}">
                             <Grid ColumnDefinitions="*,Auto">
                                 <TextBlock Grid.Column="0" Text="{Binding Localization[ProfileLowEndPc]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
-                                <Border Grid.Column="1" Classes="pill">
-                                    <TextBlock Text="{Binding Localization[TagRecommended]}"/>
-                                </Border>
+                                <TextBlock Grid.Column="1" Text="{Binding Localization[TagHighFps]}" Classes="muted" FontSize="12"/>
                             </Grid>
                         </Button>
 
@@ -224,7 +222,9 @@
                                 IsEnabled="{Binding CanApplyPreset}">
                             <Grid ColumnDefinitions="*,Auto">
                                 <TextBlock Grid.Column="0" Text="{Binding Localization[ProfileCompetitive]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
-                                <TextBlock Grid.Column="1" Text="{Binding Localization[TagHighFps]}" Classes="muted" FontSize="12"/>
+                                <Border Grid.Column="1" Classes="pill">
+                                    <TextBlock Text="{Binding Localization[TagRecommended]}"/>
+                                </Border>
                             </Grid>
                         </Button>
 
