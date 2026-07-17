@@ -1,23 +1,7 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Design.PreviewWith>
-        <Border Padding="20" Background="{DynamicResource BgColor}" Width="400">
-            <TextBlock Classes="changelogBody" TextWrapping="Wrap">
-                <Run Text="Switch between Settings (" />
-                <InlineUIContainer Classes="changelogInlineCode">
-                    <Border Classes="changelogInlineCode">
-                        <TextBlock Classes="changelogInlineCode" Text="client.cfg" />
-                    </Border>
-                </InlineUIContainer>
-                <Run Text=") and Keybinds (" />
-                <InlineUIContainer Classes="changelogInlineCode">
-                    <Border Classes="changelogInlineCode">
-                        <TextBlock Classes="changelogInlineCode" Text="keys.cfg" />
-                    </Border>
-                </InlineUIContainer>
-                <Run Text="), see each one's history." />
-            </TextBlock>
-        </Border>
+        <!-- Add Controls for Previewer Here -->
     </Design.PreviewWith>
 
     <Style Selector="Window">
