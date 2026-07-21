@@ -3,9 +3,15 @@
 All notable changes to Rust Optimizer are documented here.
 
 ## Unreleased
+
+## 0.8.7
+- Added a **Gameplay** page: a curated list of optional `client.cfg` tweaks that improve visibility or clarity with no performance cost, split into "Recommended for Everyone" (no real downside for anyone) and "Preferences" (a matter of taste) - each tweak is individually toggleable, and each section has a master switch to flip everything in it at once.
+- Toggling a Gameplay tweak writes straight to `client.cfg` without taking a full backup snapshot each time, unlike Preset Profiles - flipping a few settings back and forth no longer floods the Backup & Restore history with junk entries.
 - Added Raidboi-1129 (iOS and Android) to the Utilities page's resource list, a mobile raid cost and loot calculator for Rust.
 - Removed the Streamer preset from Preset Profiles (now Low End PC, Competitive, and Cinematic) to cut decision fatigue.
 - Added a Display card to the System page: current vs. maximum refresh rate and resolution, flagged with a warning icon and tooltip whenever either is running below what the monitor actually supports - e.g. a 144Hz panel stuck at 60Hz, or a 4K panel running at 1080p.
+- Filled in the missing Danish and Russian translations for the entire Backup & Restore page and its confirm dialogs, which had been silently falling back to English.
+- Fixed the Settings page's Light/Dark/System theme labels and the Backup & Restore page's Restore/Delete tooltips being hardcoded in English regardless of the selected language.
 
 ## 0.8.6
 - Removed the standalone Configs page and folded it into a new Backup & Restore page, since both were really about the same thing: managing Rust's cfg files.

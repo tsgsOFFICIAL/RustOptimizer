@@ -3,9 +3,15 @@
 Alle væsentlige ændringer i Rust Optimizer er dokumenteret her.
 
 ## Unreleased
+
+## 0.8.7
+- Tilføjet en **Gameplay**-side: en kurateret liste af valgfrie `client.cfg`-justeringer, der forbedrer synlighed eller klarhed uden ydelsesomkostninger, opdelt i "Anbefalet til alle" (ingen reel ulempe for nogen) og "Præferencer" (et spørgsmål om smag) - hver justering kan tændes/slukkes individuelt, og hver sektion har en hovedkontakt, der slår alt i den til/fra på én gang.
+- At slå en Gameplay-justering til/fra skriver nu direkte til `client.cfg` uden at tage et fuldt sikkerhedskopi-øjebliksbillede hver gang, i modsætning til Forudindstillede profiler - at vende et par indstillinger frem og tilbage fylder ikke længere Sikkerhedskopi & Gendan-historikken med overflødige poster.
 - Tilføjet Raidboi-1129 (iOS og Android) til Værktøjer-sidens ressourceliste - en mobil raid-omkostnings- og loot-beregner til Rust.
 - Fjernet Streamer-profilen fra Forudindstillede profiler (nu Svag PC, Konkurrence og Filmisk) for at reducere antallet af valgmuligheder.
 - Tilføjet et Skærm-kort til Systemsiden: nuværende vs. maksimal opdateringsfrekvens og opløsning, markeret med et advarselsikon og værktøjstip, når en af delene kører under det, skærmen faktisk understøtter - f.eks. en 144Hz-skærm der sidder fast på 60Hz, eller en 4K-skærm der kører i 1080p.
+- Udfyldt de manglende danske og russiske oversættelser for hele Sikkerhedskopi & Gendan-siden og dens bekræftelsesdialoger, som tidligere stille faldt tilbage til engelsk.
+- Rettet at Indstillinger-sidens Lys/Mørk/System-temaetiketter og Sikkerhedskopi & Gendan-sidens Gendan/Slet-værktøjstips var hardkodet på engelsk uanset det valgte sprog.
 
 ## 0.8.6
 - Fjernet den separate Configs-side og lagt den ind i en ny Sikkerhedskopi & Gendan-side, da de begge reelt handlede om det samme: at administrere Rusts cfg-filer.
@@ -15,7 +21,7 @@ Alle væsentlige ændringer i Rust Optimizer er dokumenteret her.
 - Systemsidens Lagerplads-kort opdaterer nu hvert par sekunder i stedet for kun at indlæse én gang, når siden åbnes.
 - Rettet at knappers hover-baggrunde i hele appen viste skarpe firkantede hjørner i stedet for at følge knappens egen afrundede form.
 
-## 8.0.5
+## 0.8.5
 - Tilføjet en Systemside (tilgængelig fra sidebaren): CPU-/GPU-/RAM-forbrug og specifikationer, bundkort/BIOS, lagerplads og OS-oplysninger, samt OS-niveau-justeringer - strømplan, markørpræcision, Spilfunktion, baggrundsoptagelse og fuldskærmsoptimeringer for Rust.
 - Tilføjet advarselsikoner ved enhver indstilling på Systemsiden, der ikke står på den anbefalede værdi, med et tooltip, der forklarer hvorfor - herunder for lidt RAM (under 16 GB), RAM der kører under sin vurderede hastighed (XMP/EXPO ikke aktiveret i BIOS), og lidt ledig plads på Rusts drev (under 10%).
 - Koblet Dashboardets Optimeringsoversigt-System-kort til Systemsidens rigtige indstillinger i stedet for en hardkodet "12 / 16 settings"-pladsholder, og givet det en tre-trins rød/gul/grøn status i stedet for en simpel god/ikke-optimeret-opdeling.
