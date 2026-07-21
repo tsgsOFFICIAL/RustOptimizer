@@ -94,13 +94,13 @@
                                             </StackPanel>
                                         </StackPanel>
                                         <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="2" VerticalAlignment="Center">
-                                            <Button Classes="linkIcon" ToolTip.Tip="Restore"
+                                            <Button Classes="linkIcon" ToolTip.Tip="{Binding $parent[ItemsControl].((vm:BackupRestoreViewModel)DataContext).Localization[Restore]}"
                                                     IsEnabled="{Binding $parent[ItemsControl].((vm:BackupRestoreViewModel)DataContext).CanRestore}"
                                                     Command="{Binding $parent[ItemsControl].((vm:BackupRestoreViewModel)DataContext).RestoreCommand}"
                                                     CommandParameter="{Binding FileName}">
                                                 <iconPacks:PackIconPhosphorIcons Kind="ArrowCounterClockwise" Width="16" Height="16"/>
                                             </Button>
-                                            <Button Classes="linkIcon" ToolTip.Tip="Delete"
+                                            <Button Classes="linkIcon" ToolTip.Tip="{Binding $parent[ItemsControl].((vm:BackupRestoreViewModel)DataContext).Localization[Delete]}"
                                                     Command="{Binding $parent[ItemsControl].((vm:BackupRestoreViewModel)DataContext).DeleteCommand}"
                                                     CommandParameter="{Binding FileName}">
                                                 <iconPacks:PackIconPhosphorIcons Kind="Trash" Width="16" Height="16"/>

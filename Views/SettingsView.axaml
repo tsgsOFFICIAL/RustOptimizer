@@ -23,7 +23,7 @@
                                 Command="{Binding SetThemeCommand}" CommandParameter="{Binding $self.Tag}">
                             <StackPanel Orientation="Horizontal" Spacing="6">
                                 <iconPacks:PackIconPhosphorIcons Kind="Sun" Width="16" Height="16"/>
-                                <TextBlock Text="Light"/>
+                                <TextBlock Text="{Binding Localization[ThemeLight]}"/>
                             </StackPanel>
                         </Button>
                         <Button Classes="segment" Tag="Dark"
@@ -31,7 +31,7 @@
                                 Command="{Binding SetThemeCommand}" CommandParameter="{Binding $self.Tag}">
                             <StackPanel Orientation="Horizontal" Spacing="6">
                                 <iconPacks:PackIconPhosphorIcons Kind="Moon" Width="16" Height="16"/>
-                                <TextBlock Text="Dark"/>
+                                <TextBlock Text="{Binding Localization[ThemeDark]}"/>
                             </StackPanel>
                         </Button>
                         <Button Classes="segment" Tag="System"
@@ -39,7 +39,7 @@
                                 Command="{Binding SetThemeCommand}" CommandParameter="{Binding $self.Tag}">
                             <StackPanel Orientation="Horizontal" Spacing="6">
                                 <iconPacks:PackIconPhosphorIcons Kind="Monitor" Width="16" Height="16"/>
-                                <TextBlock Text="System"/>
+                                <TextBlock Text="{Binding Localization[ThemeSystem]}"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>

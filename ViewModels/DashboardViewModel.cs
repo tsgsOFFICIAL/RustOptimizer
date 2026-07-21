@@ -158,7 +158,7 @@ public sealed class DashboardViewModel : ViewModelBase
     /// System page's recommended settings are currently applied, scored via
     /// <see cref="SystemOptimizationRecommendations"/> so both pages agree. Zero/zero until
     /// <see cref="LoadSystemScoreAsync"/> finishes. The same <see cref="OptimizationCategoryScore"/>
-    /// type is meant to back Performance/Network/Graphics too, once those pages have real checks
+    /// type is meant to back Network/Graphics too, once those pages have real checks
     /// of their own to score.
     /// </summary>
     public OptimizationCategoryScore SystemScore

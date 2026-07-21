@@ -22,6 +22,7 @@ public sealed class MainWindowViewModel : ViewModelBase
 
     private DashboardViewModel? _dashboard;
     private SystemViewModel? _system;
+    private GameplayViewModel? _gameplay;
     private SettingsViewModel? _settings;
     private AboutViewModel? _about;
     private UtilitiesViewModel? _utilities;
@@ -110,7 +111,7 @@ public sealed class MainWindowViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Swaps <see cref="CurrentPage"/> to match the sidebar selection. Dashboard/System/Settings/About/
+    /// Swaps <see cref="CurrentPage"/> to match the sidebar selection. Dashboard/System/Gameplay/Settings/About/
     /// Utilities/BackupRestore have real content; every other page is still a "coming soon" placeholder pending later phases.
     /// </summary>
     private void Navigate(SidebarPage page)
@@ -119,6 +120,7 @@ public sealed class MainWindowViewModel : ViewModelBase
         {
             SidebarPage.Dashboard => _dashboard ??= new DashboardViewModel(Localization, _systemInfo, _systemTweaks, _rustProcess, _configService, Sidebar),
             SidebarPage.System => _system ??= new SystemViewModel(Localization, _systemInfo, _systemTweaks, _rustProcess),
+            SidebarPage.Gameplay => _gameplay ??= new GameplayViewModel(Localization, _configService, Sidebar),
             SidebarPage.Settings => _settings ??= new SettingsViewModel(_theme, Localization),
             SidebarPage.About => _about ??= new AboutViewModel(Localization, _updates, _dialogs),
             SidebarPage.Utilities => _utilities ??= new UtilitiesViewModel(Localization),

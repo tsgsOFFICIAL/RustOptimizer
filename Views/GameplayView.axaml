@@ -1,0 +1,117 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:iconPacks="https://github.com/MahApps/IconPacks.Avalonia"
+             xmlns:vm="using:RustOptimizer.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="900"
+             x:Class="RustOptimizer.Views.GameplayView"
+             x:DataType="vm:GameplayViewModel">
+
+    <UserControl.Resources>
+        <DataTemplate x:Key="TweakRowTemplate" x:DataType="vm:GameplayTweakRow">
+            <Border Classes="tweakRow">
+                <Grid ColumnDefinitions="*,Auto">
+                    <StackPanel Grid.Column="0" Spacing="2" Margin="0,0,16,0" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding Label}" Classes="tweakLabel"/>
+                        <TextBlock Text="{Binding Description}" Classes="muted" FontSize="11" TextWrapping="Wrap"/>
+                    </StackPanel>
+                    <ToggleSwitch Grid.Column="1" VerticalAlignment="Center"
+                                  IsChecked="{Binding IsEnabled}"
+                                  IsEnabled="{Binding $parent[ItemsControl].((vm:GameplayViewModel)DataContext).CanToggleTweaks}"
+                                  OnContent="" OffContent=""/>
+                </Grid>
+            </Border>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <UserControl.Styles>
+        <Style Selector="TextBlock.sectionTitle">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextColor}"/>
+        </Style>
+        <Style Selector="TextBlock.sectionSubtitle">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextMutedColor}"/>
+            <Setter Property="Margin" Value="0,2,0,0"/>
+        </Style>
+        <Style Selector="TextBlock.tweakLabel">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextColor}"/>
+        </Style>
+        <Style Selector="Border.sectionIcon">
+            <Setter Property="Width" Value="36"/>
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Background" Value="{DynamicResource AccentSurfaceColor}"/>
+        </Style>
+        <Style Selector="Border.tweakRow">
+            <Setter Property="Padding" Value="0,14"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}"/>
+            <Setter Property="BorderThickness" Value="0,1,0,0"/>
+        </Style>
+        <Style Selector="Border.sectionHeader">
+            <Setter Property="Padding" Value="0,0,0,16"/>
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer>
+        <StackPanel Margin="24" Spacing="20" MaxWidth="900" HorizontalAlignment="Stretch">
+
+            <StackPanel Spacing="4">
+                <TextBlock Text="{Binding Localization[NavGameplay]}" FontSize="26" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>
+                <TextBlock Text="{Binding Localization[GameplayPageSubtitle]}" Classes="muted"/>
+            </StackPanel>
+
+            <Border Classes="card">
+                <StackPanel>
+                    <Border Classes="sectionHeader">
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            <Border Grid.Column="0" Classes="sectionIcon">
+                                <iconPacks:PackIconPhosphorIcons Kind="Sparkle" Width="18" Height="18" Foreground="{StaticResource AccentColor}"
+                                                                  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="12,0,16,0">
+                                <TextBlock Text="{Binding Localization[RecommendedTweaksTitle]}" Classes="sectionTitle"/>
+                                <TextBlock Text="{Binding Localization[RecommendedTweaksSubtitle]}" Classes="sectionSubtitle"/>
+                            </StackPanel>
+                            <ToggleSwitch Grid.Column="2" VerticalAlignment="Center"
+                                          IsChecked="{Binding RecommendedAllEnabled}"
+                                          IsEnabled="{Binding CanToggleTweaks}"
+                                          OnContent="" OffContent=""/>
+                        </Grid>
+                    </Border>
+
+                    <ItemsControl ItemsSource="{Binding RecommendedTweaks}" ItemTemplate="{StaticResource TweakRowTemplate}"/>
+                </StackPanel>
+            </Border>
+
+            <Border Classes="card">
+                <StackPanel>
+                    <Border Classes="sectionHeader">
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            <Border Grid.Column="0" Classes="sectionIcon">
+                                <iconPacks:PackIconPhosphorIcons Kind="SlidersHorizontal" Width="18" Height="18" Foreground="{StaticResource AccentColor}"
+                                                                  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="12,0,16,0">
+                                <TextBlock Text="{Binding Localization[PreferenceTweaksTitle]}" Classes="sectionTitle"/>
+                                <TextBlock Text="{Binding Localization[PreferenceTweaksSubtitle]}" Classes="sectionSubtitle"/>
+                            </StackPanel>
+                            <ToggleSwitch Grid.Column="2" VerticalAlignment="Center"
+                                          IsChecked="{Binding PreferenceAllEnabled}"
+                                          IsEnabled="{Binding CanToggleTweaks}"
+                                          OnContent="" OffContent=""/>
+                        </Grid>
+                    </Border>
+
+                    <ItemsControl ItemsSource="{Binding PreferenceTweaks}" ItemTemplate="{StaticResource TweakRowTemplate}"/>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+
+</UserControl>
