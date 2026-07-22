@@ -18,10 +18,11 @@ public partial class DashboardView : UserControl
         InitializeComponent();
     }
 
-    /// <summary>Re-fetches the Optimization Overview's System score, so changes made on the System page show up on return.</summary>
+    /// <summary>Re-fetches the Optimization Overview's System/Network scores, so changes made on those pages show up on return.</summary>
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnAttachedToVisualTree(e);
         (DataContext as DashboardViewModel)?.RefreshSystemScore();
+        (DataContext as DashboardViewModel)?.RefreshNetworkScore();
     }
 }

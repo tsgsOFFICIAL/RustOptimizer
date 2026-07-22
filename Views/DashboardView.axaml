@@ -87,17 +87,26 @@
                             </StackPanel>
                         </Button>
 
-                        <Border Grid.Column="2" Classes="card outOfOrder" Margin="6,0,6,0" ToolTip.Tip="{Binding Localization[ComingSoon]}">
+                        <Button Grid.Column="2" Classes="card" Padding="16" Margin="6,0,6,0" Command="{Binding ViewNetworkDetailsCommand}">
                             <StackPanel Spacing="10">
-                                <iconPacks:PackIconPhosphorIcons Kind="WifiHigh" Width="24" Height="24" Foreground="{StaticResource NetworkColor}"/>
+                                <iconPacks:PackIconPhosphorIcons Kind="WifiHigh" Width="24" Height="24"
+                                                                  Foreground="{Binding NetworkScore.Status, Converter={x:Static converters:OptimizationStatusColorConverter.Instance}}"/>
                                 <StackPanel Spacing="0">
                                     <TextBlock Text="{Binding Localization[NetworkLabel]}" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
-                                    <TextBlock Text="{Binding Localization[StatusGood]}" FontSize="12" Foreground="{StaticResource SuccessColor}"/>
+                                    <TextBlock Text="{Binding Localization[StatusGood]}" FontSize="12" Foreground="{StaticResource SuccessColor}"
+                                               IsVisible="{Binding NetworkScore.Status, Converter={x:Static avconverters:ObjectConverters.Equal}, ConverterParameter={x:Static vm:OptimizationStatus.Optimized}}"/>
+                                    <TextBlock Text="{Binding Localization[StatusPartiallyOptimized]}" FontSize="12" Foreground="{StaticResource AccentColor}"
+                                               IsVisible="{Binding NetworkScore.Status, Converter={x:Static avconverters:ObjectConverters.Equal}, ConverterParameter={x:Static vm:OptimizationStatus.PartiallyOptimized}}"/>
+                                    <TextBlock Text="{Binding Localization[StatusNotOptimized]}" FontSize="12" Foreground="{StaticResource DangerColor}"
+                                               IsVisible="{Binding NetworkScore.Status, Converter={x:Static avconverters:ObjectConverters.Equal}, ConverterParameter={x:Static vm:OptimizationStatus.NotOptimized}}"/>
                                 </StackPanel>
-                                <TextBlock Text="8 / 10 settings" Classes="muted" FontSize="11"/>
-                                <ProgressBar Classes="thinBar" Minimum="0" Maximum="10" Value="8" Foreground="{StaticResource SuccessColor}"/>
+                                <TextBlock Text="{Binding NetworkScore.SettingsText}" Classes="muted" FontSize="11"/>
+                                <ProgressBar Classes="thinBar" Minimum="0" Maximum="{Binding NetworkScore.Total}" Value="{Binding NetworkScore.Optimized}"
+                                             Foreground="{Binding NetworkScore.Status, Converter={x:Static converters:OptimizationStatusColorConverter.Instance}}"/>
+                                <TextBlock Text="{Binding NetworkIssuesSummaryText}" Classes="muted" FontSize="11" TextWrapping="Wrap"
+                                           IsVisible="{Binding NetworkIssuesSummaryText, Converter={x:Static avconverters:StringConverters.IsNotNullOrEmpty}}"/>
                             </StackPanel>
-                        </Border>
+                        </Button>
 
                         <Border Grid.Column="3" Classes="card outOfOrder" Margin="6,0,0,0" ToolTip.Tip="{Binding Localization[ComingSoon]}">
                             <StackPanel Spacing="10">

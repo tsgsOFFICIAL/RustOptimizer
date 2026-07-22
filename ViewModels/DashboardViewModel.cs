@@ -13,13 +13,14 @@ namespace RustOptimizer.ViewModels;
 /// once - live usage and deeper detail live on the full System page, reachable via
 /// <see cref="SystemDetailsRequested"/>. Rust's running state is tracked by <see cref="SidebarViewModel"/>
 /// (always visible, already polling it) rather than polled again here. Also drives the
-/// Optimization Overview's System tile, scored from the same tweaks the System page uses.
+/// Optimization Overview's System and Network tiles, scored from the same tweaks their own pages use.
 /// </summary>
 public sealed class DashboardViewModel : ViewModelBase
 {
     private readonly IRustProcessService _rustProcess;
     private readonly IConfigService _configService;
     private readonly ISystemTweaksService _systemTweaks;
+    private readonly INetworkTweaksService _networkTweaks;
     private readonly ISystemInfoService _systemInfo;
     private readonly SidebarViewModel _sidebar;
     private const string NotAvailable = "N/A";
@@ -32,29 +33,35 @@ public sealed class DashboardViewModel : ViewModelBase
     private bool _isRustInstalled = true;
     private OptimizationCategoryScore _systemScore;
     private IReadOnlyList<string> _systemOutstandingLabelKeys = [];
+    private OptimizationCategoryScore _networkScore;
+    private IReadOnlyList<string> _networkOutstandingLabelKeys = [];
 
-    // Keeps the System tile's "what's wrong" summary compact - beyond this many, the rest are
-    // only a click away on the full System page anyway.
-    private const int MaxSystemIssuesShown = 2;
+    // Keeps each tile's "what's wrong" summary compact - beyond this many, the rest are only a
+    // click away on the tile's own full page anyway.
+    private const int MaxIssuesShown = 2;
 
-    /// <summary>Creates the view model, resolves the card's hardware identity strings once, and kicks off the System score's async load.</summary>
+    /// <summary>Creates the view model, resolves the card's hardware identity strings once, and kicks off the System/Network scores' async loads.</summary>
     public DashboardViewModel(ILocalizationService localization, ISystemInfoService systemInfo, ISystemTweaksService systemTweaks,
-        IRustProcessService rustProcess, IConfigService configService, SidebarViewModel sidebar)
+        INetworkTweaksService networkTweaks, IRustProcessService rustProcess, IConfigService configService, SidebarViewModel sidebar)
         : base(localization)
     {
         _rustProcess = rustProcess;
         _configService = configService;
         _systemTweaks = systemTweaks;
+        _networkTweaks = networkTweaks;
         _systemInfo = systemInfo;
         _sidebar = sidebar;
         _sidebar.PropertyChanged += OnSidebarPropertyChanged;
 
-        // SystemIssuesSummaryText is built from localized strings in C#, not a plain
-        // {Binding Localization[Key]} lookup, so it needs to be manually re-raised on language switch.
+        // SystemIssuesSummaryText/NetworkIssuesSummaryText are built from localized strings in C#,
+        // not a plain {Binding Localization[Key]} lookup, so they need to be manually re-raised on language switch.
         Localization.PropertyChanged += (_, e) =>
         {
             if (e.PropertyName is "Item" or null)
+            {
                 OnPropertyChanged(nameof(SystemIssuesSummaryText));
+                OnPropertyChanged(nameof(NetworkIssuesSummaryText));
+            }
         };
 
         RunSmartOptimizationCommand = new RelayCommand(() =>
@@ -65,6 +72,7 @@ public sealed class DashboardViewModel : ViewModelBase
         VerifyRustFilesCommand = new RelayCommand(VerifyRustFiles);
         ApplyPresetCommand = new RelayCommand<string>(ApplyPreset);
         ViewSystemDetailsCommand = new RelayCommand(() => SystemDetailsRequested?.Invoke(this, EventArgs.Empty));
+        ViewNetworkDetailsCommand = new RelayCommand(() => NetworkDetailsRequested?.Invoke(this, EventArgs.Empty));
 
         CpuName = systemInfo.GetCpuName();
         GpuName = systemInfo.GetGpuName();
@@ -91,6 +99,15 @@ public sealed class DashboardViewModel : ViewModelBase
 
     /// <summary>Raises <see cref="SystemDetailsRequested"/> to navigate to the System page.</summary>
     public RelayCommand ViewSystemDetailsCommand { get; }
+
+    /// <summary>
+    /// Raised when the Optimization Overview's Network tile is clicked, so the shell can navigate
+    /// to the full Network page.
+    /// </summary>
+    public event EventHandler? NetworkDetailsRequested;
+
+    /// <summary>Raises <see cref="NetworkDetailsRequested"/> to navigate to the Network page.</summary>
+    public RelayCommand ViewNetworkDetailsCommand { get; }
 
     /// <summary>The CPU's model name.</summary>
     public string CpuName
@@ -157,9 +174,7 @@ public sealed class DashboardViewModel : ViewModelBase
     /// The System category's optimization tally for the Optimization Overview - how many of the
     /// System page's recommended settings are currently applied, scored via
     /// <see cref="SystemOptimizationRecommendations"/> so both pages agree. Zero/zero until
-    /// <see cref="LoadSystemScoreAsync"/> finishes. The same <see cref="OptimizationCategoryScore"/>
-    /// type is meant to back Network/Graphics too, once those pages have real checks
-    /// of their own to score.
+    /// <see cref="LoadSystemScoreAsync"/> finishes.
     /// </summary>
     public OptimizationCategoryScore SystemScore
     {
@@ -169,21 +184,43 @@ public sealed class DashboardViewModel : ViewModelBase
 
     /// <summary>
     /// A short, comma-separated preview of what's not optimized yet (e.g. "Game Mode, Power Plan
-    /// +1 more"), or "" once every applicable check passes. Capped at <see cref="MaxSystemIssuesShown"/>
+    /// +1 more"), or "" once every applicable check passes. Capped at <see cref="MaxIssuesShown"/>
     /// so the tile stays compact - the System page itself lists every check with its own warning icon.
     /// </summary>
-    public string SystemIssuesSummaryText
+    public string SystemIssuesSummaryText => BuildIssuesSummaryText(_systemOutstandingLabelKeys);
+
+    /// <summary>
+    /// The Network category's optimization tally for the Optimization Overview - how many of the
+    /// Network page's recommended tweaks are currently applied, scored via
+    /// <see cref="NetworkOptimizationRecommendations"/> so both pages agree. Zero/zero until
+    /// <see cref="LoadNetworkScoreAsync"/> finishes.
+    /// </summary>
+    public OptimizationCategoryScore NetworkScore
     {
-        get
-        {
-            if (_systemOutstandingLabelKeys.Count == 0)
-                return "";
+        get => _networkScore;
+        private set => SetProperty(ref _networkScore, value);
+    }
 
-            string shown = string.Join(", ", _systemOutstandingLabelKeys.Take(MaxSystemIssuesShown).Select(key => Localization[key]));
-            int remaining = _systemOutstandingLabelKeys.Count - MaxSystemIssuesShown;
+    /// <summary>
+    /// A short, comma-separated preview of what's not optimized yet on the Network page, or "" once
+    /// every applicable check passes. Capped at <see cref="MaxIssuesShown"/>, same as <see cref="SystemIssuesSummaryText"/>.
+    /// </summary>
+    public string NetworkIssuesSummaryText => BuildIssuesSummaryText(_networkOutstandingLabelKeys);
 
-            return remaining > 0 ? string.Format(Localization["SystemIssuesMoreFormat"], shown, remaining) : shown;
-        }
+    /// <summary>
+    /// Builds a tile's "what's wrong" summary from its outstanding check label keys, capped at
+    /// <see cref="MaxIssuesShown"/> - shared by <see cref="SystemIssuesSummaryText"/> and
+    /// <see cref="NetworkIssuesSummaryText"/> so both tiles read identically.
+    /// </summary>
+    private string BuildIssuesSummaryText(IReadOnlyList<string> outstandingLabelKeys)
+    {
+        if (outstandingLabelKeys.Count == 0)
+            return "";
+
+        string shown = string.Join(", ", outstandingLabelKeys.Take(MaxIssuesShown).Select(key => Localization[key]));
+        int remaining = outstandingLabelKeys.Count - MaxIssuesShown;
+
+        return remaining > 0 ? string.Format(Localization["IssuesMoreFormat"], shown, remaining) : shown;
     }
 
     /// <summary>Re-evaluates <see cref="CanVerifyRustFiles"/> whenever the sidebar's Rust-running state changes.</summary>
@@ -198,6 +235,26 @@ public sealed class DashboardViewModel : ViewModelBase
     /// tweaks made on the System page while this view model sat cached wouldn't otherwise be reflected.
     /// </summary>
     public void RefreshSystemScore() => _ = LoadSystemScoreAsync();
+
+    /// <summary>
+    /// Re-fetches <see cref="NetworkScore"/>. Call whenever the Dashboard becomes visible again -
+    /// tweaks made on the Network page while this view model sat cached wouldn't otherwise be reflected.
+    /// </summary>
+    public void RefreshNetworkScore() => _ = LoadNetworkScoreAsync();
+
+    /// <summary>Loads the Network score off the UI thread, independent of whether the Network page itself has ever been visited.</summary>
+    private async Task LoadNetworkScoreAsync()
+    {
+        (NetworkTweaksSettings settings, NetworkAdapterInfo? adapterInfo) = await Task.Run(() =>
+            (_networkTweaks.GetNetworkTweaksSettings(), _networkTweaks.GetActiveAdapterInfo()));
+
+        NetworkOptimizationInputs inputs = new(settings.NetworkThrottlingDisabled, settings.NicPowerSavingDisabled,
+            settings.QosReservedBandwidthDisabled, adapterInfo?.IsWireless);
+
+        NetworkScore = NetworkOptimizationRecommendations.Score(inputs);
+        _networkOutstandingLabelKeys = NetworkOptimizationRecommendations.GetOutstandingLabelKeys(inputs);
+        OnPropertyChanged(nameof(NetworkIssuesSummaryText));
+    }
 
     /// <summary>Loads the System score off the UI thread, independent of whether the System page itself has ever been visited.</summary>
     private async Task LoadSystemScoreAsync()
