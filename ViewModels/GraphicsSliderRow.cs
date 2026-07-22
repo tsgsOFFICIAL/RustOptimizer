@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using RustOptimizer.Interface;
 using System.ComponentModel;
-using Avalonia.Media;
+using Avalonia.Controls;
 using System;
 
 namespace RustOptimizer.ViewModels;
@@ -16,12 +16,17 @@ public sealed record GraphicsTierOption(string Label, GraphicsSliderTier Tier);
 /// a language switch rebuilds the whole row list.
 /// <see cref="SelectedTierIndex"/> is the only mutable, bindable part: changing it writes every
 /// convar in the chosen tier to client.cfg immediately, reverting the position if the write fails,
-/// and updates <see cref="PreviewImage"/> to match.
+/// and rebuilds <see cref="PreviewControl"/> to match.
 /// </summary>
 public sealed class GraphicsSliderRow(string title, string previewId, IReadOnlyList<GraphicsTierOption> tiers, IConfigService configService, int? currentTierIndex) : INotifyPropertyChanged
 {
     private int _selectedTierIndex = currentTierIndex ?? 0;
     private bool _isCustom = currentTierIndex is null;
+
+    // Built once per selection rather than recomputed on every property read - a multi-frame GIF's
+    // control owns a live DispatcherTimer/codec, so re-reading this property shouldn't spin up a
+    // fresh one each time something merely re-evaluates the binding.
+    private Control? _previewControl = GraphicsPreviewImages.Build(previewId, tiers[currentTierIndex ?? 0].Tier.PreviewId);
 
     /// <inheritdoc />
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -77,14 +82,14 @@ public sealed class GraphicsSliderRow(string title, string previewId, IReadOnlyL
     public bool IsCustom => _isCustom;
 
     /// <summary>
-    /// The in-game screenshot for <see cref="SelectedTierIndex"/>, or <see langword="null"/> if no
-    /// matching image has been added to <c>Assets/GraphicsPreviews/</c> yet - the view shows a
-    /// plain placeholder either way.
+    /// The in-game preview control for <see cref="SelectedTierIndex"/> (animates if it's a
+    /// multi-frame GIF), or <see langword="null"/> if no matching image has been added to
+    /// <c>Assets/GraphicsPreviews/</c> yet - the view shows a plain placeholder either way.
     /// </summary>
-    public IImage? PreviewImage => GraphicsPreviewImages.Get(previewId, Tiers[_selectedTierIndex].Tier.PreviewId);
+    public Control? PreviewControl => _previewControl;
 
-    /// <summary>Whether <see cref="PreviewImage"/> resolved to a real image - drives the "no preview yet" placeholder in the view.</summary>
-    public bool HasPreviewImage => PreviewImage is not null;
+    /// <summary>Whether <see cref="PreviewControl"/> resolved to a real image - drives the "no preview yet" placeholder in the view.</summary>
+    public bool HasPreviewImage => _previewControl is not null;
 
     /// <summary>Inverse of <see cref="HasPreviewImage"/>, exposed for the view's placeholder visibility binding.</summary>
     public bool HasNoPreviewImage => !HasPreviewImage;
@@ -93,9 +98,11 @@ public sealed class GraphicsSliderRow(string title, string previewId, IReadOnlyL
     {
         _selectedTierIndex = index;
         _isCustom = isCustom;
+        _previewControl = GraphicsPreviewImages.Build(previewId, Tiers[index].Tier.PreviewId);
+
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedTierIndex)));
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsCustom)));
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PreviewImage)));
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PreviewControl)));
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasPreviewImage)));
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasNoPreviewImage)));
     }
