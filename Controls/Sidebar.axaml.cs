@@ -8,8 +8,8 @@ using System;
 namespace RustOptimizer.Controls;
 
 /// <summary>
-/// The pages reachable from the sidebar nav rail. <see cref="Optimizer"/> and <see cref="Network"/>
-/// are still "coming soon" placeholders - every other page has real content.
+/// The pages reachable from the sidebar nav rail. <see cref="Optimizer"/> is still a "coming soon"
+/// placeholder - every other page has real content.
 /// </summary>
 public enum SidebarPage
 {
