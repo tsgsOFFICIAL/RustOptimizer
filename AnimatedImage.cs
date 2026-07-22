@@ -91,7 +91,7 @@ public static class AnimatedImage
     /// animates on a timer using each frame's own duration; everything else (single-frame GIF, PNG,
     /// JPEG, WebP, etc.) is shown as a static image.
     /// </summary>
-    private static Control BuildImageControl(byte[] bytes)
+    internal static Control BuildImageControl(byte[] bytes)
     {
         SKCodec codec = SKCodec.Create(new SKMemoryStream(bytes))
             ?? throw new InvalidDataException("Unrecognized image format.");
