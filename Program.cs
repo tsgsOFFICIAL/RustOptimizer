@@ -24,10 +24,25 @@ namespace RustOptimizer
             // the DI container/Avalonia lifetime are built at all, since this path never shows a window.
             if (args is ["--apply-network-tweak", string key, string value])
             {
+                int exitCode;
+                try
+                {
 #pragma warning disable CA1416 // This app only ever runs on Windows (see app.manifest); NetworkTweakElevationRunner is Windows-only.
-                Environment.Exit(NetworkTweakElevationRunner.Run(key, value));
+                    exitCode = NetworkTweakElevationRunner.Run(key, value);
 #pragma warning restore CA1416
-                return;
+                }
+                catch (Exception ex)
+                {
+                    AppLog.Fatal("Program", "Unhandled exception in the elevated network-tweak helper.", ex);
+                    exitCode = 1;
+                }
+
+                // Environment.Exit terminates the process immediately without reliably running a
+                // finally block, so "Application exiting" is logged explicitly here rather than
+                // relying on the main path's try/finally below - every launch of this exe, elevated
+                // helper or full UI, should leave a symmetric start/exit pair in the log.
+                AppLog.Info("Program", "Application exiting.");
+                Environment.Exit(exitCode);
             }
 
             try

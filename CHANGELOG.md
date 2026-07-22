@@ -3,6 +3,12 @@
 All notable changes to Rust Optimizer are documented here.
 
 ## Unreleased
+- Added a **Network** page: live info for your active adapter (link speed, local IPv4/gateway/MAC/DNS), a continuously updating ping and jitter reading to 1.1.1.1, live download/upload throughput, and an opt-in public IP lookup you check on demand rather than automatically - plus a link to Speedtest.net for a full download/upload/latency test.
+- Added three Network tweaks - disabling Windows' network throttling, NIC power saving, and QoS reserved bandwidth - each briefly showing an administrator prompt when applied, since these particular settings can't be changed without elevated permissions.
+- Added a warning icon on the Network page when your active connection is Wi-Fi instead of wired Ethernet, since a cable gives meaningfully lower and more consistent latency.
+- Wired the Dashboard's Optimization Overview Network tile to the Network page's real settings instead of a hardcoded "8 / 10 settings" placeholder, matching how the System tile already works.
+
+![Network page](https://raw.githubusercontent.com/tsgsOFFICIAL/RustOptimizer/master/Assets/Changelog/network-page.png)
 
 ## 0.8.8
 - Added a **Graphics** page: simplified quality sliders (Shadow Quality, Texture Quality, Effects Quality, Draw Distance, World Detail, Water Quality, Inventory Display) that each write straight to `client.cfg` - the same convar values Preset Profiles already use, now adjustable one setting at a time instead of only as whole bundles.

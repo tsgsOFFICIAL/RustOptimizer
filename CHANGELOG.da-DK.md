@@ -3,6 +3,12 @@
 Alle væsentlige ændringer i Rust Optimizer er dokumenteret her.
 
 ## Unreleased
+- Tilføjet en **Netværk**-side: live info om din aktive adapter (linkhastighed, lokal IPv4/gateway/MAC/DNS), en løbende opdateret ping- og jitter-måling til 1.1.1.1, live download-/upload-hastighed, og et valgfrit offentligt IP-opslag, du selv tjekker i stedet for at det sker automatisk - samt et link til Speedtest.net for en fuld download-/upload-/latenstest.
+- Tilføjet tre Netværk-justeringer - deaktivering af Windows' netværksdrosling, strømbesparelse for netværkskort og reserveret QoS-båndbredde - som hver især kort viser en administratorprompt, når de anvendes, da disse specifikke indstillinger kræver forhøjede rettigheder for at ændre.
+- Tilføjet et advarselsikon på Netværk-siden, når din aktive forbindelse er Wi-Fi i stedet for kabelforbundet Ethernet, da et kabel giver markant lavere og mere konsistent latenstid.
+- Forbundet Dashboardets Optimeringsoversigt Netværk-felt til Netværk-sidens rigtige indstillinger i stedet for en hardkodet "8 / 10 indstillinger"-pladsholder, ligesom System-feltet allerede fungerer.
+
+![Netværk-siden](https://raw.githubusercontent.com/tsgsOFFICIAL/RustOptimizer/master/Assets/Changelog/network-page.png)
 
 ## 0.8.8
 - Tilføjet en **Grafik**-side: forenklede kvalitetsskydere (Skyggekvalitet, Teksturkvalitet, Effektkvalitet, Synsafstand, Verdensdetaljer, Vandkvalitet, Inventar-visning), der hver skriver direkte til `client.cfg` - de samme convar-værdier, som Forudindstillede profiler allerede bruger, nu justerbare én indstilling ad gangen i stedet for kun som hele pakker.
