@@ -1,0 +1,92 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:RustOptimizer.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="900"
+             x:Class="RustOptimizer.Views.GraphicsView"
+             x:DataType="vm:GraphicsViewModel">
+
+    <UserControl.Styles>
+        <Style Selector="TextBlock.sliderLabel">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextColor}"/>
+        </Style>
+        <Style Selector="Border.sliderRow">
+            <Setter Property="Padding" Value="0,14"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}"/>
+            <Setter Property="BorderThickness" Value="0,1,0,0"/>
+        </Style>
+        <Style Selector="Border.previewFrame">
+            <Setter Property="Width" Value="220"/>
+            <Setter Property="Height" Value="124"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="ClipToBounds" Value="True"/>
+            <Setter Property="Background" Value="{DynamicResource BorderColorTransparent}"/>
+        </Style>
+        <Style Selector="TextBlock.tierLabel">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextMutedColor}"/>
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer>
+        <StackPanel Margin="24" Spacing="20" MaxWidth="900" HorizontalAlignment="Stretch">
+
+            <StackPanel Spacing="4">
+                <TextBlock Text="{Binding Localization[NavGraphics]}" FontSize="26" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>
+                <TextBlock Text="{Binding Localization[GraphicsPageSubtitle]}" Classes="muted"/>
+            </StackPanel>
+
+            <!-- Quality Sliders -->
+            <Border Classes="card">
+                <StackPanel Spacing="4">
+                    <TextBlock Text="{Binding Localization[QualitySettingsTitle]}" FontWeight="Bold" Foreground="{DynamicResource TextColor}" Margin="0,0,0,6"/>
+                    <TextBlock Text="{Binding Localization[QualitySettingsSubtitle]}" Classes="muted" FontSize="12" Margin="0,0,0,6"/>
+
+                    <ItemsControl ItemsSource="{Binding Sliders}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:GraphicsSliderRow">
+                                <Border Classes="sliderRow">
+                                    <Grid ColumnDefinitions="*,220">
+
+                                        <!-- Slider is the main point of focus - title, drag handle, and Low/Medium/High labels. -->
+                                        <StackPanel Grid.Column="0" Spacing="6" Margin="0,0,24,0" VerticalAlignment="Center">
+                                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                                <TextBlock Text="{Binding Title}" Classes="sliderLabel"/>
+                                                <TextBlock Classes="muted" FontSize="11" VerticalAlignment="Center"
+                                                           IsVisible="{Binding IsCustom}"
+                                                           Text="{Binding $parent[ItemsControl].((vm:GraphicsViewModel)DataContext).Localization[GraphicsTierCustom]}"/>
+                                            </StackPanel>
+                                            <Slider Minimum="0" Maximum="2" TickFrequency="1" IsSnapToTickEnabled="True"
+                                                    Value="{Binding SelectedTierIndex}"
+                                                    IsEnabled="{Binding $parent[ItemsControl].((vm:GraphicsViewModel)DataContext).CanApplySliders}"/>
+                                            <Grid ColumnDefinitions="*,*,*">
+                                                <TextBlock Grid.Column="0" Text="{Binding LowLabel}" Classes="tierLabel" HorizontalAlignment="Left"/>
+                                                <TextBlock Grid.Column="1" Text="{Binding MediumLabel}" Classes="tierLabel" HorizontalAlignment="Center"/>
+                                                <TextBlock Grid.Column="2" Text="{Binding HighLabel}" Classes="tierLabel" HorizontalAlignment="Right"/>
+                                            </Grid>
+                                        </StackPanel>
+
+                                        <!-- In-game preview for the currently selected tier - updates immediately when the slider moves. -->
+                                        <Border Grid.Column="1" Classes="previewFrame">
+                                            <Grid>
+                                                <Image Source="{Binding PreviewImage}" Stretch="UniformToFill" IsVisible="{Binding HasPreviewImage}"/>
+                                                <TextBlock Classes="muted" FontSize="11" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" MaxWidth="180"
+                                                           IsVisible="{Binding HasNoPreviewImage}"
+                                                           Text="{Binding $parent[ItemsControl].((vm:GraphicsViewModel)DataContext).Localization[GraphicsPreviewUnavailable]}"/>
+                                            </Grid>
+                                        </Border>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+
+</UserControl>

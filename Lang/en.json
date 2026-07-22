@@ -52,6 +52,22 @@
 
   "SystemPageSubtitle": "Detailed hardware and OS information.",
 
+  "GraphicsPageSubtitle": "Simplified quality settings for Rust, grouped the way the in-game options menu does.",
+  "QualitySettingsTitle": "Quality Settings",
+  "QualitySettingsSubtitle": "Each slider adjusts several related in-game settings together. Pick Low, Medium, or High for the balance of quality vs. performance you want.",
+  "GraphicsTierLow": "Low",
+  "GraphicsTierMedium": "Medium",
+  "GraphicsTierHigh": "High",
+  "GraphicsTierCustom": "Custom",
+  "GraphicsPreviewUnavailable": "No preview available",
+  "GraphicsSliderShadowQualityLabel": "Shadow Quality",
+  "GraphicsSliderTextureQualityLabel": "Texture Quality",
+  "GraphicsSliderEffectsQualityLabel": "Effects Quality",
+  "GraphicsSliderDrawDistanceLabel": "Draw Distance",
+  "GraphicsSliderWorldDetailLabel": "World Detail",
+  "GraphicsSliderWaterQualityLabel": "Water Quality",
+  "GraphicsSliderInventoryDisplayLabel": "Inventory Display",
+
   "UtilitiesPageSubtitle": "Handy external tools and resources for Rust.",
   "ExternalResourcesTitle": "External Resources",
   "UtilitiesDisclaimer": "Rust Optimizer is not affiliated with, endorsed by, or responsible for the content of any of these third-party sites.",

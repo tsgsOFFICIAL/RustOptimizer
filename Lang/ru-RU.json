@@ -52,6 +52,22 @@
 
   "SystemPageSubtitle": "Подробная информация об оборудовании и ОС.",
 
+  "GraphicsPageSubtitle": "Упрощённые настройки качества для Rust, сгруппированные так же, как в игровом меню настроек.",
+  "QualitySettingsTitle": "Настройки качества",
+  "QualitySettingsSubtitle": "Каждый ползунок одновременно регулирует несколько связанных игровых настроек. Выберите Низкое, Среднее или Высокое качество для нужного баланса между качеством и производительностью.",
+  "GraphicsTierLow": "Низкое",
+  "GraphicsTierMedium": "Среднее",
+  "GraphicsTierHigh": "Высокое",
+  "GraphicsTierCustom": "Пользовательское",
+  "GraphicsPreviewUnavailable": "Предпросмотр недоступен",
+  "GraphicsSliderShadowQualityLabel": "Качество теней",
+  "GraphicsSliderTextureQualityLabel": "Качество текстур",
+  "GraphicsSliderEffectsQualityLabel": "Качество эффектов",
+  "GraphicsSliderDrawDistanceLabel": "Дальность прорисовки",
+  "GraphicsSliderWorldDetailLabel": "Детализация мира",
+  "GraphicsSliderWaterQualityLabel": "Качество воды",
+  "GraphicsSliderInventoryDisplayLabel": "Отображение инвентаря",
+
   "UtilitiesPageSubtitle": "Полезные внешние инструменты и ресурсы для Rust.",
   "ExternalResourcesTitle": "Внешние ресурсы",
   "UtilitiesDisclaimer": "Rust Optimizer не аффилирован ни с одним из этих сторонних сайтов, не поддерживает их и не несёт ответственности за их содержимое.",

@@ -20,6 +20,9 @@ public sealed class ConfigService(IRustProcessService rustProcess, IConfigBackup
     public IReadOnlyList<GameplayTweak> GetRecommendedGameplayTweaks() => RecommendedGameplayTweaks.All;
 
     /// <inheritdoc />
+    public IReadOnlyList<GraphicsSlider> GetGraphicsSliders() => RecommendedGraphicsSliders.All;
+
+    /// <inheritdoc />
     public IReadOnlyDictionary<string, string> ReadConvars(IReadOnlyCollection<string> convars)
     {
         Dictionary<string, string> result = new(StringComparer.OrdinalIgnoreCase);

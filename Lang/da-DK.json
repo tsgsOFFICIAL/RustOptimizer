@@ -52,6 +52,22 @@
 
   "SystemPageSubtitle": "Detaljerede hardware- og OS-oplysninger.",
 
+  "GraphicsPageSubtitle": "Forenklede kvalitetsindstillinger til Rust, grupperet på samme måde som i spillets indstillingsmenu.",
+  "QualitySettingsTitle": "Kvalitetsindstillinger",
+  "QualitySettingsSubtitle": "Hver skyder justerer flere relaterede indstillinger i spillet samtidig. Vælg Lav, Mellem eller Høj for den balance mellem kvalitet og ydeevne, du ønsker.",
+  "GraphicsTierLow": "Lav",
+  "GraphicsTierMedium": "Mellem",
+  "GraphicsTierHigh": "Høj",
+  "GraphicsTierCustom": "Brugerdefineret",
+  "GraphicsPreviewUnavailable": "Ingen forhåndsvisning tilgængelig",
+  "GraphicsSliderShadowQualityLabel": "Skyggekvalitet",
+  "GraphicsSliderTextureQualityLabel": "Teksturkvalitet",
+  "GraphicsSliderEffectsQualityLabel": "Effektkvalitet",
+  "GraphicsSliderDrawDistanceLabel": "Synsafstand",
+  "GraphicsSliderWorldDetailLabel": "Verdensdetaljer",
+  "GraphicsSliderWaterQualityLabel": "Vandkvalitet",
+  "GraphicsSliderInventoryDisplayLabel": "Inventar-visning",
+
   "UtilitiesPageSubtitle": "Praktiske eksterne værktøjer og ressourcer til Rust.",
   "ExternalResourcesTitle": "Eksterne ressourcer",
   "UtilitiesDisclaimer": "Rust Optimizer er ikke tilknyttet, godkendt af eller ansvarlig for indholdet på nogen af disse tredjepartssider.",
