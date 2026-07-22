@@ -4,6 +4,10 @@ Alle væsentlige ændringer i Rust Optimizer er dokumenteret her.
 
 ## Unreleased
 
+## 0.8.8
+- Tilføjet en **Grafik**-side: forenklede kvalitetsskydere (Skyggekvalitet, Teksturkvalitet, Effektkvalitet, Synsafstand, Verdensdetaljer, Vandkvalitet, Inventar-visning), der hver skriver direkte til `client.cfg` - de samme convar-værdier, som Forudindstillede profiler allerede bruger, nu justerbare én indstilling ad gangen i stedet for kun som hele pakker.
+- Hver Grafik-skyder viser et live forhåndsvisningsbillede, der opdateres, når du trækker mellem Lav/Mellem/Høj, inklusive animerede GIF'er til før/efter-sammenligninger - falder tilbage til en simpel pladsholder for enhver indstilling, der endnu ikke har et forhåndsvisningsbillede.
+
 ## 0.8.7
 - Tilføjet en **Gameplay**-side: en kurateret liste af valgfrie `client.cfg`-justeringer, der forbedrer synlighed eller klarhed uden ydelsesomkostninger, opdelt i "Anbefalet til alle" (ingen reel ulempe for nogen) og "Præferencer" (et spørgsmål om smag) - hver justering kan tændes/slukkes individuelt, og hver sektion har en hovedkontakt, der slår alt i den til/fra på én gang.
 - At slå en Gameplay-justering til/fra skriver nu direkte til `client.cfg` uden at tage et fuldt sikkerhedskopi-øjebliksbillede hver gang, i modsætning til Forudindstillede profiler - at vende et par indstillinger frem og tilbage fylder ikke længere Sikkerhedskopi & Gendan-historikken med overflødige poster.

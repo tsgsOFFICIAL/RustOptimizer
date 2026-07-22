@@ -4,6 +4,10 @@ All notable changes to Rust Optimizer are documented here.
 
 ## Unreleased
 
+## 0.8.8
+- Added a **Graphics** page: simplified quality sliders (Shadow Quality, Texture Quality, Effects Quality, Draw Distance, World Detail, Water Quality, Inventory Display) that each write straight to `client.cfg` - the same convar values Preset Profiles already use, now adjustable one setting at a time instead of only as whole bundles.
+- Each Graphics slider shows a live preview image that updates as you drag between Low/Medium/High, including animated GIFs for before/after comparisons - falls back to a plain placeholder for any setting that doesn't have a preview image yet.
+
 ## 0.8.7
 - Added a **Gameplay** page: a curated list of optional `client.cfg` tweaks that improve visibility or clarity with no performance cost, split into "Recommended for Everyone" (no real downside for anyone) and "Preferences" (a matter of taste) - each tweak is individually toggleable, and each section has a master switch to flip everything in it at once.
 - Toggling a Gameplay tweak writes straight to `client.cfg` without taking a full backup snapshot each time, unlike Preset Profiles - flipping a few settings back and forth no longer floods the Backup & Restore history with junk entries.
