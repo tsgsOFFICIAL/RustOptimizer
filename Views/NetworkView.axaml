@@ -1,0 +1,191 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:iconPacks="https://github.com/MahApps/IconPacks.Avalonia"
+             xmlns:vm="using:RustOptimizer.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
+             x:Class="RustOptimizer.Views.NetworkView"
+             x:DataType="vm:NetworkViewModel">
+
+    <UserControl.Styles>
+        <Style Selector="TextBlock.infoValue">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextColor}"/>
+        </Style>
+        <Style Selector="TextBlock.infoLabel">
+            <Setter Property="Foreground" Value="{DynamicResource TextMutedColor}"/>
+            <Setter Property="FontSize" Value="11"/>
+        </Style>
+        <Style Selector="TextBlock.cardTitle">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextColor}"/>
+        </Style>
+        <Style Selector="TextBlock.sectionTitle">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextColor}"/>
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer>
+        <StackPanel Margin="24" Spacing="24">
+
+            <StackPanel Spacing="4">
+                <TextBlock Text="{Binding Localization[NavNetwork]}" FontSize="26" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>
+                <TextBlock Text="{Binding Localization[NetworkPageSubtitle]}" Classes="muted"/>
+            </StackPanel>
+
+            <Grid ColumnDefinitions="*,*">
+
+                <!-- Adapter -->
+                <Border Grid.Column="0" Classes="card" Margin="0,0,8,0">
+                    <StackPanel Spacing="14">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <iconPacks:PackIconPhosphorIcons Kind="WifiHigh" Width="20" Height="20" Foreground="{StaticResource AccentColor}"/>
+                            <TextBlock Text="{Binding Localization[AdapterInfoTitle]}" Classes="cardTitle"/>
+                        </StackPanel>
+
+                        <Grid ColumnDefinitions="*,*">
+                            <StackPanel Grid.Column="0" Spacing="0">
+                                <TextBlock Text="{Binding Localization[ActiveAdapterLabel]}" Classes="infoLabel"/>
+                                <Grid ColumnDefinitions="Auto,Auto">
+                                    <TextBlock Grid.Column="0" Text="{Binding AdapterNameText}" Classes="infoValue" VerticalAlignment="Center"/>
+                                    <Border Grid.Column="1" Background="Transparent" Margin="6,0,0,0" VerticalAlignment="Center"
+                                            IsVisible="{Binding WiredConnectionWarningVisible}"
+                                            ToolTip.Tip="{Binding Localization[WiredConnectionWarningTooltip]}">
+                                        <iconPacks:PackIconPhosphorIcons Kind="Warning" Width="14" Height="14" Foreground="{StaticResource AccentColor}"/>
+                                    </Border>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Spacing="0">
+                                <TextBlock Text="{Binding Localization[LinkSpeedLabel]}" Classes="infoLabel"/>
+                                <TextBlock Text="{Binding LinkSpeedText}" Classes="infoValue"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid ColumnDefinitions="*,*">
+                            <StackPanel Grid.Column="0" Spacing="0">
+                                <TextBlock Text="{Binding Localization[IPv4AddressLabel]}" Classes="infoLabel"/>
+                                <TextBlock Text="{Binding IPv4AddressText}" Classes="infoValue"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Spacing="0">
+                                <TextBlock Text="{Binding Localization[GatewayLabel]}" Classes="infoLabel"/>
+                                <TextBlock Text="{Binding GatewayText}" Classes="infoValue"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid ColumnDefinitions="*,*">
+                            <StackPanel Grid.Column="0" Spacing="0">
+                                <TextBlock Text="{Binding Localization[MacAddressLabel]}" Classes="infoLabel"/>
+                                <TextBlock Text="{Binding MacAddressText}" Classes="infoValue"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Spacing="0">
+                                <TextBlock Text="{Binding Localization[DnsServersLabel]}" Classes="infoLabel"/>
+                                <TextBlock Text="{Binding DnsServersText}" Classes="infoValue" TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <StackPanel Spacing="4">
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <TextBlock Text="{Binding Localization[PublicIpLabel]}" Classes="infoLabel"/>
+                                <TextBlock Text="{Binding Localization[PublicIpAttributionText]}" Classes="infoLabel" FontStyle="Italic"/>
+                            </StackPanel>
+                            <Button Content="{Binding Localization[LookupPublicIpButtonLabel]}" Command="{Binding LookupPublicIpCommand}"
+                                    IsVisible="{Binding !PublicIpRequested}" Padding="8,4" FontSize="12" HorizontalAlignment="Left"/>
+                            <TextBlock Text="{Binding PublicIpText}" Classes="infoValue" IsVisible="{Binding PublicIpRequested}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Connection -->
+                <Border Grid.Column="1" Classes="card" Margin="8,0,0,0">
+                    <StackPanel Spacing="14">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <iconPacks:PackIconPhosphorIcons Kind="Pulse" Width="20" Height="20" Foreground="{StaticResource AccentColor}"/>
+                            <TextBlock Text="{Binding Localization[ConnectionTitle]}" Classes="cardTitle"/>
+                        </StackPanel>
+
+                        <Grid ColumnDefinitions="*,*">
+                            <StackPanel Grid.Column="0" Spacing="0">
+                                <TextBlock Text="{Binding Localization[PingLabel]}" Classes="infoLabel"/>
+                                <TextBlock Text="{Binding PingResultText}" Classes="infoValue"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Spacing="0">
+                                <TextBlock Text="{Binding Localization[JitterLabel]}" Classes="infoLabel"/>
+                                <TextBlock Text="{Binding PingJitterText}" Classes="infoValue"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid ColumnDefinitions="*,*">
+                            <StackPanel Grid.Column="0" Spacing="0">
+                                <TextBlock Text="{Binding Localization[DownloadRateLabel]}" Classes="infoLabel"/>
+                                <TextBlock Text="{Binding DownloadRateText}" Classes="infoValue"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Spacing="0">
+                                <TextBlock Text="{Binding Localization[UploadRateLabel]}" Classes="infoLabel"/>
+                                <TextBlock Text="{Binding UploadRateText}" Classes="infoValue"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <Button Command="{Binding OpenSpeedTestCommand}" HorizontalAlignment="Left">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <TextBlock Text="{Binding Localization[OpenSpeedTestLabel]}" FontSize="12"/>
+                                <iconPacks:PackIconPhosphorIcons Kind="ArrowSquareOut" Width="14" Height="14" Foreground="{DynamicResource TextMutedColor}"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Border>
+
+            </Grid>
+
+            <!-- Tweaks -->
+            <StackPanel Spacing="12">
+                <TextBlock Text="{Binding Localization[NetworkTweaksTitle]}" Classes="sectionTitle"/>
+
+                <Border Classes="card">
+                    <StackPanel Spacing="14">
+
+                        <Grid ColumnDefinitions="*,Auto,Auto">
+                            <TextBlock Grid.Column="0" Text="{Binding Localization[NetworkThrottlingLabel]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                            <Border Grid.Column="1" Background="Transparent" Margin="0,0,8,0" VerticalAlignment="Center"
+                                    IsVisible="{Binding NetworkThrottlingWarningVisible}"
+                                    ToolTip.Tip="{Binding Localization[NetworkThrottlingWarningTooltip]}">
+                                <iconPacks:PackIconPhosphorIcons Kind="Warning" Width="18" Height="18" Foreground="{StaticResource AccentColor}"/>
+                            </Border>
+                            <ToggleSwitch Grid.Column="2" IsChecked="{Binding NetworkThrottlingDisabled}" OnContent="" OffContent=""/>
+                        </Grid>
+
+                        <Grid ColumnDefinitions="*,Auto,Auto" IsVisible="{Binding ShowNicPowerSavingToggle}">
+                            <TextBlock Grid.Column="0" Text="{Binding Localization[NicPowerSavingLabel]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                            <Border Grid.Column="1" Background="Transparent" Margin="0,0,8,0" VerticalAlignment="Center"
+                                    IsVisible="{Binding NicPowerSavingWarningVisible}"
+                                    ToolTip.Tip="{Binding Localization[NicPowerSavingWarningTooltip]}">
+                                <iconPacks:PackIconPhosphorIcons Kind="Warning" Width="18" Height="18" Foreground="{StaticResource AccentColor}"/>
+                            </Border>
+                            <ToggleSwitch Grid.Column="2" IsChecked="{Binding NicPowerSavingDisabled}" OnContent="" OffContent=""/>
+                        </Grid>
+
+                        <Grid ColumnDefinitions="*,Auto,Auto">
+                            <TextBlock Grid.Column="0" Text="{Binding Localization[QosReservedBandwidthLabel]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                            <Border Grid.Column="1" Background="Transparent" Margin="0,0,8,0" VerticalAlignment="Center"
+                                    IsVisible="{Binding QosReservedBandwidthWarningVisible}"
+                                    ToolTip.Tip="{Binding Localization[QosReservedBandwidthWarningTooltip]}">
+                                <iconPacks:PackIconPhosphorIcons Kind="Warning" Width="18" Height="18" Foreground="{StaticResource AccentColor}"/>
+                            </Border>
+                            <ToggleSwitch Grid.Column="2" IsChecked="{Binding QosReservedBandwidthDisabled}" OnContent="" OffContent=""/>
+                        </Grid>
+
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+
+            <Grid ColumnDefinitions="Auto,*">
+                <iconPacks:PackIconPhosphorIcons Grid.Column="0" Kind="Info" Width="14" Height="14" Foreground="{DynamicResource TextMutedColor}" VerticalAlignment="Top" Margin="0,1,6,0"/>
+                <TextBlock Grid.Column="1" Text="{Binding Localization[NetworkPageDisclaimer]}" Classes="muted" FontSize="12" TextWrapping="Wrap"/>
+            </Grid>
+
+        </StackPanel>
+    </ScrollViewer>
+
+</UserControl>

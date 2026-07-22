@@ -31,7 +31,7 @@ namespace RustOptimizer
             RustProcessService rustProcess = new();
             ConfigBackupService configBackup = new(rustProcess);
             return new MainWindowViewModel(theme, localization, new UpdateService(), rustProcess,
-                new SystemInfoService(localization), new SystemTweaksService(rustProcess), new DialogService(),
+                new SystemInfoService(localization), new SystemTweaksService(rustProcess), new NetworkTweaksService(), new DialogService(),
                 new ConfigService(rustProcess, configBackup), configBackup);
         }
 

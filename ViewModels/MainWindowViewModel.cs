@@ -16,6 +16,7 @@ public sealed class MainWindowViewModel : ViewModelBase
     private readonly IDialogService _dialogs;
     private readonly ISystemInfoService _systemInfo;
     private readonly ISystemTweaksService _systemTweaks;
+    private readonly INetworkTweaksService _networkTweaks;
     private readonly IRustProcessService _rustProcess;
     private readonly IConfigService _configService;
     private readonly IConfigBackupService _configBackup;
@@ -23,6 +24,7 @@ public sealed class MainWindowViewModel : ViewModelBase
     private DashboardViewModel? _dashboard;
     private SystemViewModel? _system;
     private GraphicsViewModel? _graphics;
+    private NetworkViewModel? _network;
     private GameplayViewModel? _gameplay;
     private SettingsViewModel? _settings;
     private AboutViewModel? _about;
@@ -35,7 +37,7 @@ public sealed class MainWindowViewModel : ViewModelBase
     /// <summary>Creates the shell, its sidebar, and the initial Dashboard page.</summary>
     public MainWindowViewModel(IThemeService theme, ILocalizationService localization, IUpdateService updates,
         IRustProcessService rustProcess, ISystemInfoService systemInfo, ISystemTweaksService systemTweaks,
-        IDialogService dialogs, IConfigService configService, IConfigBackupService configBackup)
+        INetworkTweaksService networkTweaks, IDialogService dialogs, IConfigService configService, IConfigBackupService configBackup)
         : base(localization)
     {
         _theme = theme;
@@ -43,6 +45,7 @@ public sealed class MainWindowViewModel : ViewModelBase
         _dialogs = dialogs;
         _systemInfo = systemInfo;
         _systemTweaks = systemTweaks;
+        _networkTweaks = networkTweaks;
         _rustProcess = rustProcess;
         _configService = configService;
         _configBackup = configBackup;
@@ -54,8 +57,9 @@ public sealed class MainWindowViewModel : ViewModelBase
         OpenGitHubCommand = new RelayCommand(() => Utility.OpenUrl(ProjectLinks.GitHub));
         OpenDiscordCommand = new RelayCommand(() => Utility.OpenUrl(ProjectLinks.Discord));
 
-        _dashboard = new DashboardViewModel(localization, systemInfo, systemTweaks, rustProcess, configService, Sidebar);
+        _dashboard = new DashboardViewModel(localization, systemInfo, systemTweaks, networkTweaks, rustProcess, configService, Sidebar);
         _dashboard.SystemDetailsRequested += (_, _) => Sidebar.NavigateTo(SidebarPage.System);
+        _dashboard.NetworkDetailsRequested += (_, _) => Sidebar.NavigateTo(SidebarPage.Network);
         CurrentPage = _dashboard;
     }
 
@@ -112,16 +116,17 @@ public sealed class MainWindowViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Swaps <see cref="CurrentPage"/> to match the sidebar selection. Dashboard/System/Graphics/Gameplay/Settings/
-    /// About/Utilities/BackupRestore have real content; every other page is still a "coming soon" placeholder pending later phases.
+    /// Swaps <see cref="CurrentPage"/> to match the sidebar selection. Dashboard/System/Graphics/Network/Gameplay/
+    /// Settings/About/Utilities/BackupRestore have real content; every other page is still a "coming soon" placeholder pending later phases.
     /// </summary>
     private void Navigate(SidebarPage page)
     {
         CurrentPage = page switch
         {
-            SidebarPage.Dashboard => _dashboard ??= new DashboardViewModel(Localization, _systemInfo, _systemTweaks, _rustProcess, _configService, Sidebar),
+            SidebarPage.Dashboard => _dashboard ??= new DashboardViewModel(Localization, _systemInfo, _systemTweaks, _networkTweaks, _rustProcess, _configService, Sidebar),
             SidebarPage.System => _system ??= new SystemViewModel(Localization, _systemInfo, _systemTweaks, _rustProcess),
             SidebarPage.Graphics => _graphics ??= new GraphicsViewModel(Localization, _configService, Sidebar),
+            SidebarPage.Network => _network ??= new NetworkViewModel(Localization, _networkTweaks, _dialogs),
             SidebarPage.Gameplay => _gameplay ??= new GameplayViewModel(Localization, _configService, Sidebar),
             SidebarPage.Settings => _settings ??= new SettingsViewModel(_theme, Localization),
             SidebarPage.About => _about ??= new AboutViewModel(Localization, _updates, _dialogs),

@@ -20,9 +20,19 @@ namespace RustOptimizer
             AppLog.RegisterGlobalExceptionHandlers();
             AppLog.Info("Program", "Application starting.");
 
+            // Elevated re-launch for a single network tweak (see ElevationHelper) is handled before
+            // the DI container/Avalonia lifetime are built at all, since this path never shows a window.
+            if (args is ["--apply-network-tweak", string key, string value])
+            {
+#pragma warning disable CA1416 // This app only ever runs on Windows (see app.manifest); NetworkTweakElevationRunner is Windows-only.
+                Environment.Exit(NetworkTweakElevationRunner.Run(key, value));
+#pragma warning restore CA1416
+                return;
+            }
+
             try
             {
-                // SystemInfoService is Windows-only; matches this app's WinExe/app.manifest-only deployment.
+                // SystemInfoService/NetworkTweaksService are Windows-only; matches this app's WinExe/app.manifest-only deployment.
 #pragma warning disable CA1416
                 Services = new ServiceCollection()
                     .AddSingleton<IThemeService, ThemeService>()
@@ -31,6 +41,7 @@ namespace RustOptimizer
                     .AddSingleton<IRustProcessService, RustProcessService>()
                     .AddSingleton<ISystemInfoService, SystemInfoService>()
                     .AddSingleton<ISystemTweaksService, SystemTweaksService>()
+                    .AddSingleton<INetworkTweaksService, NetworkTweaksService>()
                     .AddSingleton<IDialogService, DialogService>()
                     .AddSingleton<IConfigBackupService, ConfigBackupService>()
                     .AddSingleton<IConfigService, ConfigService>()

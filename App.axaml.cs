@@ -35,6 +35,7 @@ namespace RustOptimizer
             IRustProcessService rustProcess = services.GetRequiredService<IRustProcessService>();
             ISystemInfoService systemInfo = services.GetRequiredService<ISystemInfoService>();
             ISystemTweaksService systemTweaks = services.GetRequiredService<ISystemTweaksService>();
+            INetworkTweaksService networkTweaks = services.GetRequiredService<INetworkTweaksService>();
             IDialogService dialogs = services.GetRequiredService<IDialogService>();
             IConfigService configService = services.GetRequiredService<IConfigService>();
             IConfigBackupService configBackup = services.GetRequiredService<IConfigBackupService>();
@@ -42,7 +43,7 @@ namespace RustOptimizer
             theme.Initialize();
             localization.Initialize();
 
-            MainWindowViewModel viewModel = new(theme, localization, updates, rustProcess, systemInfo, systemTweaks, dialogs, configService, configBackup);
+            MainWindowViewModel viewModel = new(theme, localization, updates, rustProcess, systemInfo, systemTweaks, networkTweaks, dialogs, configService, configBackup);
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
                 desktop.MainWindow = new MainWindow(viewModel);
