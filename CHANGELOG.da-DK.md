@@ -2,7 +2,12 @@
 
 Alle væsentlige ændringer i Rust Optimizer er dokumenteret her.
 
-## Unreleased
+## 0.9.0
+- Tilføjet **Ryd cache** til Dashboardets hurtige handlinger: rydder midlertidige Windows-filer, GPU'ens shader-caches (NVIDIA, AMD, Intel og DirectX), Steams download-, depot- og butikscaches, Rusts Unity-logs og programmernes nedbrudsdumps - og viser derefter, hvor meget der rent faktisk blev frigjort under knappen.
+- Ryd cache spørger, før den kører, med tre ting du kan slå fra først: tømning af papirkurven, rydning af miniaturecachen og medtagelse af systemfiler (som beder om administratorgodkendelse). Alt andet, den rydder, er sikkert at fjerne og bygges op igen af sig selv.
+- Ryd cache viser sit forløb undervejs og navngiver hver gruppe, mens den arbejder, og den kan stoppes undervejs - en afbrudt kørsel viser stadig, hvor meget den nåede at frigøre.
+- Ryd cache rører ikke shader-caches, mens Rust kører - og siger det, i stedet for i stilhed at frigøre mindre end forventet. Filer, der reelt er i brug, springes over og tælles med i stedet for at blive behandlet som fejl.
+- Rust kan tage lidt længere tid om at starte første gang efter en rydning af shader-caches, mens de bygges igen. Det er forventet, og det står i prompten på forhånd.
 - Tilføjet en **Netværk**-side: live info om din aktive adapter (linkhastighed, lokal IPv4/gateway/MAC/DNS), en løbende opdateret ping- og jitter-måling til 1.1.1.1, live download-/upload-hastighed, og et valgfrit offentligt IP-opslag, du selv tjekker i stedet for at det sker automatisk - samt et link til Speedtest.net for en fuld download-/upload-/latenstest.
 - Tilføjet tre Netværk-justeringer - deaktivering af Windows' netværksdrosling, strømbesparelse for netværkskort og reserveret QoS-båndbredde - som hver især kort viser en administratorprompt, når de anvendes, da disse specifikke indstillinger kræver forhøjede rettigheder for at ændre.
 - Tilføjet et advarselsikon på Netværk-siden, når din aktive forbindelse er Wi-Fi i stedet for kabelforbundet Ethernet, da et kabel giver markant lavere og mere konsistent latenstid.

@@ -2,7 +2,12 @@
 
 All notable changes to Rust Optimizer are documented here.
 
-## Unreleased
+## 0.9.0
+- Added **Clear Cache** to the Dashboard's Quick Actions: clears Windows temporary files, GPU shader caches (NVIDIA, AMD, Intel and DirectX), Steam's download, depot and store caches, Rust's Unity logs, and application crash dumps - then reports how much it actually freed underneath the button.
+- Clear Cache asks before it runs, with three things you can switch off first: emptying the Recycle Bin, clearing the thumbnail cache, and including system files (which asks for administrator approval). Everything else it clears is safe to remove and rebuilds on its own.
+- Clear Cache shows its progress while it works, naming each group as it goes, and can be stopped part-way - a cancelled run still reports what it managed to free.
+- Clear Cache leaves shader caches alone while Rust is running - and tells you it did, rather than silently freeing less than you expected. Files that are genuinely in use are skipped and counted rather than treated as errors.
+- Rust may take a little longer to start the first time after clearing shader caches, while they rebuild. That's expected, and the prompt says so up front.
 - Added a **Network** page: live info for your active adapter (link speed, local IPv4/gateway/MAC/DNS), a continuously updating ping and jitter reading to 1.1.1.1, live download/upload throughput, and an opt-in public IP lookup you check on demand rather than automatically - plus a link to Speedtest.net for a full download/upload/latency test.
 - Added three Network tweaks - disabling Windows' network throttling, NIC power saving, and QoS reserved bandwidth - each briefly showing an administrator prompt when applied, since these particular settings can't be changed without elevated permissions.
 - Added a warning icon on the Network page when your active connection is Wi-Fi instead of wired Ethernet, since a cable gives meaningfully lower and more consistent latency.
