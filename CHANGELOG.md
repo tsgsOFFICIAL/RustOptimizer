@@ -6,7 +6,7 @@ All notable changes to Rust Optimizer are documented here.
 
 ### Settings, rebuilt
 
-![Settings page](https://raw.githubusercontent.com/tsgsOFFICIAL/RustOptimizer/master/Assets/Changelog/settings-page.png)
+![Settings page](https://raw.githubusercontent.com/tsgsOFFICIAL/RustOptimizer/master/Assets/Changelog/settings-page.gif)
 
 Grouped into **Appearance**, **Application**, **Updates**, **Units** and **Data** - and every option now says what it actually does instead of being a bare label.
 

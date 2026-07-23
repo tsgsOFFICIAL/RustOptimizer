@@ -6,7 +6,7 @@ Alle væsentlige ændringer i Rust Optimizer er dokumenteret her.
 
 ### Indstillinger, bygget om
 
-![Indstillinger](https://raw.githubusercontent.com/tsgsOFFICIAL/RustOptimizer/master/Assets/Changelog/settings-page.png)
+![Indstillinger](https://raw.githubusercontent.com/tsgsOFFICIAL/RustOptimizer/master/Assets/Changelog/settings-page.gif)
 
 Grupperet i **Udseende**, **Program**, **Opdateringer**, **Enheder** og **Data** - og hver mulighed forklarer nu, hvad den rent faktisk gør, i stedet for kun at være en overskrift.
 

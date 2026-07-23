@@ -6,7 +6,7 @@
 
 ### «Настройки» переработаны
 
-![Настройки](https://raw.githubusercontent.com/tsgsOFFICIAL/RustOptimizer/master/Assets/Changelog/settings-page.png)
+![Настройки](https://raw.githubusercontent.com/tsgsOFFICIAL/RustOptimizer/master/Assets/Changelog/settings-page.gif)
 
 Параметры сгруппированы по разделам **«Внешний вид»**, **«Приложение»**, **«Обновления»**, **«Единицы измерения»** и **«Данные»** - и каждый пункт теперь объясняет, что он делает, а не просто называется.
 
