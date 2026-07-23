@@ -22,14 +22,21 @@ public sealed class DashboardViewModel : ViewModelBase
     private readonly ISystemTweaksService _systemTweaks;
     private readonly INetworkTweaksService _networkTweaks;
     private readonly ISystemInfoService _systemInfo;
+    private readonly ICleanupService _cleanup;
+    private readonly IDialogService _dialogs;
     private readonly SidebarViewModel _sidebar;
     private const string NotAvailable = "N/A";
+
+    // Joins the parts of the post-cleanup status line ("Freed 4.2 GB · 12 files in use were skipped").
+    private const string StatusPartSeparator = " · ";
 
     private string _cpuName = "";
     private string _gpuName = "";
     private string _osDescription = "";
     private string _ramText = NotAvailable;
     private string _presetStatusText = "";
+    private string _clearCacheStatusText = "";
+    private bool _isClearingCache;
     private bool _isRustInstalled = true;
     private OptimizationCategoryScore _systemScore;
     private IReadOnlyList<string> _systemOutstandingLabelKeys = [];
@@ -42,7 +49,8 @@ public sealed class DashboardViewModel : ViewModelBase
 
     /// <summary>Creates the view model, resolves the card's hardware identity strings once, and kicks off the System/Network scores' async loads.</summary>
     public DashboardViewModel(ILocalizationService localization, ISystemInfoService systemInfo, ISystemTweaksService systemTweaks,
-        INetworkTweaksService networkTweaks, IRustProcessService rustProcess, IConfigService configService, SidebarViewModel sidebar)
+        INetworkTweaksService networkTweaks, IRustProcessService rustProcess, IConfigService configService,
+        ICleanupService cleanup, IDialogService dialogs, SidebarViewModel sidebar)
         : base(localization)
     {
         _rustProcess = rustProcess;
@@ -50,6 +58,8 @@ public sealed class DashboardViewModel : ViewModelBase
         _systemTweaks = systemTweaks;
         _networkTweaks = networkTweaks;
         _systemInfo = systemInfo;
+        _cleanup = cleanup;
+        _dialogs = dialogs;
         _sidebar = sidebar;
         _sidebar.PropertyChanged += OnSidebarPropertyChanged;
 
@@ -70,6 +80,7 @@ public sealed class DashboardViewModel : ViewModelBase
         });
 
         VerifyRustFilesCommand = new RelayCommand(VerifyRustFiles);
+        ClearCacheCommand = new RelayCommand(() => _ = ClearCacheAsync());
         ApplyPresetCommand = new RelayCommand<string>(ApplyPreset);
         ViewSystemDetailsCommand = new RelayCommand(() => SystemDetailsRequested?.Invoke(this, EventArgs.Empty));
         ViewNetworkDetailsCommand = new RelayCommand(() => NetworkDetailsRequested?.Invoke(this, EventArgs.Empty));
@@ -93,6 +104,9 @@ public sealed class DashboardViewModel : ViewModelBase
 
     /// <summary>Verifies Rust's game files via Steam.</summary>
     public RelayCommand VerifyRustFilesCommand { get; }
+
+    /// <summary>Prompts for cleanup options, then clears the caches the user left enabled.</summary>
+    public RelayCommand ClearCacheCommand { get; }
 
     /// <summary>Applies the preset profile named by its parameter.</summary>
     public RelayCommand<string> ApplyPresetCommand { get; }
@@ -143,6 +157,30 @@ public sealed class DashboardViewModel : ViewModelBase
         get => _presetStatusText;
         private set => SetProperty(ref _presetStatusText, value);
     }
+
+    /// <summary>
+    /// Status message shown under the Clear Cache button - "Clearing…" while a run is in progress,
+    /// then what it freed. Empty until the first run finishes.
+    /// </summary>
+    public string ClearCacheStatusText
+    {
+        get => _clearCacheStatusText;
+        private set => SetProperty(ref _clearCacheStatusText, value);
+    }
+
+    /// <summary>Whether a cleanup is currently running, which disables the button for its duration.</summary>
+    public bool IsClearingCache
+    {
+        get => _isClearingCache;
+        private set
+        {
+            if (SetProperty(ref _isClearingCache, value))
+                OnPropertyChanged(nameof(CanClearCache));
+        }
+    }
+
+    /// <summary>Whether the Clear Cache button should be enabled - false only while a run is in progress.</summary>
+    public bool CanClearCache => !IsClearingCache;
 
     /// <summary>Whether Rust's install path could be resolved.</summary>
     public bool IsRustInstalled
@@ -270,6 +308,77 @@ public sealed class DashboardViewModel : ViewModelBase
         SystemScore = SystemOptimizationRecommendations.Score(inputs);
         _systemOutstandingLabelKeys = SystemOptimizationRecommendations.GetOutstandingLabelKeys(inputs);
         OnPropertyChanged(nameof(SystemIssuesSummaryText));
+    }
+
+    /// <summary>
+    /// Prompts for options and, unless cancelled, runs the cleanup. The prompt is the only gate:
+    /// once the user confirms, the run isn't interruptible, so the button is disabled for its duration.
+    /// </summary>
+    private async Task ClearCacheAsync()
+    {
+        if (IsClearingCache)
+            return;
+
+        IsClearingCache = true;
+
+        try
+        {
+            // The prompt runs the cleanup itself and stays open for its duration, so what comes back
+            // is the finished outcome rather than a set of options to act on.
+            if (await _dialogs.ShowClearCacheAsync(Localization, _cleanup) is { } outcome)
+                ClearCacheStatusText = BuildClearCacheStatusText(outcome);
+        }
+        finally
+        {
+            IsClearingCache = false;
+        }
+    }
+
+    /// <summary>
+    /// Builds the post-cleanup status line: what was freed, plus a note for anything deliberately
+    /// left alone (locked files, a running Steam or Rust, or a declined UAC prompt) so a smaller
+    /// than expected total is explained rather than mysterious.
+    /// </summary>
+    private string BuildClearCacheStatusText(CleanupOutcome outcome)
+    {
+        List<string> parts =
+        [
+            outcome.BytesFreed > 0
+                ? string.Format(Localization["ClearCacheFreedFormat"], FormatBytes(outcome.BytesFreed))
+                : Localization["ClearCacheNothingFreed"]
+        ];
+
+        if (outcome.FilesSkipped > 0)
+            parts.Add(string.Format(Localization["ClearCacheSkippedFormat"], outcome.FilesSkipped));
+
+        if (outcome.RustWasRunning)
+            parts.Add(Localization["ClearCacheRustSkipped"]);
+
+        if (outcome.ElevationDeclined)
+            parts.Add(Localization["ClearCacheSystemFilesSkipped"]);
+
+        if (outcome.Cancelled)
+            parts.Add(Localization["ClearCacheCancelled"]);
+
+        return string.Join(StatusPartSeparator, parts);
+    }
+
+    /// <summary>
+    /// Formats a byte count for display, e.g. "4.2 GB" or "812 MB". Unit symbols are left untranslated,
+    /// matching how RAM and storage sizes are already rendered elsewhere in the app.
+    /// </summary>
+    private static string FormatBytes(long bytes)
+    {
+        const double kb = 1024.0;
+        const double mb = kb * 1024.0;
+        const double gb = mb * 1024.0;
+
+        return bytes switch
+        {
+            >= (long)gb => $"{bytes / gb:0.#} GB",
+            >= (long)mb => $"{bytes / mb:0.#} MB",
+            _ => $"{bytes / kb:0} KB"
+        };
     }
 
     /// <summary>Triggers Steam's file verification for Rust.</summary>

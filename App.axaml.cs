@@ -39,11 +39,12 @@ namespace RustOptimizer
             IDialogService dialogs = services.GetRequiredService<IDialogService>();
             IConfigService configService = services.GetRequiredService<IConfigService>();
             IConfigBackupService configBackup = services.GetRequiredService<IConfigBackupService>();
+            ICleanupService cleanup = services.GetRequiredService<ICleanupService>();
 
             theme.Initialize();
             localization.Initialize();
 
-            MainWindowViewModel viewModel = new(theme, localization, updates, rustProcess, systemInfo, systemTweaks, networkTweaks, dialogs, configService, configBackup);
+            MainWindowViewModel viewModel = new(theme, localization, updates, rustProcess, systemInfo, systemTweaks, networkTweaks, dialogs, configService, configBackup, cleanup);
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
                 desktop.MainWindow = new MainWindow(viewModel);

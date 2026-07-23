@@ -20,4 +20,12 @@ public interface IDialogService
     /// only if the user picked the confirm option; closing the window any other way counts as "no".
     /// </summary>
     Task<bool> ShowConfirmAsync(ILocalizationService localization, string title, string message, string confirmLabel, bool isDestructive);
+
+    /// <summary>
+    /// Shows the Clear Cache prompt and keeps it open for the duration of the run, returning what
+    /// the cleanup achieved or <see langword="null"/> if the user cancelled before it started. Every
+    /// option starts enabled - the prompt exists so the few consequential targets (Recycle Bin,
+    /// thumbnail cache, admin-only files) can be opted out of, not opted into.
+    /// </summary>
+    Task<CleanupOutcome?> ShowClearCacheAsync(ILocalizationService localization, ICleanupService cleanup);
 }

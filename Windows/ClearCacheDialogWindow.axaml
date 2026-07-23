@@ -1,0 +1,80 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:RustOptimizer.ViewModels"
+        xmlns:controls="using:RustOptimizer.Controls"
+        mc:Ignorable="d" d:DesignWidth="460" d:DesignHeight="360"
+        x:Class="RustOptimizer.Windows.ClearCacheDialogWindow"
+        x:DataType="vm:ClearCacheDialogViewModel"
+        Title="{Binding Localization[ClearCache]}"
+        Icon="/Assets/App/logo.ico"
+        Width="460" Height="360"
+        CanResize="False"
+        Background="{DynamicResource BgColor}"
+        WindowStartupLocation="CenterOwner">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <controls:TitleBar Grid.Row="0"
+                           Localization="{Binding Localization}"
+                           Title="{Binding Localization[ClearCache]}"
+                           Author="tsgsOFFICIAL"
+                           ShowMaximizeButton="False">
+            <controls:TitleBar.Icon>
+                <Image Source="/Assets/App/logo.ico"/>
+            </controls:TitleBar.Icon>
+        </controls:TitleBar>
+
+        <StackPanel Grid.Row="1" Margin="20" Spacing="14" IsVisible="{Binding IsConfiguring}">
+
+            <TextBlock Text="{Binding Localization[ClearCacheDescription]}" TextWrapping="Wrap"
+                       FontSize="12" Foreground="{DynamicResource TextColor}"/>
+
+            <Grid ColumnDefinitions="*,Auto">
+                <StackPanel Grid.Column="0" Spacing="0" Margin="0,0,12,0">
+                    <TextBlock Text="{Binding Localization[ClearCacheRecycleBin]}" FontSize="12" Foreground="{DynamicResource TextColor}"/>
+                    <TextBlock Text="{Binding Localization[ClearCacheRecycleBinHint]}" Classes="muted" FontSize="11" TextWrapping="Wrap"/>
+                </StackPanel>
+                <ToggleSwitch Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding EmptyRecycleBin}" OnContent="" OffContent=""/>
+            </Grid>
+
+            <Grid ColumnDefinitions="*,Auto">
+                <StackPanel Grid.Column="0" Spacing="0" Margin="0,0,12,0">
+                    <TextBlock Text="{Binding Localization[ClearCacheThumbnails]}" FontSize="12" Foreground="{DynamicResource TextColor}"/>
+                    <TextBlock Text="{Binding Localization[ClearCacheThumbnailsHint]}" Classes="muted" FontSize="11" TextWrapping="Wrap"/>
+                </StackPanel>
+                <ToggleSwitch Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding ClearThumbnailCache}" OnContent="" OffContent=""/>
+            </Grid>
+
+            <Grid ColumnDefinitions="*,Auto">
+                <StackPanel Grid.Column="0" Spacing="0" Margin="0,0,12,0">
+                    <TextBlock Text="{Binding Localization[ClearCacheSystemFiles]}" FontSize="12" Foreground="{DynamicResource TextColor}"/>
+                    <TextBlock Text="{Binding Localization[ClearCacheSystemFilesHint]}" Classes="muted" FontSize="11" TextWrapping="Wrap"/>
+                </StackPanel>
+                <ToggleSwitch Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding IncludeSystemFiles}" OnContent="" OffContent=""/>
+            </Grid>
+
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Margin="20" Spacing="12" VerticalAlignment="Center" IsVisible="{Binding IsRunning}">
+            <TextBlock Text="{Binding Localization[ClearCacheRunning]}" FontSize="12"
+                       Foreground="{DynamicResource TextColor}"/>
+            <ProgressBar Minimum="0" Maximum="{Binding ProgressMaximum}" Value="{Binding ProgressValue}" Height="6"/>
+            <TextBlock Text="{Binding ProgressLabel}" Classes="muted" FontSize="11" TextWrapping="Wrap"/>
+        </StackPanel>
+
+        <Border Grid.Row="2"
+                Padding="16"
+                BorderBrush="{DynamicResource BorderColor}"
+                BorderThickness="0,1,0,0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+                <Button Content="{Binding Localization[Cancel]}" Command="{Binding CancelCommand}" Classes="secondaryButton"/>
+                <Button Content="{Binding Localization[ClearCacheConfirmLabel]}" Command="{Binding ConfirmCommand}"
+                        Classes="accentButton" IsVisible="{Binding IsConfiguring}"/>
+            </StackPanel>
+        </Border>
+
+    </Grid>
+
+</Window>

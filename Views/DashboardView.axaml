@@ -188,13 +188,17 @@
                             </Grid>
                         </Button>
 
-                        <Button Classes="listRow outOfOrder" ToolTip.Tip="{Binding Localization[ComingSoon]}">
+                        <Button Classes="listRow" Command="{Binding ClearCacheCommand}" IsEnabled="{Binding CanClearCache}">
                             <Grid ColumnDefinitions="Auto,*,Auto">
                                 <iconPacks:PackIconPhosphorIcons Grid.Column="0" Kind="Trash" Width="18" Height="18" Foreground="{DynamicResource TextMutedColor}" Margin="0,0,10,0"/>
                                 <TextBlock Grid.Column="1" Text="{Binding Localization[ClearCache]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
-                                <iconPacks:PackIconPhosphorIcons Grid.Column="2" Kind="Barricade" Width="16" Height="16" Foreground="{DynamicResource TextMutedColor}"/>
+                                <iconPacks:PackIconPhosphorIcons Grid.Column="2" Kind="CaretRight" Width="16" Height="16" Foreground="{DynamicResource TextMutedColor}"/>
                             </Grid>
                         </Button>
+
+                        <TextBlock Text="{Binding ClearCacheStatusText}" Classes="muted" FontSize="11"
+                                   TextWrapping="Wrap" Margin="28,2,0,4"
+                                   IsVisible="{Binding ClearCacheStatusText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
 
                         <Button Classes="listRow outOfOrder" ToolTip.Tip="{Binding Localization[ComingSoon]}">
                             <Grid ColumnDefinitions="Auto,*,Auto">

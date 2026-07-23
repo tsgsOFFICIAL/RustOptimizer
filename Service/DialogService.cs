@@ -39,6 +39,16 @@ public sealed class DialogService : IDialogService
         return await window.ShowDialog<bool>(owner);
     }
 
+    public async Task<CleanupOutcome?> ShowClearCacheAsync(ILocalizationService localization, ICleanupService cleanup)
+    {
+        if (GetOwner() is not { } owner)
+            return null;
+
+        ClearCacheDialogViewModel viewModel = new(localization, cleanup);
+        ClearCacheDialogWindow window = new(viewModel);
+        return await window.ShowDialog<CleanupOutcome?>(owner);
+    }
+
     private static Window? GetOwner()
         => Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
             ? desktop.MainWindow

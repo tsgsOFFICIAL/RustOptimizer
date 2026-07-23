@@ -19,6 +19,7 @@ public sealed class MainWindowViewModel : ViewModelBase
     private readonly INetworkTweaksService _networkTweaks;
     private readonly IRustProcessService _rustProcess;
     private readonly IConfigService _configService;
+    private readonly ICleanupService _cleanup;
     private readonly IConfigBackupService _configBackup;
 
     private DashboardViewModel? _dashboard;
@@ -37,7 +38,8 @@ public sealed class MainWindowViewModel : ViewModelBase
     /// <summary>Creates the shell, its sidebar, and the initial Dashboard page.</summary>
     public MainWindowViewModel(IThemeService theme, ILocalizationService localization, IUpdateService updates,
         IRustProcessService rustProcess, ISystemInfoService systemInfo, ISystemTweaksService systemTweaks,
-        INetworkTweaksService networkTweaks, IDialogService dialogs, IConfigService configService, IConfigBackupService configBackup)
+        INetworkTweaksService networkTweaks, IDialogService dialogs, IConfigService configService, IConfigBackupService configBackup,
+        ICleanupService cleanup)
         : base(localization)
     {
         _theme = theme;
@@ -48,6 +50,7 @@ public sealed class MainWindowViewModel : ViewModelBase
         _networkTweaks = networkTweaks;
         _rustProcess = rustProcess;
         _configService = configService;
+        _cleanup = cleanup;
         _configBackup = configBackup;
 
         Sidebar = new SidebarViewModel(localization, rustProcess);
@@ -57,7 +60,7 @@ public sealed class MainWindowViewModel : ViewModelBase
         OpenGitHubCommand = new RelayCommand(() => Utility.OpenUrl(ProjectLinks.GitHub));
         OpenDiscordCommand = new RelayCommand(() => Utility.OpenUrl(ProjectLinks.Discord));
 
-        _dashboard = new DashboardViewModel(localization, systemInfo, systemTweaks, networkTweaks, rustProcess, configService, Sidebar);
+        _dashboard = new DashboardViewModel(localization, systemInfo, systemTweaks, networkTweaks, rustProcess, configService, cleanup, dialogs, Sidebar);
         _dashboard.SystemDetailsRequested += (_, _) => Sidebar.NavigateTo(SidebarPage.System);
         _dashboard.NetworkDetailsRequested += (_, _) => Sidebar.NavigateTo(SidebarPage.Network);
         CurrentPage = _dashboard;
@@ -123,7 +126,7 @@ public sealed class MainWindowViewModel : ViewModelBase
     {
         CurrentPage = page switch
         {
-            SidebarPage.Dashboard => _dashboard ??= new DashboardViewModel(Localization, _systemInfo, _systemTweaks, _networkTweaks, _rustProcess, _configService, Sidebar),
+            SidebarPage.Dashboard => _dashboard ??= new DashboardViewModel(Localization, _systemInfo, _systemTweaks, _networkTweaks, _rustProcess, _configService, _cleanup, _dialogs, Sidebar),
             SidebarPage.System => _system ??= new SystemViewModel(Localization, _systemInfo, _systemTweaks, _rustProcess),
             SidebarPage.Graphics => _graphics ??= new GraphicsViewModel(Localization, _configService, Sidebar),
             SidebarPage.Network => _network ??= new NetworkViewModel(Localization, _networkTweaks, _dialogs),
