@@ -88,8 +88,8 @@ public static class AppLog
     }
 
     /// <summary>
-    /// Initializes the logger, creates today's log file if it does not already exist, and prunes
-    /// log files older than the current retention window. Subsequent calls have no effect.
+    /// Initializes the logger and creates today's log file if it does not already exist. Subsequent
+    /// calls have no effect. Old logs are not pruned here - see <see cref="ApplyRetention"/>.
     /// </summary>
     public static void Initialize()
     {
@@ -103,7 +103,10 @@ public static class AppLog
             string date = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
             _logFilePath = Path.Combine(LogDirectoryPath, $"app-{date}.log");
 
-            PruneOldLogs();
+            // Deliberately does NOT prune here. The logger starts before the DI container exists,
+            // so it would prune against the default window and delete files the user's own setting
+            // says to keep - raising retention above the default would then have no effect.
+            // Pruning happens in ApplyRetention, once the real value is known.
 
             Write(LogLevel.Info, "AppLog",
                 $"Logger initialized. Version={SafeGetVersion()}, OS={Utility.GetFriendlyOsName()} ({Environment.OSVersion.Version}), " +
