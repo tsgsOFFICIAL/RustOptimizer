@@ -20,20 +20,21 @@ namespace RustOptimizer
             AppLog.RegisterGlobalExceptionHandlers();
             AppLog.Info("Program", "Application starting.");
 
-            // Elevated re-launch for a single network tweak (see ElevationHelper) is handled before
-            // the DI container/Avalonia lifetime are built at all, since this path never shows a window.
-            if (args is ["--apply-network-tweak", string key, string value])
+            // Elevated re-launches (see ElevationHelper) are handled before the DI container/Avalonia
+            // lifetime are built at all, since neither path ever shows a window.
+#pragma warning disable CA1416 // This app only ever runs on Windows (see app.manifest); both elevated runners are Windows-only.
+            if (args is ["--apply-network-tweak", _, _] or [CleanupElevationRunner.Argument])
             {
                 int exitCode;
                 try
                 {
-#pragma warning disable CA1416 // This app only ever runs on Windows (see app.manifest); NetworkTweakElevationRunner is Windows-only.
-                    exitCode = NetworkTweakElevationRunner.Run(key, value);
-#pragma warning restore CA1416
+                    exitCode = args[0] == CleanupElevationRunner.Argument
+                        ? CleanupElevationRunner.Run()
+                        : NetworkTweakElevationRunner.Run(args[1], args[2]);
                 }
                 catch (Exception ex)
                 {
-                    AppLog.Fatal("Program", "Unhandled exception in the elevated network-tweak helper.", ex);
+                    AppLog.Fatal("Program", "Unhandled exception in an elevated helper.", ex);
                     exitCode = 1;
                 }
 
@@ -44,6 +45,7 @@ namespace RustOptimizer
                 AppLog.Info("Program", "Application exiting.");
                 Environment.Exit(exitCode);
             }
+#pragma warning restore CA1416
 
             try
             {
@@ -60,6 +62,7 @@ namespace RustOptimizer
                     .AddSingleton<IDialogService, DialogService>()
                     .AddSingleton<IConfigBackupService, ConfigBackupService>()
                     .AddSingleton<IConfigService, ConfigService>()
+                    .AddSingleton<ICleanupService, CleanupService>()
                     .BuildServiceProvider();
 #pragma warning restore CA1416
 
