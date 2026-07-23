@@ -2,6 +2,10 @@
 
 All notable changes to Rust Optimizer are documented here.
 
+## 0.10.1
+
+- Fixed screenshots and GIFs in this changelog being locked to a small fixed width, leaving them stranded in the middle of a wide window. They now use the space available, without being scaled up past their own resolution.
+
 ## 0.10.0
 
 ### Settings, rebuilt

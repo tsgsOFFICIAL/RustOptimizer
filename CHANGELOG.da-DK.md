@@ -2,6 +2,10 @@
 
 Alle væsentlige ændringer i Rust Optimizer er dokumenteret her.
 
+## 0.10.1
+
+- Rettet at skærmbilleder og GIF'er i denne ændringslog var låst til en lille fast bredde, så de lå forladt midt i et bredt vindue. De bruger nu den plads, der er til rådighed, uden at blive skaleret op ud over deres egen opløsning.
+
 ## 0.10.0
 
 ### Indstillinger, bygget om
