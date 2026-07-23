@@ -2,6 +2,39 @@
 
 Alle væsentlige ændringer i Rust Optimizer er dokumenteret her.
 
+## 0.10.0
+
+### Indstillinger, bygget om
+
+![Indstillinger](https://raw.githubusercontent.com/tsgsOFFICIAL/RustOptimizer/master/Assets/Changelog/settings-page.png)
+
+Grupperet i **Udseende**, **Program**, **Opdateringer**, **Enheder** og **Data** - og hver mulighed forklarer nu, hvad den rent faktisk gør, i stedet for kun at være en overskrift.
+
+- **Tema og Sprog er dropdowns** - mere overskueligt, efterhånden som der kommer flere sprog til, og hvert sprog vises med sit flag.
+- **Start med Windows** - starter Rust Optimizer, når du logger ind. Pr. bruger, så den beder aldrig om administratorrettigheder.
+- **Opdateringsindstillinger** - søg efter en nyere version ved opstart, og installer den eventuelt automatisk. Automatisk installation er slået fra som standard, da en opdatering genstarter appen.
+- **Enheder for netværkshastighed** - `MB/s`, der svarer til filstørrelser, eller `Mbps`, der svarer til den måde forbindelser markedsføres på. Netværkssiden følger dit valg.
+- **Logindstillinger** - gem logfiler i 7, 30 eller 90 dage, åbn logmappen direkte, og slå **detaljeret logning** til.
+
+> Slå detaljeret logning til, *før* du genskaber et problem. Så forklarer loggen, hvad appen rent faktisk lavede - hvilke stier den kiggede på, hvad den fandt, og hvor lang tid hvert trin tog.
+
+> **Bemærk:** dit tema og sprog nulstilles til standardværdierne én gang, når du opdaterer. Alle indstillinger ligger nu i én samlet fil, og de gamle overføres ikke. Vælg dem igen, så bliver de husket fremover.
+
+### Om
+
+- Tilføjet en **Programoplysninger**-sektion - version, builddato, styresystem og licens - så en fejlrapport kan indeholde de oplysninger, der betyder noget, uden at du skal lede efter dem.
+- Flyttet Ko-fi-linket ned i sidefoden ved siden af GitHub og Discord, så det kan nås fra alle sider i stedet for kun herfra.
+
+### Andet
+
+- Links, appen åbner, fortæller nu modtagersiden, at de kommer fra Rust Optimizer.
+
+### Rettelser
+
+- Almindelige knapper havde skarpere hjørner end alle andre knapper i appen.
+- De danske og russiske navne for *Backup & Gendan* blev skåret af i sidemenuen.
+- Grafik, Gameplay, Indstillinger og Om lå i en anden bredde end de øvrige sider, hvilket fik deres overskrifter til at stå forskudt.
+
 ## 0.9.0
 - Tilføjet **Ryd cache** til Dashboardets hurtige handlinger: rydder midlertidige Windows-filer, GPU'ens shader-caches (NVIDIA, AMD, Intel og DirectX), Steams download-, depot- og butikscaches, Rusts Unity-logs og programmernes nedbrudsdumps - og viser derefter, hvor meget der rent faktisk blev frigjort under knappen.
 - Ryd cache spørger, før den kører, med tre ting du kan slå fra først: tømning af papirkurven, rydning af miniaturecachen og medtagelse af systemfiler (som beder om administratorgodkendelse). Alt andet, den rydder, er sikkert at fjerne og bygges op igen af sig selv.

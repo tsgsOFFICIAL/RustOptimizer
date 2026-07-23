@@ -2,6 +2,39 @@
 
 All notable changes to Rust Optimizer are documented here.
 
+## 0.10.0
+
+### Settings, rebuilt
+
+![Settings page](https://raw.githubusercontent.com/tsgsOFFICIAL/RustOptimizer/master/Assets/Changelog/settings-page.png)
+
+Grouped into **Appearance**, **Application**, **Updates**, **Units** and **Data** - and every option now says what it actually does instead of being a bare label.
+
+- **Theme and Language are dropdowns** - tidier as more languages arrive, and each language shows its flag.
+- **Start with Windows** - launches Rust Optimizer when you log in. Per-user, so it never asks for administrator rights.
+- **Update settings** - check for a newer version on startup, and optionally install it automatically. Auto-install is off by default, since applying an update restarts the app.
+- **Network speed units** - `MB/s` to match file sizes, or `Mbps` to match how connections are advertised. The Network page follows your choice.
+- **Log settings** - keep logs for 7, 30 or 90 days, open the log folder directly, and switch on **verbose logging**.
+
+> Turn verbose logging on *before* reproducing a problem. The log will then explain what the app was actually doing - which paths it looked at, what it found, and how long each step took.
+
+> **Heads up:** your theme and language reset to their defaults once when you upgrade. All preferences now live in a single settings file and the old ones aren't carried across. Set them again and they'll stick.
+
+### About
+
+- Added an **Application information** section - version, build date, operating system and licence - so a bug report can include the details that matter without hunting for them.
+- Moved the Ko-fi link into the footer beside GitHub and Discord, reachable from every page instead of only this one.
+
+### Elsewhere
+
+- Links the app opens now tell the destination site they came from Rust Optimizer.
+
+### Fixes
+
+- Plain buttons had sharper corners than every other button in the app.
+- The Danish and Russian names for *Backup & Restore* were cut off in the sidebar.
+- Graphics, Gameplay, Settings and About sat at a different width from every other page, leaving their headings out of line.
+
 ## 0.9.0
 - Added **Clear Cache** to the Dashboard's Quick Actions: clears Windows temporary files, GPU shader caches (NVIDIA, AMD, Intel and DirectX), Steam's download, depot and store caches, Rust's Unity logs, and application crash dumps - then reports how much it actually freed underneath the button.
 - Clear Cache asks before it runs, with three things you can switch off first: emptying the Recycle Bin, clearing the thumbnail cache, and including system files (which asks for administrator approval). Everything else it clears is safe to remove and rebuilds on its own.
