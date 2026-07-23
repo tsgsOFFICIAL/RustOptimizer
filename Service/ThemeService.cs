@@ -1,7 +1,6 @@
 using RustOptimizer.Service.Logging;
 using RustOptimizer.Interface;
 using Avalonia.Styling;
-using System.IO;
 using Avalonia;
 using System;
 
@@ -12,9 +11,10 @@ namespace RustOptimizer.Service;
 /// </summary>
 public sealed class ThemeService : IThemeService
 {
-    private static readonly string PrefPath = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-        "RustOptimizer", "theme.tsgs");
+    private readonly IAppSettingsService _settings;
+
+    /// <summary>Creates the service. The theme value itself lives in <see cref="IAppSettingsService"/>.</summary>
+    public ThemeService(IAppSettingsService settings) => _settings = settings;
 
     /// <summary>
     /// Gets the current theme of the application.
@@ -68,43 +68,25 @@ public sealed class ThemeService : IThemeService
         };
     }
     /// <summary>
-    /// Saves the specified theme preference to a file.
+    /// Reads the saved theme from application settings.
     /// </summary>
     /// <returns>The loaded theme.</returns>
-    private static AppTheme Load()
-    {
-        try
-        {
-            if (!File.Exists(PrefPath))
-                return AppTheme.System;
+    private AppTheme Load() => _settings.Current.Theme;
 
-            return File.ReadAllText(PrefPath).Trim() switch
-            {
-                "Light" => AppTheme.Light,
-                "Dark" => AppTheme.Dark,
-                _ => AppTheme.System
-            };
-        }
-        catch (Exception ex)
-        {
-            AppLog.Warn("ThemeService", $"Failed to load theme preference from '{PrefPath}'.", ex);
-            return AppTheme.System;
-        }
-    }
     /// <summary>
-    /// Saves the specified theme preference to a file.
+    /// Writes the specified theme into application settings and persists them.
     /// </summary>
     /// <param name="theme">The theme to save.</param>
-    private static void Save(AppTheme theme)
+    private void Save(AppTheme theme)
     {
         try
         {
-            Directory.CreateDirectory(Path.GetDirectoryName(PrefPath)!);
-            File.WriteAllText(PrefPath, theme.ToString());
+            _settings.Current.Theme = theme;
+            _settings.Save();
         }
         catch (Exception ex)
         {
-            AppLog.Warn("ThemeService", $"Failed to save theme preference to '{PrefPath}'.", ex);
+            AppLog.Warn("ThemeService", "Failed to save the theme preference.", ex);
         }
     }
 }

@@ -8,7 +8,7 @@
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
         <ApplicationIcon>Assets\App\logo.ico</ApplicationIcon>
         <DefaultItemExcludes>$(DefaultItemExcludes);externals/**</DefaultItemExcludes>
-        <FileVersion>0.9.0</FileVersion>
+        <FileVersion>0.10.0</FileVersion>
         <InformationalVersion>$(FileVersion)</InformationalVersion>
         <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
         <IsPackable>false</IsPackable>
@@ -20,9 +20,7 @@
         <DebugType>none</DebugType>
     </PropertyGroup>
 
-    <Target Name="CleanupPublish"
-            AfterTargets="Publish"
-            Condition="'$(Configuration)' == 'Release'">
+    <Target Name="CleanupPublish" AfterTargets="Publish" Condition="'$(Configuration)' == 'Release'">
         <ItemGroup>
             <PdbFiles Include="$(PublishDir)**\*.pdb" />
         </ItemGroup>
@@ -30,6 +28,17 @@
         <Delete Files="@(PdbFiles)" />
     </Target>
     
+    <!-- Stamped into the assembly at compile time and shown on the About page. The executable's
+         file timestamp was used before, but that drifts: copying or repackaging the exe rewrites it,
+         so two machines could report different "builds" of identical code. -->
+    <PropertyGroup>
+        <BuildTimestamp>$([System.DateTime]::UtcNow.ToString("yyyy-MM-dd HH:mm")) UTC</BuildTimestamp>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <AssemblyMetadata Include="BuildTimestamp" Value="$(BuildTimestamp)" />
+    </ItemGroup>
+
     <ItemGroup>
         <ProjectReference Include="externals\IconPacks.Avalonia\src\IconPacks.Avalonia.PhosphorIcons\IconPacks.Avalonia.PhosphorIcons.csproj" />
         <ProjectReference Include="externals\IconPacks.Avalonia\src\IconPacks.Avalonia.SimpleIcons\IconPacks.Avalonia.SimpleIcons.csproj" />
@@ -47,6 +56,7 @@
         <PackageReference Include="LibreHardwareMonitorLib" Version="0.9.6" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.9" />
         <PackageReference Include="SkiaSharp" Version="4.148.0" />
+        <PackageReference Include="Svg.Controls.Skia.Avalonia" Version="12.0.0.13" />
         <PackageReference Include="System.Management" Version="10.0.2" />
     </ItemGroup>
 
@@ -83,6 +93,13 @@
     </ItemGroup>
 
     <ItemGroup>
-        <AvaloniaResource Include="Assets\**" />
+        <!-- The full lipis/flag-icons set lives in Assets\Flags so any future language already has
+             its artwork, but embedding all 271 would add ~2.5 MB for just a few flags. Only the ones a
+             language actually uses are built in - add a new line below to add a language/flag. -->
+        <AvaloniaResource Include="Assets\**" Exclude="Assets\Flags\**" />
+        <AvaloniaResource Include="Assets\Flags\LICENSE" />
+        <AvaloniaResource Include="Assets\Flags\gb.svg" />
+        <AvaloniaResource Include="Assets\Flags\dk.svg" />
+        <AvaloniaResource Include="Assets\Flags\ru.svg" />
     </ItemGroup>
 </Project>

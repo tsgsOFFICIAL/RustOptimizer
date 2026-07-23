@@ -8,8 +8,13 @@
         <Setter Property="FontFamily" Value="{DynamicResource Montserrat}"></Setter>
     </Style>
 
+    <!-- Every classed button (accent, secondary, danger, segment) already rounds to 8. Setting it
+         on the base style too means a plain unclassed Button - e.g. "Open folder" on Settings -
+         matches instead of falling back to the Fluent theme's tighter default. -->
     <Style Selector="Button">
         <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Padding" Value="16,8" />
     </Style>
 
     <Style Selector="Button /template/ ContentPresenter">

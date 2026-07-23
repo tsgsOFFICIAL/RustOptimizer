@@ -52,6 +52,7 @@ namespace RustOptimizer
                 // SystemInfoService/NetworkTweaksService are Windows-only; matches this app's WinExe/app.manifest-only deployment.
 #pragma warning disable CA1416
                 Services = new ServiceCollection()
+                    .AddSingleton<IAppSettingsService, AppSettingsService>()
                     .AddSingleton<IThemeService, ThemeService>()
                     .AddSingleton<ILocalizationService, LocalizationService>()
                     .AddSingleton<IUpdateService, UpdateService>()

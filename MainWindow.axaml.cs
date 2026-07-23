@@ -1,4 +1,4 @@
-using System.Runtime.Versioning;
+﻿using System.Runtime.Versioning;
 using RustOptimizer.ViewModels;
 using RustOptimizer.Service;
 using Avalonia.Controls;
@@ -22,17 +22,20 @@ namespace RustOptimizer
         [SupportedOSPlatform("windows")]
         private static MainWindowViewModel CreateDesignViewModel()
         {
-            ThemeService theme = new();
+            AppSettingsService settings = new();
+            settings.Initialize();
+
+            ThemeService theme = new(settings);
             theme.Initialize();
 
-            LocalizationService localization = new();
+            LocalizationService localization = new(settings);
             localization.Initialize();
 
             RustProcessService rustProcess = new();
             ConfigBackupService configBackup = new(rustProcess);
             return new MainWindowViewModel(theme, localization, new UpdateService(), rustProcess,
                 new SystemInfoService(localization), new SystemTweaksService(rustProcess), new NetworkTweaksService(), new DialogService(),
-                new ConfigService(rustProcess, configBackup), configBackup, new CleanupService(rustProcess));
+                new ConfigService(rustProcess, configBackup), configBackup, new CleanupService(rustProcess), settings);
         }
 
         /// <summary>Creates the window bound to the given view model and wires up the startup update check.</summary>

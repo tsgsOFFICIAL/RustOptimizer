@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Globalization;
 using System.Diagnostics;
 using System.Text;
@@ -14,9 +14,10 @@ namespace RustOptimizer.Service.Logging;
 /// </summary>
 public static class AppLog
 {
-    private const int RetentionDays = 30;
+    private const int DefaultRetentionDays = 30;
 
     private static readonly object Sync = new();
+    private static int _retentionDays = DefaultRetentionDays;
     private static string? _logFilePath;
     private static bool _handlersRegistered;
 
@@ -45,8 +46,50 @@ public static class AppLog
     public static string? LogFilePath => _logFilePath;
 
     /// <summary>
+    /// Applies the user's log retention preference and immediately prunes anything now too old.
+    /// Called after settings load rather than at <see cref="Initialize"/>, because the logger starts
+    /// before the DI container exists and has to work with a default until then.
+    /// </summary>
+    /// <param name="days">How many days of logs to keep. Values below 1 are ignored.</param>
+    public static void ApplyRetention(int days)
+    {
+        if (days < 1)
+            return;
+
+        lock (Sync)
+        {
+            _retentionDays = days;
+            PruneOldLogs();
+        }
+    }
+
+    /// <summary>
+    /// Applies the user's verbose-logging preference. When on, <see cref="MinimumLevel"/> drops to
+    /// <see cref="LogLevel.Debug"/> so nothing is filtered out; when off it returns to the build's
+    /// default. Called after settings load, and again whenever the setting is toggled.
+    /// </summary>
+    /// <param name="verbose">Whether to log every level, including Debug.</param>
+    public static void ApplyVerbose(bool verbose)
+    {
+        LogLevel target = verbose
+            ? LogLevel.Debug
+#if DEBUG
+            : LogLevel.Debug;
+#else
+            : LogLevel.Info;
+#endif
+
+        MinimumLevel = target;
+
+        // Logged unconditionally, even when the level didn't actually change. Debug builds already
+        // log at Debug, so an early return here would leave no trace that the user turned verbose
+        // on - and "did they actually enable it?" is the first question when reading a support log.
+        Info("AppLog", $"Verbose logging {(verbose ? "enabled" : "disabled")}; minimum level is now {target}.");
+    }
+
+    /// <summary>
     /// Initializes the logger, creates today's log file if it does not already exist, and prunes
-    /// log files older than <see cref="RetentionDays"/> days. Subsequent calls have no effect.
+    /// log files older than the current retention window. Subsequent calls have no effect.
     /// </summary>
     public static void Initialize()
     {
@@ -171,14 +214,14 @@ public static class AppLog
     }
 
     /// <summary>
-    /// Deletes log files older than <see cref="RetentionDays"/> days. Best-effort: a single
+    /// Deletes log files older than the current retention window. Best-effort: a single
     /// unreadable/locked file is skipped rather than aborting the whole prune pass.
     /// </summary>
     private static void PruneOldLogs()
     {
         try
         {
-            DateTime cutoff = DateTime.Now.Date.AddDays(-RetentionDays);
+            DateTime cutoff = DateTime.Now.Date.AddDays(-_retentionDays);
 
             foreach (string file in Directory.EnumerateFiles(LogDirectoryPath, "app-*.log"))
             {

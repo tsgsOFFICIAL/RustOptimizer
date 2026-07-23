@@ -15,9 +15,10 @@ namespace RustOptimizer.Service;
 /// </summary>
 public sealed class LocalizationService : ILocalizationService
 {
-    private static readonly string PrefPath = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-        "RustOptimizer", "language.tsgs");
+    private readonly IAppSettingsService _settings;
+
+    /// <summary>Creates the service. The language value itself lives in <see cref="IAppSettingsService"/>.</summary>
+    public LocalizationService(IAppSettingsService settings) => _settings = settings;
 
     private const string IndexerName = "Item";
     private const string IndexerArrayName = "Item[]";
@@ -168,23 +169,9 @@ public sealed class LocalizationService : ILocalizationService
     /// <returns>The loaded language, or a detected system language when no preference exists.</returns>
     private AppLanguage Load()
     {
-        try
-        {
-            if (!File.Exists(PrefPath))
-                return DetectSystemLanguage();
-
-            return File.ReadAllText(PrefPath).Trim() switch
-            {
-                "Danish" => AppLanguage.Danish,
-                "Russian" => AppLanguage.Russian,
-                _ => AppLanguage.English
-            };
-        }
-        catch (Exception ex)
-        {
-            AppLog.Warn("LocalizationService", $"Failed to load language preference from '{PrefPath}'.", ex);
-            return AppLanguage.English;
-        }
+        // Null means the user has never chosen a language, so the OS culture decides - the same
+        // behaviour the old per-preference file had when it didn't exist yet.
+        return _settings.Current.Language ?? DetectSystemLanguage();
     }
 
     /// <summary>
@@ -208,16 +195,16 @@ public sealed class LocalizationService : ILocalizationService
     /// Saves the specified language preference to the preference file.
     /// </summary>
     /// <param name="language">The language to save.</param>
-    private static void Save(AppLanguage language)
+    private void Save(AppLanguage language)
     {
         try
         {
-            Directory.CreateDirectory(Path.GetDirectoryName(PrefPath)!);
-            File.WriteAllText(PrefPath, language.ToString());
+            _settings.Current.Language = language;
+            _settings.Save();
         }
         catch (Exception ex)
         {
-            AppLog.Warn("LocalizationService", $"Failed to save language preference to '{PrefPath}'.", ex);
+            AppLog.Warn("LocalizationService", "Failed to save the language preference.", ex);
         }
     }
 

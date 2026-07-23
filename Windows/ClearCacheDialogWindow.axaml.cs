@@ -1,4 +1,4 @@
-using System.Runtime.Versioning;
+﻿using System.Runtime.Versioning;
 using RustOptimizer.ViewModels;
 using RustOptimizer.Interface;
 using RustOptimizer.Service;
@@ -21,7 +21,7 @@ public partial class ClearCacheDialogWindow : Window
     [SupportedOSPlatform("windows")]
     private static ClearCacheDialogViewModel CreateDesignViewModel()
     {
-        LocalizationService localization = new();
+        LocalizationService localization = new(new AppSettingsService());
         localization.Initialize();
         return new ClearCacheDialogViewModel(localization, new CleanupService(new RustProcessService()));
     }

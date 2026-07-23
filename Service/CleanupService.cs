@@ -1,4 +1,4 @@
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using RustOptimizer.Service.Logging;
 using System.Collections.Generic;
 using System.Runtime.Versioning;
@@ -100,7 +100,7 @@ public sealed class CleanupService : ICleanupService
                 AppLog.Warn("CleanupService", $"Group '{steps[i].LabelKey}' failed.", ex);
             }
 
-            AppLog.Info("CleanupService", $"Group '{steps[i].LabelKey}' took {Stopwatch.GetElapsedTime(startedTicks).TotalMilliseconds:0} ms.");
+            AppLog.Debug("CleanupService", $"Group '{steps[i].LabelKey}' took {Stopwatch.GetElapsedTime(startedTicks).TotalMilliseconds:0} ms.");
         }
 
         return false;
@@ -321,11 +321,22 @@ public sealed class CleanupService : ICleanupService
     internal static void DeleteContents(string root, CleanupTally tally, TimeSpan? minimumAge = null)
     {
         if (!Directory.Exists(root))
+        {
+            // Absent targets are the normal case (no Steam, no AMD GPU, no Rust install), but
+            // "which paths did it even look at" is the first question when a cleanup frees less
+            // than someone expected.
+            AppLog.Debug("CleanupService", $"Target '{root}' does not exist; skipped.");
             return;
+        }
 
         DirectoryInfo rootInfo = new(root);
         if (rootInfo.Attributes.HasFlag(FileAttributes.ReparsePoint))
+        {
+            AppLog.Debug("CleanupService", $"Target '{root}' is a reparse point; not followed.");
             return;
+        }
+
+        long bytesBefore = tally.BytesFreed;
 
         // Parallelised only at the top level of each target. Most of these roots hold thousands of
         // small entries, and the cost is dominated by per-file syscalls rather than throughput, so
@@ -337,6 +348,8 @@ public sealed class CleanupService : ICleanupService
             else if (entry is FileInfo file)
                 DeleteFile(file, tally, minimumAge);
         });
+
+        AppLog.Debug("CleanupService", $"Target '{root}' freed {tally.BytesFreed - bytesBefore} bytes.");
     }
 
     /// <summary>

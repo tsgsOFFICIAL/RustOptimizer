@@ -1,4 +1,4 @@
-using RustOptimizer.Service.Logging;
+﻿using RustOptimizer.Service.Logging;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Runtime.Versioning;
@@ -56,6 +56,8 @@ public sealed class RustProcessService : IRustProcessService
                     continue;
 
                 string candidate = Path.GetFullPath(Path.Combine(library, "steamapps", "common", installDir));
+                AppLog.Debug("RustProcessService", $"Found Rust's manifest in '{library}'; candidate install path '{candidate}' exists={Directory.Exists(candidate)}.");
+
                 if (Directory.Exists(candidate))
                     return _installPath = candidate;
             }
@@ -81,7 +83,10 @@ public sealed class RustProcessService : IRustProcessService
         {
             using RegistryKey? hkcu = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Valve\Steam");
             if (hkcu?.GetValue("SteamPath") is string userPath && !string.IsNullOrWhiteSpace(userPath))
+            {
+                AppLog.Debug("RustProcessService", $"Resolved Steam path from HKCU: '{userPath}'.");
                 return userPath;
+            }
         }
         catch (Exception ex)
         {

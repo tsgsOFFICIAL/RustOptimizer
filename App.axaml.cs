@@ -1,5 +1,6 @@
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Avalonia.Controls.ApplicationLifetimes;
+using RustOptimizer.Service.Logging;
 using RustOptimizer.ViewModels;
 using RustOptimizer.Interface;
 using Avalonia.Markup.Xaml;
@@ -29,6 +30,7 @@ namespace RustOptimizer
             IServiceProvider services = Program.Services
                 ?? throw new InvalidOperationException("ServiceProvider not initialized");
 
+            IAppSettingsService settings = services.GetRequiredService<IAppSettingsService>();
             IThemeService theme = services.GetRequiredService<IThemeService>();
             ILocalizationService localization = services.GetRequiredService<ILocalizationService>();
             IUpdateService updates = services.GetRequiredService<IUpdateService>();
@@ -41,10 +43,17 @@ namespace RustOptimizer
             IConfigBackupService configBackup = services.GetRequiredService<IConfigBackupService>();
             ICleanupService cleanup = services.GetRequiredService<ICleanupService>();
 
+            // Settings first: the theme and language services both source their value from here.
+            settings.Initialize();
             theme.Initialize();
             localization.Initialize();
 
-            MainWindowViewModel viewModel = new(theme, localization, updates, rustProcess, systemInfo, systemTweaks, networkTweaks, dialogs, configService, configBackup, cleanup);
+            // The logger starts before the container exists, so it prunes on a default window first
+            // and only learns the user's retention preference once settings are loaded.
+            AppLog.ApplyRetention(settings.Current.LogRetentionDays);
+            AppLog.ApplyVerbose(settings.Current.VerboseLogging);
+
+            MainWindowViewModel viewModel = new(theme, localization, updates, rustProcess, systemInfo, systemTweaks, networkTweaks, dialogs, configService, configBackup, cleanup, settings);
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
                 desktop.MainWindow = new MainWindow(viewModel);

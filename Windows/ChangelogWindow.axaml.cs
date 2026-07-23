@@ -1,4 +1,4 @@
-using RustOptimizer.ViewModels;
+﻿using RustOptimizer.ViewModels;
 using RustOptimizer.Interface;
 using RustOptimizer.Service;
 using Avalonia.Controls;
@@ -21,7 +21,7 @@ public partial class ChangelogWindow : Window
     /// </summary>
     private static ChangelogViewModel CreateDesignViewModel()
     {
-        LocalizationService localization = new();
+        LocalizationService localization = new(new AppSettingsService());
         localization.Initialize();
         return new ChangelogViewModel(localization, "# Changelog\n\n- Sample entry");
     }

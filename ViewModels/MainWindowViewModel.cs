@@ -1,7 +1,9 @@
+﻿using RustOptimizer.Service.Logging;
 using RustOptimizer.ViewModels.Mvvm;
 using RustOptimizer.Interface;
 using RustOptimizer.Controls;
 using System.Threading.Tasks;
+using System;
 
 namespace RustOptimizer.ViewModels;
 
@@ -12,6 +14,7 @@ namespace RustOptimizer.ViewModels;
 public sealed class MainWindowViewModel : ViewModelBase
 {
     private readonly IThemeService _theme;
+    private readonly IAppSettingsService _settings;
     private readonly IUpdateService _updates;
     private readonly IDialogService _dialogs;
     private readonly ISystemInfoService _systemInfo;
@@ -27,7 +30,7 @@ public sealed class MainWindowViewModel : ViewModelBase
     private GraphicsViewModel? _graphics;
     private NetworkViewModel? _network;
     private GameplayViewModel? _gameplay;
-    private SettingsViewModel? _settings;
+    private SettingsViewModel? _settingsPage;
     private AboutViewModel? _about;
     private UtilitiesViewModel? _utilities;
     private BackupRestoreViewModel? _backupRestore;
@@ -39,10 +42,11 @@ public sealed class MainWindowViewModel : ViewModelBase
     public MainWindowViewModel(IThemeService theme, ILocalizationService localization, IUpdateService updates,
         IRustProcessService rustProcess, ISystemInfoService systemInfo, ISystemTweaksService systemTweaks,
         INetworkTweaksService networkTweaks, IDialogService dialogs, IConfigService configService, IConfigBackupService configBackup,
-        ICleanupService cleanup)
+        ICleanupService cleanup, IAppSettingsService settings)
         : base(localization)
     {
         _theme = theme;
+        _settings = settings;
         _updates = updates;
         _dialogs = dialogs;
         _systemInfo = systemInfo;
@@ -59,6 +63,7 @@ public sealed class MainWindowViewModel : ViewModelBase
         VersionText = Utility.GetDisplayVersion();
         OpenGitHubCommand = new RelayCommand(() => Utility.OpenUrl(ProjectLinks.GitHub));
         OpenDiscordCommand = new RelayCommand(() => Utility.OpenUrl(ProjectLinks.Discord));
+        OpenKofiCommand = new RelayCommand(() => Utility.OpenUrl(ProjectLinks.KoFi));
 
         _dashboard = new DashboardViewModel(localization, systemInfo, systemTweaks, networkTweaks, rustProcess, configService, cleanup, dialogs, Sidebar);
         _dashboard.SystemDetailsRequested += (_, _) => Sidebar.NavigateTo(SidebarPage.System);
@@ -78,6 +83,9 @@ public sealed class MainWindowViewModel : ViewModelBase
     /// <summary>Opens the project's Discord server.</summary>
     public RelayCommand OpenDiscordCommand { get; }
 
+    /// <summary>Opens the project's Ko-fi page. Lives in the footer so it's reachable from any page.</summary>
+    public RelayCommand OpenKofiCommand { get; }
+
     /// <summary>The view model of the page currently shown in the main content area.</summary>
     public ViewModelBase? CurrentPage
     {
@@ -92,6 +100,9 @@ public sealed class MainWindowViewModel : ViewModelBase
     /// </summary>
     public async Task CheckForUpdatesOnStartupAsync()
     {
+        if (!_settings.Current.CheckForUpdatesOnStartup)
+            return;
+
         UpdateInfo? update;
         try
         {
@@ -104,6 +115,20 @@ public sealed class MainWindowViewModel : ViewModelBase
 
         if (update is null)
             return;
+
+        // Auto-update skips the prompt entirely: ApplyUpdateAsync swaps the install and terminates
+        // this process, so there's nothing to show afterwards. Opt-in only - see AppSettings.AutoUpdate.
+        if (_settings.Current.AutoUpdate)
+        {
+            try
+            {
+                await _updates.ApplyUpdateAsync(update);
+            }
+            catch (Exception ex)
+            {
+                AppLog.Warn("MainWindowViewModel", "Automatic update failed; falling back to the prompt.", ex);
+            }
+        }
 
         string changes;
         try
@@ -129,9 +154,13 @@ public sealed class MainWindowViewModel : ViewModelBase
             SidebarPage.Dashboard => _dashboard ??= new DashboardViewModel(Localization, _systemInfo, _systemTweaks, _networkTweaks, _rustProcess, _configService, _cleanup, _dialogs, Sidebar),
             SidebarPage.System => _system ??= new SystemViewModel(Localization, _systemInfo, _systemTweaks, _rustProcess),
             SidebarPage.Graphics => _graphics ??= new GraphicsViewModel(Localization, _configService, Sidebar),
-            SidebarPage.Network => _network ??= new NetworkViewModel(Localization, _networkTweaks, _dialogs),
+            SidebarPage.Network => _network ??= new NetworkViewModel(Localization, _networkTweaks, _settings, _dialogs),
             SidebarPage.Gameplay => _gameplay ??= new GameplayViewModel(Localization, _configService, Sidebar),
-            SidebarPage.Settings => _settings ??= new SettingsViewModel(_theme, Localization),
+            // SettingsViewModel reads the Windows registry for the "start with Windows" toggle;
+            // this app only ever runs on Windows (see app.manifest), same as Program.cs assumes.
+#pragma warning disable CA1416
+            SidebarPage.Settings => _settingsPage ??= new SettingsViewModel(_theme, Localization, _settings),
+#pragma warning restore CA1416
             SidebarPage.About => _about ??= new AboutViewModel(Localization, _updates, _dialogs),
             SidebarPage.Utilities => _utilities ??= new UtilitiesViewModel(Localization),
             SidebarPage.BackupRestore => _backupRestore ??= new BackupRestoreViewModel(Localization, _configBackup, _rustProcess, Sidebar, _dialogs),

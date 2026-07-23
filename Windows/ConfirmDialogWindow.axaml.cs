@@ -1,4 +1,4 @@
-using RustOptimizer.ViewModels;
+﻿using RustOptimizer.ViewModels;
 using RustOptimizer.Service;
 using Avalonia.Controls;
 
@@ -18,7 +18,7 @@ public partial class ConfirmDialogWindow : Window
     /// </summary>
     private static ConfirmDialogViewModel CreateDesignViewModel()
     {
-        LocalizationService localization = new();
+        LocalizationService localization = new(new AppSettingsService());
         localization.Initialize();
         return new ConfirmDialogViewModel(localization, "Delete backup?", "This can't be undone.", "Delete", isDestructive: true);
     }

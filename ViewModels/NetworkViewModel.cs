@@ -29,6 +29,7 @@ public sealed class NetworkViewModel : ViewModelBase
     private const int JitterWindowSize = 20;
 
     private readonly INetworkTweaksService _networkTweaks;
+    private readonly IAppSettingsService _settings;
     private readonly IDialogService _dialogs;
     private DispatcherTimer? _pollTimer;
     private bool _isPolling;
@@ -59,10 +60,12 @@ public sealed class NetworkViewModel : ViewModelBase
     private bool _qosReservedBandwidthDisabled;
 
     /// <summary>Creates the view model and kicks off the tweaks load. The public IP is opt-in - nothing is fetched until requested.</summary>
-    public NetworkViewModel(ILocalizationService localization, INetworkTweaksService networkTweaks, IDialogService dialogs)
+    public NetworkViewModel(ILocalizationService localization, INetworkTweaksService networkTweaks,
+        IAppSettingsService settings, IDialogService dialogs)
         : base(localization)
     {
         _networkTweaks = networkTweaks;
+        _settings = settings;
         _dialogs = dialogs;
 
         OpenSpeedTestCommand = new RelayCommand(() => Utility.OpenUrl(SpeedTestUrl));
@@ -436,9 +439,19 @@ public sealed class NetworkViewModel : ViewModelBase
         return mbps >= 1000 ? $"{mbps / 1000.0:0.#} Gbps" : $"{mbps:0} Mbps";
     }
 
-    /// <summary>Formats a throughput rate in bytes/second as e.g. "1.2 MB/s" or "340 KB/s".</summary>
-    private static string FormatThroughput(double bytesPerSecond)
+    /// <summary>
+    /// Formats a throughput rate in bytes/second, honouring the user's unit preference: either
+    /// "1.2 MB/s" / "340 KB/s" (bytes, binary multiples) or "9.6 Mbps" / "340 Kbps" (bits, decimal
+    /// multiples - the convention network hardware is advertised in).
+    /// </summary>
+    private string FormatThroughput(double bytesPerSecond)
     {
+        if (_settings.Current.ThroughputUnit == ThroughputUnit.Bits)
+        {
+            double kbps = bytesPerSecond * 8 / 1000.0;
+            return kbps >= 1000 ? $"{kbps / 1000.0:0.#} Mbps" : $"{kbps:0} Kbps";
+        }
+
         double kbPerSecond = bytesPerSecond / 1024.0;
         return kbPerSecond >= 1024 ? $"{kbPerSecond / 1024.0:0.#} MB/s" : $"{kbPerSecond:0} KB/s";
     }
