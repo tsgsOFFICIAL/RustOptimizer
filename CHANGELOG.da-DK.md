@@ -2,6 +2,17 @@
 
 Alle væsentlige ændringer i Rust Optimizer er dokumenteret her.
 
+## 0.10.3
+
+Ryd Cache er blevet testet på en rigtig AMD-maskine og en aktiv Steam-installation, og flere af de steder, den kiggede, viste sig ikke at være steder. Den rydder nu en hel del mere end før.
+
+- **Steams indbyggede browser bliver nu ryddet** - butikken, fællesskabet og overlayet cacher alle igennem den, og den var vokset til omkring 500 MB uden nogensinde at blive rørt. Det er nu typisk det største enkeltstående, Ryd Cache frigør. Din indlogning og dine butiksindstillinger bliver ikke rørt.
+- **Steams depot-cache blev aldrig ryddet** - der blev ledt efter den én mappe fra, hvor den rent faktisk ligger. Omkring 55 MB på en typisk installation.
+- Ryd Cache rydder nu også Steams downloadmappe og dens nedbrudsrapporter. Spilgrafik og Steams egne logfiler bliver bevidst ikke rørt, da grafikken koster en ny download at genskabe, og logfilerne er dem, Steams support beder om.
+- **Flere AMD-shadercaches bliver nu ryddet** - Vulkan, OpenGL og DirectX 9, plus endnu en DirectX-cache, der slet ikke blev fundet. Der blev tidligere ledt efter OpenGL-cachen under NVIDIAs navn for den, så på en AMD-maskine blev den aldrig fundet, og der blev ledt efter en mappe, som ganske enkelt ikke findes på nogen driver.
+- **Rusts Unity-logfiler bliver nu rent faktisk ryddet.** Der blev ledt efter dem under `Facepunch`, men den mappe Rust skriver til, hedder `Facepunch Studios LTD`, så `Player.log` var aldrig blevet fjernet - og da intet roterer den, vokser den, så længe installationen findes.
+- Ryd Cache rydder nu Rusts logfiler før Windows' midlertidige filer i stedet for efter. En af logplaceringerne ligger inde i den midlertidige mappe, så den tidligere rækkefølge betød, at temp-trinnet allerede havde slettet den, og logtrinnet meldte, at det intet fandt.
+
 ## 0.10.2
 
 - Rettet at **Behold logs i** ikke havde nogen effekt over 30 dage. Gamle logfiler blev ryddet, mens appen startede - altså før din indstilling var læst - så alt ældre end 30 dage blev slettet uanset hvad du havde valgt. Oprydningen venter nu, til din indstilling er kendt.

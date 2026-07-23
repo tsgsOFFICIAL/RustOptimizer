@@ -2,6 +2,17 @@
 
 All notable changes to Rust Optimizer are documented here.
 
+## 0.10.3
+
+Clear Cache was tested against a real AMD machine and a live Steam install, and several of the places it looked at turned out not to be places. It now clears a good deal more than it did.
+
+- **Steam's built-in browser is now cleared** - the store, community and overlay pages all cache through it, and it had grown to around 500 MB without ever being touched. This is now routinely the largest single thing Clear Cache frees. Your sign-in and store settings are left alone.
+- **Steam's depot cache was never being cleared** - it was looked for one folder away from where it actually lives. Around 55 MB on a typical install.
+- Clear Cache now also clears Steam's download staging folder and its crash dumps. Game artwork and Steam's own logs are deliberately left alone, since artwork costs a re-download to rebuild and the logs are what Steam support asks for.
+- **More AMD shader caches are now cleared** - Vulkan, OpenGL and DirectX 9, plus a second DirectX cache that was being missed entirely. The OpenGL cache was previously looked for under NVIDIA's name for it, so on an AMD machine it was never found, and one folder was being looked for that simply doesn't exist on any driver.
+- **Rust's Unity logs are now actually cleared.** They were being looked for under `Facepunch` when the folder Rust really writes to is `Facepunch Studios LTD`, so `Player.log` had never been removed - and since nothing rotates it, it grows for as long as the install lives.
+- Clear Cache now clears Rust's logs before Windows' temporary files rather than after. One of the log locations sits inside the temp folder, so the earlier order meant the temp step had already deleted it and the log step reported finding nothing.
+
 ## 0.10.2
 
 - Fixed **Keep logs for** having no effect above 30 days. Old logs were being cleared as the app started, before your setting had been read, so anything older than 30 days was deleted no matter what you'd chosen. Pruning now waits until your setting is known.

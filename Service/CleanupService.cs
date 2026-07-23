@@ -115,9 +115,11 @@ public sealed class CleanupService : ICleanupService
     {
         List<(string LabelKey, Action Run)> steps =
         [
+            // Logs before temp, not after: one of the log targets lives inside %TEMP%, so clearing
+            // temp first leaves the log step reporting an absent folder and zero bytes freed.
+            ("ClearCacheStepLogs", () => ClearRustAndUnityLogs(tally)),
             ("ClearCacheStepTemp", () => ClearUserTemp(tally)),
-            ("ClearCacheStepCrashDumps", () => ClearAppCrashDumps(tally)),
-            ("ClearCacheStepLogs", () => ClearRustAndUnityLogs(tally))
+            ("ClearCacheStepCrashDumps", () => ClearAppCrashDumps(tally))
         ];
 
         // Shader caches are only locked while the game itself is up, and deleting them mid-session
@@ -162,13 +164,16 @@ public sealed class CleanupService : ICleanupService
         DeleteContents(Path.Combine(LocalAppData, "NVIDIA", "DXCache"), tally);
         DeleteContents(Path.Combine(LocalAppData, "NVIDIA", "GLCache"), tally);
 
-        // AMD. Dx = DX11, Dxc = DX12, and post-2023 drivers reportedly consolidate into AMDCache.
-        // All four are probed because the naming has drifted across driver generations.
-        // TODO: Verify on gaming rig (AMD CPU + GPU)
-        DeleteContents(Path.Combine(LocalAppData, "AMD", "DXCache"), tally);
+        // AMD. Dx = DX11, Dxc = DX12, Ogl = OpenGL, Vk = Vulkan, DX9 for anything old enough to need
+        // it. Verified against a live Adrenalin install: there is no consolidated "AMDCache", and
+        // GLCache is NVIDIA's name for the OpenGL cache, not AMD's. LocalLow holds a second, separate
+        // DxCache that the LocalAppData one doesn't cover.
+        DeleteContents(Path.Combine(LocalAppData, "AMD", "DxCache"), tally);
         DeleteContents(Path.Combine(LocalAppData, "AMD", "DxcCache"), tally);
-        DeleteContents(Path.Combine(LocalAppData, "AMD", "GLCache"), tally);
-        DeleteContents(Path.Combine(LocalAppData, "AMD", "AMDCache"), tally);
+        DeleteContents(Path.Combine(LocalAppData, "AMD", "OglCache"), tally);
+        DeleteContents(Path.Combine(LocalAppData, "AMD", "VkCache"), tally);
+        DeleteContents(Path.Combine(LocalAppData, "AMD", "DX9Cache"), tally);
+        DeleteContents(Path.Combine(LocalLowAppData, "AMD", "DxCache"), tally);
 
         // Intel. LocalLow is the one confirmed on real hardware; the widely-cited LocalAppData
         // variant doesn't exist on a machine with a live Intel driver, but is probed in case newer
@@ -178,23 +183,51 @@ public sealed class CleanupService : ICleanupService
     }
 
     /// <summary>
-    /// Clears Steam's download, depot and HTTP caches plus Rust's Steam-managed shader cache. Steam
-    /// re-downloads anything still needed, so none of this is destructive - but the next launch
-    /// recompiles shaders and will be slower.
+    /// Clears Steam's download, depot, HTTP and embedded-browser caches plus Rust's Steam-managed
+    /// shader cache. Steam re-downloads anything still needed, so none of this is destructive - but
+    /// the next launch recompiles shaders and will be slower.
     /// </summary>
     private void ClearSteamCaches(CleanupTally tally)
     {
-        // TODO: Verify on gaming rig
+        // Per-library: only steamapps is duplicated across library folders.
         foreach (string library in _rustProcess.GetSteamLibraryFolders())
         {
             DeleteContents(Path.Combine(library, "steamapps", "downloading"), tally);
-            DeleteContents(Path.Combine(library, "steamapps", "depotcache"), tally);
+            DeleteContents(Path.Combine(library, "steamapps", "temp"), tally);
             DeleteContents(Path.Combine(library, "steamapps", "shadercache", SteamAppId), tally);
         }
 
-        // appcache lives under the Steam install itself rather than each library folder.
+        // Per-install. depotcache was previously probed under steamapps, where it doesn't live -
+        // it sits beside it at the Steam root, so that target could never hit. librarycache and
+        // logs are deliberately left alone: the first is game artwork that costs a re-download to
+        // rebuild, the second is what Steam support asks for when something breaks.
         if (_rustProcess.GetSteamPath() is { } steamPath)
+        {
             DeleteContents(Path.Combine(steamPath, "appcache", "httpcache"), tally);
+            DeleteContents(Path.Combine(steamPath, "depotcache"), tally);
+            DeleteContents(Path.Combine(steamPath, "dumps"), tally);
+        }
+
+        ClearSteamBrowserCaches(tally);
+    }
+
+    /// <summary>
+    /// Clears the caches of Steam's embedded Chromium browser - store, community and overlay - which
+    /// is routinely the largest single thing this app removes.
+    /// <para>
+    /// The individual cache folders are targeted rather than the whole htmlcache profile: its
+    /// <c>Default</c> root also holds Cookies, Local Storage and Network, and wiping those signs the
+    /// user out of the in-client store. The caches below are ~98% of the bytes and none of the risk.
+    /// </para>
+    /// </summary>
+    private static void ClearSteamBrowserCaches(CleanupTally tally)
+    {
+        string htmlCache = Path.Combine(LocalAppData, "Steam", "htmlcache");
+
+        DeleteContents(Path.Combine(htmlCache, "Default", "Cache"), tally);
+        DeleteContents(Path.Combine(htmlCache, "Default", "Code Cache"), tally);
+        DeleteContents(Path.Combine(htmlCache, "Default", "GPUCache"), tally);
+        DeleteContents(Path.Combine(htmlCache, "GrShaderCache"), tally);
     }
 
     /// <summary>
@@ -203,8 +236,9 @@ public sealed class CleanupService : ICleanupService
     /// </summary>
     private static void ClearRustAndUnityLogs(CleanupTally tally)
     {
-        // TODO: Verify on gaming rig
-        string rustLogFolder = Path.Combine(LocalLowAppData, "Facepunch", "Rust");
+        // The publisher folder is "Facepunch Studios LTD" - Unity uses the full company name from the
+        // build, not the short "Facepunch". The short form silently matched nothing.
+        string rustLogFolder = Path.Combine(LocalLowAppData, "Facepunch Studios LTD", "Rust");
         DeleteFileByPath(Path.Combine(rustLogFolder, "Player.log"), tally);
         DeleteFileByPath(Path.Combine(rustLogFolder, "Player-prev.log"), tally);
 
