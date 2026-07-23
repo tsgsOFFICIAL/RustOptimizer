@@ -68,11 +68,14 @@ public sealed class RustProcessService : IRustProcessService
         return null;
     }
 
+    public IReadOnlyList<string> GetSteamLibraryFolders()
+        => GetSteamPath() is { } steamPath ? [.. GetLibraryFolders(steamPath)] : [];
+
     /// <summary>
     /// Reads Steam's own install path from the registry. Only the registry is consulted -
     /// no hardcoded fallback paths are probed if both keys are missing.
     /// </summary>
-    private static string? GetSteamPath()
+    public string? GetSteamPath()
     {
         try
         {

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace RustOptimizer.Interface;
 
 /// <summary>
@@ -28,4 +30,17 @@ public interface IRustProcessService
     /// Rust's manifest, or the resolved folder doesn't actually exist on disk.
     /// </summary>
     string? GetInstallPath();
+
+    /// <summary>
+    /// Resolves Steam's own install directory from the registry, or <see langword="null"/> if Steam
+    /// isn't installed. Exposed because Steam's caches live here rather than in any library folder.
+    /// </summary>
+    string? GetSteamPath();
+
+    /// <summary>
+    /// Enumerates every configured Steam library folder - the default library plus anything listed
+    /// in steamapps/libraryfolders.vdf. Empty if Steam isn't installed. Shared with
+    /// <see cref="ICleanupService"/>, which clears per-library download and shader caches.
+    /// </summary>
+    IReadOnlyList<string> GetSteamLibraryFolders();
 }
