@@ -49,6 +49,10 @@
                     <Button Classes="linkIcon" Command="{Binding OpenDiscordCommand}" ToolTip.Tip="Discord">
                         <iconPacks:PackIconSimpleIcons Kind="Discord" Width="16" Height="16" Foreground="#5865F2" />
                     </Button>
+
+                    <Button Classes="linkIcon" Command="{Binding OpenKofiCommand}" ToolTip.Tip="Ko-fi">
+                        <iconPacks:PackIconPhosphorIcons Kind="CoffeeFill" Width="16" Height="16" Foreground="#FF6433" />
+                    </Button>
                 </StackPanel>
                 <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6" HorizontalAlignment="Right"
                             VerticalAlignment="Center">

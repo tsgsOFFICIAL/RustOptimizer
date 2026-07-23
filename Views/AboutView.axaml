@@ -39,20 +39,30 @@
                 </StackPanel>
             </Border>
 
+            <!-- Application information: the details worth quoting in a bug report. -->
             <Border Classes="card">
-                <StackPanel Spacing="12">
-                    <StackPanel Orientation="Horizontal" Spacing="4">
-                        <Button Classes="linkIcon" Command="{Binding OpenGitHubCommand}" ToolTip.Tip="GitHub">
-                            <iconPacks:PackIconSimpleIcons Kind="GitHub" Width="18" Height="18"/>
-                        </Button>
-                        <Button Classes="linkIcon" Command="{Binding OpenDiscordCommand}" ToolTip.Tip="Discord">
-                            <iconPacks:PackIconSimpleIcons Kind="Discord" Width="18" Height="18" Foreground="#5865F2"/>
-                        </Button>
-                        <Button Classes="linkIcon" Command="{Binding OpenKofiCommand}" ToolTip.Tip="Ko-fi">
-                            <iconPacks:PackIconPhosphorIcons Kind="CoffeeFill" Width="18" Height="18" Foreground="#FF6433"/>
-                        </Button>
+                <StackPanel Spacing="0">
+                    <StackPanel Spacing="0" Margin="0,0,0,4">
+                        <TextBlock Text="{Binding Localization[AboutInformationTitle]}" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>
+                        <TextBlock Text="{Binding Localization[AboutInformationSubtitle]}" Classes="muted" FontSize="12" Margin="0,2,0,0"/>
                     </StackPanel>
-                    <TextBlock Text="{Binding Localization[License]}" Classes="muted" FontSize="12"/>
+
+                    <Grid ColumnDefinitions="140,*" Margin="0,14,0,0">
+                        <TextBlock Grid.Column="0" Text="{Binding Localization[Version]}" Classes="muted" FontSize="12"/>
+                        <TextBlock Grid.Column="1" Text="{Binding VersionText}" FontSize="12" Foreground="{DynamicResource TextColor}"/>
+                    </Grid>
+                    <Grid ColumnDefinitions="140,*" Margin="0,8,0,0">
+                        <TextBlock Grid.Column="0" Text="{Binding Localization[AboutBuildLabel]}" Classes="muted" FontSize="12"/>
+                        <TextBlock Grid.Column="1" Text="{Binding BuildText}" FontSize="12" Foreground="{DynamicResource TextColor}"/>
+                    </Grid>
+                    <Grid ColumnDefinitions="140,*" Margin="0,8,0,0">
+                        <TextBlock Grid.Column="0" Text="{Binding Localization[OsLabel]}" Classes="muted" FontSize="12"/>
+                        <TextBlock Grid.Column="1" Text="{Binding OsText}" FontSize="12" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
+                    </Grid>
+                    <Grid ColumnDefinitions="140,*" Margin="0,8,0,0">
+                        <TextBlock Grid.Column="0" Text="{Binding Localization[AboutLicenseLabel]}" Classes="muted" FontSize="12"/>
+                        <TextBlock Grid.Column="1" Text="{Binding LicenseText}" FontSize="12" Foreground="{DynamicResource TextColor}"/>
+                    </Grid>
                 </StackPanel>
             </Border>
 
