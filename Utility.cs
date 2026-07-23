@@ -55,18 +55,66 @@ public static class Utility
     }
 
     /// <summary>
-    /// Opens the given URL using the operating system's default handler. Fails silently (e.g. no
-    /// default browser configured) so a broken link never crashes the app.
+    /// Identifies traffic this app sends to a site, so the destination can attribute visitors to
+    /// Rust Optimizer rather than seeing them as direct. Standard UTM parameters, since that's what
+    /// analytics tools already understand.
+    /// </summary>
+    private const string ReferralQuery = "utm_source=RustOptimizer&utm_medium=app";
+
+    /// <summary>
+    /// Opens the given URL using the operating system's default handler, tagging web links with
+    /// <see cref="ReferralQuery"/> first. Fails silently (e.g. no default browser configured) so a
+    /// broken link never crashes the app.
     /// </summary>
     public static void OpenUrl(string url)
     {
+        string target = AddReferral(url);
+
         try
         {
-            Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+            Process.Start(new ProcessStartInfo(target) { UseShellExecute = true });
         }
         catch (Exception ex)
         {
-            AppLog.Warn("Utility", $"Failed to open URL '{url}'.", ex);
+            AppLog.Warn("Utility", $"Failed to open URL '{target}'.", ex);
+        }
+    }
+
+    /// <summary>
+    /// Appends the referral parameters to a web address, preserving any query it already has.
+    /// <para>
+    /// Only http/https are touched. This same method opens <c>steam://</c> protocol links and local
+    /// folder paths (see <see cref="Logging.AppLog.OpenLogDirectory"/>), and a query string appended
+    /// to either of those would simply break them. Anything already carrying a <c>utm_source</c> is
+    /// left alone so a hand-tagged link doesn't end up with two.
+    /// </para>
+    /// </summary>
+    private static string AddReferral(string url)
+    {
+        try
+        {
+            if (!Uri.TryCreate(url, UriKind.Absolute, out Uri? uri))
+                return url;
+
+            if (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps)
+                return url;
+
+            if (url.Contains("utm_source=", StringComparison.OrdinalIgnoreCase))
+                return url;
+
+            // UriBuilder rather than string concatenation: it puts the query before any #fragment,
+            // which a naive append would corrupt.
+            UriBuilder builder = new(uri);
+            builder.Query = string.IsNullOrEmpty(builder.Query)
+                ? ReferralQuery
+                : $"{builder.Query.TrimStart('?')}&{ReferralQuery}";
+
+            return builder.Uri.ToString();
+        }
+        catch (Exception ex)
+        {
+            AppLog.Warn("Utility", $"Failed to tag '{url}' with referral parameters; opening it unchanged.", ex);
+            return url;
         }
     }
 }
