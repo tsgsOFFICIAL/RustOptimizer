@@ -2,6 +2,10 @@
 
 Alle væsentlige ændringer i Rust Optimizer er dokumenteret her.
 
+## 0.10.2
+
+- Rettet at **Behold logs i** ikke havde nogen effekt over 30 dage. Gamle logfiler blev ryddet, mens appen startede - altså før din indstilling var læst - så alt ældre end 30 dage blev slettet uanset hvad du havde valgt. Oprydningen venter nu, til din indstilling er kendt.
+
 ## 0.10.1
 
 - Rettet at skærmbilleder og GIF'er i denne ændringslog var låst til en lille fast bredde, så de lå forladt midt i et bredt vindue. De bruger nu den plads, der er til rådighed, uden at blive skaleret op ud over deres egen opløsning.

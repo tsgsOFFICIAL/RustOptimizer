@@ -2,6 +2,10 @@
 
 All notable changes to Rust Optimizer are documented here.
 
+## 0.10.2
+
+- Fixed **Keep logs for** having no effect above 30 days. Old logs were being cleared as the app started, before your setting had been read, so anything older than 30 days was deleted no matter what you'd chosen. Pruning now waits until your setting is known.
+
 ## 0.10.1
 
 - Fixed screenshots and GIFs in this changelog being locked to a small fixed width, leaving them stranded in the middle of a wide window. They now use the space available, without being scaled up past their own resolution.
