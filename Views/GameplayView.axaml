@@ -58,7 +58,7 @@
     </UserControl.Styles>
 
     <ScrollViewer>
-        <StackPanel Margin="24" Spacing="20" MaxWidth="900" HorizontalAlignment="Stretch">
+        <StackPanel Margin="24" Spacing="24">
 
             <StackPanel Spacing="4">
                 <TextBlock Text="{Binding Localization[NavGameplay]}" FontSize="26" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>

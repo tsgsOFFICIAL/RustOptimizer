@@ -9,63 +9,65 @@
              x:Class="RustOptimizer.Views.SettingsView"
              x:DataType="vm:SettingsViewModel">
 
-    <StackPanel Margin="24" Spacing="20" MaxWidth="480">
+    <ScrollViewer>
+        <StackPanel Margin="24" Spacing="24">
 
-        <TextBlock Text="{Binding Localization[SettingsTitle]}" FontSize="26" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>
+            <TextBlock Text="{Binding Localization[SettingsTitle]}" FontSize="26" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>
 
-        <Border Classes="card">
-            <StackPanel Spacing="14">
-                <TextBlock Text="{Binding Localization[ThemeLabel]}" FontWeight="SemiBold" Foreground="{DynamicResource TextColor}"/>
-                <Border Classes="segmentGroup" HorizontalAlignment="Left">
-                    <StackPanel Orientation="Horizontal" Spacing="2">
-                        <Button Classes="segment" Tag="Light"
-                                Classes.active="{Binding CurrentTheme, Converter={x:Static converters:EnumEqualsConverter.Instance}, ConverterParameter=Light}"
-                                Command="{Binding SetThemeCommand}" CommandParameter="{Binding $self.Tag}">
-                            <StackPanel Orientation="Horizontal" Spacing="6">
-                                <iconPacks:PackIconPhosphorIcons Kind="Sun" Width="16" Height="16"/>
-                                <TextBlock Text="{Binding Localization[ThemeLight]}"/>
-                            </StackPanel>
-                        </Button>
-                        <Button Classes="segment" Tag="Dark"
-                                Classes.active="{Binding CurrentTheme, Converter={x:Static converters:EnumEqualsConverter.Instance}, ConverterParameter=Dark}"
-                                Command="{Binding SetThemeCommand}" CommandParameter="{Binding $self.Tag}">
-                            <StackPanel Orientation="Horizontal" Spacing="6">
-                                <iconPacks:PackIconPhosphorIcons Kind="Moon" Width="16" Height="16"/>
-                                <TextBlock Text="{Binding Localization[ThemeDark]}"/>
-                            </StackPanel>
-                        </Button>
-                        <Button Classes="segment" Tag="System"
-                                Classes.active="{Binding CurrentTheme, Converter={x:Static converters:EnumEqualsConverter.Instance}, ConverterParameter=System}"
-                                Command="{Binding SetThemeCommand}" CommandParameter="{Binding $self.Tag}">
-                            <StackPanel Orientation="Horizontal" Spacing="6">
-                                <iconPacks:PackIconPhosphorIcons Kind="Monitor" Width="16" Height="16"/>
-                                <TextBlock Text="{Binding Localization[ThemeSystem]}"/>
-                            </StackPanel>
-                        </Button>
-                    </StackPanel>
-                </Border>
-            </StackPanel>
-        </Border>
+            <Border Classes="card">
+                <StackPanel Spacing="14">
+                    <TextBlock Text="{Binding Localization[ThemeLabel]}" FontWeight="SemiBold" Foreground="{DynamicResource TextColor}"/>
+                    <Border Classes="segmentGroup" HorizontalAlignment="Left">
+                        <StackPanel Orientation="Horizontal" Spacing="2">
+                            <Button Classes="segment" Tag="Light"
+                                    Classes.active="{Binding CurrentTheme, Converter={x:Static converters:EnumEqualsConverter.Instance}, ConverterParameter=Light}"
+                                    Command="{Binding SetThemeCommand}" CommandParameter="{Binding $self.Tag}">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <iconPacks:PackIconPhosphorIcons Kind="Sun" Width="16" Height="16"/>
+                                    <TextBlock Text="{Binding Localization[ThemeLight]}"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Classes="segment" Tag="Dark"
+                                    Classes.active="{Binding CurrentTheme, Converter={x:Static converters:EnumEqualsConverter.Instance}, ConverterParameter=Dark}"
+                                    Command="{Binding SetThemeCommand}" CommandParameter="{Binding $self.Tag}">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <iconPacks:PackIconPhosphorIcons Kind="Moon" Width="16" Height="16"/>
+                                    <TextBlock Text="{Binding Localization[ThemeDark]}"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Classes="segment" Tag="System"
+                                    Classes.active="{Binding CurrentTheme, Converter={x:Static converters:EnumEqualsConverter.Instance}, ConverterParameter=System}"
+                                    Command="{Binding SetThemeCommand}" CommandParameter="{Binding $self.Tag}">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <iconPacks:PackIconPhosphorIcons Kind="Monitor" Width="16" Height="16"/>
+                                    <TextBlock Text="{Binding Localization[ThemeSystem]}"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Border>
 
-        <Border Classes="card">
-            <StackPanel Spacing="14">
-                <TextBlock Text="{Binding Localization[LanguageLabel]}" FontWeight="SemiBold" Foreground="{DynamicResource TextColor}"/>
-                <Border Classes="segmentGroup" HorizontalAlignment="Left">
-                    <StackPanel Orientation="Horizontal" Spacing="2">
-                        <Button Classes="segment" Tag="English" Content="English"
-                                Classes.active="{Binding CurrentLanguage, Converter={x:Static converters:EnumEqualsConverter.Instance}, ConverterParameter=English}"
-                                Command="{Binding SetLanguageCommand}" CommandParameter="{Binding $self.Tag}"/>
-                        <Button Classes="segment" Tag="Danish" Content="Dansk"
-                                Classes.active="{Binding CurrentLanguage, Converter={x:Static converters:EnumEqualsConverter.Instance}, ConverterParameter=Danish}"
-                                Command="{Binding SetLanguageCommand}" CommandParameter="{Binding $self.Tag}"/>
-                        <Button Classes="segment" Tag="Russian" Content="Русский"
-                                Classes.active="{Binding CurrentLanguage, Converter={x:Static converters:EnumEqualsConverter.Instance}, ConverterParameter=Russian}"
-                                Command="{Binding SetLanguageCommand}" CommandParameter="{Binding $self.Tag}"/>
-                    </StackPanel>
-                </Border>
-            </StackPanel>
-        </Border>
+            <Border Classes="card">
+                <StackPanel Spacing="14">
+                    <TextBlock Text="{Binding Localization[LanguageLabel]}" FontWeight="SemiBold" Foreground="{DynamicResource TextColor}"/>
+                    <Border Classes="segmentGroup" HorizontalAlignment="Left">
+                        <StackPanel Orientation="Horizontal" Spacing="2">
+                            <Button Classes="segment" Tag="English" Content="English"
+                                    Classes.active="{Binding CurrentLanguage, Converter={x:Static converters:EnumEqualsConverter.Instance}, ConverterParameter=English}"
+                                    Command="{Binding SetLanguageCommand}" CommandParameter="{Binding $self.Tag}"/>
+                            <Button Classes="segment" Tag="Danish" Content="Dansk"
+                                    Classes.active="{Binding CurrentLanguage, Converter={x:Static converters:EnumEqualsConverter.Instance}, ConverterParameter=Danish}"
+                                    Command="{Binding SetLanguageCommand}" CommandParameter="{Binding $self.Tag}"/>
+                            <Button Classes="segment" Tag="Russian" Content="Русский"
+                                    Classes.active="{Binding CurrentLanguage, Converter={x:Static converters:EnumEqualsConverter.Instance}, ConverterParameter=Russian}"
+                                    Command="{Binding SetLanguageCommand}" CommandParameter="{Binding $self.Tag}"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Border>
 
-    </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
 
 </UserControl>

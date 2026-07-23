@@ -8,53 +8,55 @@
              x:Class="RustOptimizer.Views.AboutView"
              x:DataType="vm:AboutViewModel">
 
-    <StackPanel Margin="24" Spacing="20" MaxWidth="480">
+    <ScrollViewer>
+        <StackPanel Margin="24" Spacing="24">
 
-        <TextBlock Text="{Binding Localization[AboutTitle]}" FontSize="26" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>
+            <TextBlock Text="{Binding Localization[AboutTitle]}" FontSize="26" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>
 
-        <Border Classes="card">
-            <StackPanel Spacing="16">
-                <StackPanel Orientation="Horizontal" Spacing="14">
-                    <Image Source="/Assets/App/logo.ico" Width="48" Height="48"/>
-                    <StackPanel Spacing="2" VerticalAlignment="Center">
-                        <TextBlock Text="{Binding Localization[AppTitle]}" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>
-                        <StackPanel Orientation="Horizontal" Spacing="4">
-                            <TextBlock Text="{Binding Localization[Version]}" Classes="muted" FontSize="12"/>
-                            <TextBlock Text="{Binding VersionText}" Classes="muted" FontSize="12"/>
-                            <TextBlock Text="·" Classes="muted" FontSize="12"/>
-                            <TextBlock Text="{Binding Localization[By]}" Classes="muted" FontSize="12"/>
-                            <TextBlock Text="tsgsOFFICIAL" Classes="muted" FontSize="12"/>
+            <Border Classes="card">
+                <StackPanel Spacing="16">
+                    <StackPanel Orientation="Horizontal" Spacing="14">
+                        <Image Source="/Assets/App/logo.ico" Width="48" Height="48"/>
+                        <StackPanel Spacing="2" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding Localization[AppTitle]}" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <TextBlock Text="{Binding Localization[Version]}" Classes="muted" FontSize="12"/>
+                                <TextBlock Text="{Binding VersionText}" Classes="muted" FontSize="12"/>
+                                <TextBlock Text="·" Classes="muted" FontSize="12"/>
+                                <TextBlock Text="{Binding Localization[By]}" Classes="muted" FontSize="12"/>
+                                <TextBlock Text="tsgsOFFICIAL" Classes="muted" FontSize="12"/>
+                            </StackPanel>
                         </StackPanel>
                     </StackPanel>
+
+                    <TextBlock Text="{Binding Localization[AppTagline]}" Classes="muted" TextWrapping="Wrap"/>
+
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Content="{Binding Localization[ViewChangelog]}" Command="{Binding ViewChangelogCommand}"/>
+                        <Button Content="{Binding Localization[CheckForUpdates]}" Command="{Binding CheckForUpdatesCommand}"/>
+                    </StackPanel>
+                    <TextBlock Text="{Binding UpdateStatusText}" IsVisible="{Binding IsUpdateStatusVisible}" Classes="muted" FontSize="12"/>
                 </StackPanel>
+            </Border>
 
-                <TextBlock Text="{Binding Localization[AppTagline]}" Classes="muted" TextWrapping="Wrap"/>
-
-                <StackPanel Orientation="Horizontal" Spacing="8">
-                    <Button Content="{Binding Localization[ViewChangelog]}" Command="{Binding ViewChangelogCommand}"/>
-                    <Button Content="{Binding Localization[CheckForUpdates]}" Command="{Binding CheckForUpdatesCommand}"/>
+            <Border Classes="card">
+                <StackPanel Spacing="12">
+                    <StackPanel Orientation="Horizontal" Spacing="4">
+                        <Button Classes="linkIcon" Command="{Binding OpenGitHubCommand}" ToolTip.Tip="GitHub">
+                            <iconPacks:PackIconSimpleIcons Kind="GitHub" Width="18" Height="18"/>
+                        </Button>
+                        <Button Classes="linkIcon" Command="{Binding OpenDiscordCommand}" ToolTip.Tip="Discord">
+                            <iconPacks:PackIconSimpleIcons Kind="Discord" Width="18" Height="18" Foreground="#5865F2"/>
+                        </Button>
+                        <Button Classes="linkIcon" Command="{Binding OpenKofiCommand}" ToolTip.Tip="Ko-fi">
+                            <iconPacks:PackIconPhosphorIcons Kind="CoffeeFill" Width="18" Height="18" Foreground="#FF6433"/>
+                        </Button>
+                    </StackPanel>
+                    <TextBlock Text="{Binding Localization[License]}" Classes="muted" FontSize="12"/>
                 </StackPanel>
-                <TextBlock Text="{Binding UpdateStatusText}" IsVisible="{Binding IsUpdateStatusVisible}" Classes="muted" FontSize="12"/>
-            </StackPanel>
-        </Border>
+            </Border>
 
-        <Border Classes="card">
-            <StackPanel Spacing="12">
-                <StackPanel Orientation="Horizontal" Spacing="4">
-                    <Button Classes="linkIcon" Command="{Binding OpenGitHubCommand}" ToolTip.Tip="GitHub">
-                        <iconPacks:PackIconSimpleIcons Kind="GitHub" Width="18" Height="18"/>
-                    </Button>
-                    <Button Classes="linkIcon" Command="{Binding OpenDiscordCommand}" ToolTip.Tip="Discord">
-                        <iconPacks:PackIconSimpleIcons Kind="Discord" Width="18" Height="18" Foreground="#5865F2"/>
-                    </Button>
-                    <Button Classes="linkIcon" Command="{Binding OpenKofiCommand}" ToolTip.Tip="Ko-fi">
-                        <iconPacks:PackIconPhosphorIcons Kind="CoffeeFill" Width="18" Height="18" Foreground="#FF6433"/>
-                    </Button>
-                </StackPanel>
-                <TextBlock Text="{Binding Localization[License]}" Classes="muted" FontSize="12"/>
-            </StackPanel>
-        </Border>
-
-    </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
 
 </UserControl>
