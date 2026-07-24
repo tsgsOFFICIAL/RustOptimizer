@@ -68,6 +68,7 @@ public sealed class MainWindowViewModel : ViewModelBase
         _dashboard = new DashboardViewModel(localization, systemInfo, systemTweaks, networkTweaks, rustProcess, configService, cleanup, dialogs, Sidebar);
         _dashboard.SystemDetailsRequested += (_, _) => Sidebar.NavigateTo(SidebarPage.System);
         _dashboard.NetworkDetailsRequested += (_, _) => Sidebar.NavigateTo(SidebarPage.Network);
+        _dashboard.ManageProfilesRequested += (_, _) => Sidebar.NavigateTo(SidebarPage.Graphics);
         CurrentPage = _dashboard;
     }
 
@@ -153,7 +154,7 @@ public sealed class MainWindowViewModel : ViewModelBase
         {
             SidebarPage.Dashboard => _dashboard ??= new DashboardViewModel(Localization, _systemInfo, _systemTweaks, _networkTweaks, _rustProcess, _configService, _cleanup, _dialogs, Sidebar),
             SidebarPage.System => _system ??= new SystemViewModel(Localization, _systemInfo, _systemTweaks, _rustProcess),
-            SidebarPage.Graphics => _graphics ??= new GraphicsViewModel(Localization, _configService, Sidebar),
+            SidebarPage.Graphics => _graphics ??= new GraphicsViewModel(Localization, _configService, _settings, _dialogs, Sidebar),
             SidebarPage.Network => _network ??= new NetworkViewModel(Localization, _networkTweaks, _settings, _dialogs),
             SidebarPage.Gameplay => _gameplay ??= new GameplayViewModel(Localization, _configService, Sidebar),
             // SettingsViewModel reads the Windows registry for the "start with Windows" toggle;

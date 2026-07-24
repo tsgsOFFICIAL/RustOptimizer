@@ -39,6 +39,43 @@
                 <TextBlock Text="{Binding Localization[GraphicsPageSubtitle]}" Classes="muted"/>
             </StackPanel>
 
+            <!-- Profiles -->
+            <Border Classes="card">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="{Binding Localization[ProfilesTitle]}" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>
+                    <TextBlock Text="{Binding Localization[ProfilesSubtitle]}" Classes="muted" FontSize="12"/>
+
+                    <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto" ColumnSpacing="12">
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                            <ComboBox MinWidth="220" VerticalAlignment="Center"
+                                      ItemsSource="{Binding Profiles}"
+                                      SelectedItem="{Binding SelectedProfile}"
+                                      IsEnabled="{Binding CanApplySliders}"
+                                      PlaceholderText="{Binding Localization[GraphicsTierCustom]}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate x:DataType="vm:GraphicsProfileOption">
+                                        <TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                            <TextBlock Text="{Binding Localization[ProfileBuiltInTag]}" Classes="muted" FontSize="12" VerticalAlignment="Center"
+                                       IsVisible="{Binding IsBuiltInSelected}"/>
+                            <TextBlock Text="{Binding Localization[ProfileUnsavedTag]}" Classes="muted" FontSize="12" FontStyle="Italic" VerticalAlignment="Center"
+                                       IsVisible="{Binding IsModified}"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" HorizontalAlignment="Right">
+                            <Button Content="{Binding Localization[Save]}" Command="{Binding SaveProfileCommand}" Classes="secondaryButton"/>
+                            <Button Content="{Binding Localization[Rename]}" Command="{Binding RenameProfileCommand}" Classes="secondaryButton"/>
+                            <Button Content="{Binding Localization[Delete]}" Command="{Binding DeleteProfileCommand}" Classes="dangerButton"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <TextBlock Text="{Binding ProfileStatusText}" Classes="muted" FontSize="11" TextWrapping="Wrap"
+                               IsVisible="{Binding ProfileStatusText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+                </StackPanel>
+            </Border>
+
             <!-- Quality Sliders -->
             <Border Classes="card">
                 <StackPanel Spacing="4">

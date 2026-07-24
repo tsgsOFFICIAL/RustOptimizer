@@ -1,4 +1,22 @@
+using System.Collections.Generic;
+
 namespace RustOptimizer.Interface;
+
+/// <summary>
+/// A user-saved graphics profile: a display name plus a chosen tier for each Graphics-page quality
+/// slider, keyed by the slider's stable <c>PreviewId</c> to the picked tier's <c>PreviewId</c> (e.g.
+/// "ShadowQuality" → "High"). Storing tier ids rather than raw convar values keeps a profile compact
+/// and tied to the sliders the user actually sees. The three built-in presets (Low End PC,
+/// Competitive, Cinematic) live in code, not here, so they can't be overridden or deleted.
+/// </summary>
+public sealed class GraphicsProfile
+{
+    /// <summary>The user-visible profile name, shown in the Graphics page's profile dropdown.</summary>
+    public string Name { get; set; } = "";
+
+    /// <summary>The chosen tier per slider: slider <c>PreviewId</c> → tier <c>PreviewId</c>.</summary>
+    public Dictionary<string, string> Sliders { get; set; } = [];
+}
 
 /// <summary>
 /// How throughput figures are displayed. Networking hardware is advertised in bits (a "1 Gbit"
@@ -54,6 +72,12 @@ public sealed class AppSettings
     /// everything rather than only what was deemed noteworthy in advance.
     /// </summary>
     public bool VerboseLogging { get; set; }
+
+    /// <summary>
+    /// The user's saved custom graphics profiles, managed from the Graphics page. The built-in
+    /// presets aren't included - they're defined in code and always available.
+    /// </summary>
+    public List<GraphicsProfile> GraphicsProfiles { get; set; } = [];
 }
 
 /// <summary>

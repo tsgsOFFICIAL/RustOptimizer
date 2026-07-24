@@ -34,8 +34,57 @@ public sealed class GraphicsSliderRow(string title, string previewId, IReadOnlyL
     /// <summary>The slider's display name (e.g. "Shadow Quality").</summary>
     public string Title { get; } = title;
 
+    /// <summary>
+    /// The slider's stable, language-independent identifier (e.g. "ShadowQuality"), used as the key
+    /// when a graphics profile records which tier this slider is set to.
+    /// </summary>
+    public string PreviewId => previewId;
+
     /// <summary>Every tier this slider can be set to, in display order (Low/Medium/High) - three per slider.</summary>
     public IReadOnlyList<GraphicsTierOption> Tiers { get; } = tiers;
+
+    /// <summary>
+    /// The stable identifier of the tier the slider handle currently sits on (e.g. "High"). Reflects
+    /// the handle position regardless of <see cref="IsCustom"/> - a profile records where the handle
+    /// is, while <see cref="IsCustom"/> separately says whether client.cfg actually matches it.
+    /// </summary>
+    public string SelectedTierPreviewId => Tiers[_selectedTierIndex].Tier.PreviewId;
+
+    /// <summary>
+    /// Whether the named tier writes the same convar values as the tier the handle currently sits on.
+    /// Some sliders have duplicate tiers (shadows and water share identical Low and Medium values), so
+    /// a profile's stored "Medium" and a resolved "Low" describe the very same client.cfg and must
+    /// count as equal - otherwise selecting such a profile reads as "unsaved changes" the instant it's applied.
+    /// </summary>
+    public bool CurrentTierValuesMatch(string tierPreviewId)
+    {
+        GraphicsSliderTier current = Tiers[_selectedTierIndex].Tier;
+        if (string.Equals(current.PreviewId, tierPreviewId, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        foreach (GraphicsTierOption option in Tiers)
+            if (string.Equals(option.Tier.PreviewId, tierPreviewId, StringComparison.OrdinalIgnoreCase))
+                return ConvarsEqual(current.Values, option.Tier.Values);
+
+        return false;
+    }
+
+    /// <summary>Whether two tiers' convar name/value sets are identical, order-independent.</summary>
+    private static bool ConvarsEqual(IReadOnlyList<ConvarSetting> a, IReadOnlyList<ConvarSetting> b)
+    {
+        if (a.Count != b.Count)
+            return false;
+
+        Dictionary<string, string> map = new(StringComparer.OrdinalIgnoreCase);
+        foreach (ConvarSetting setting in a)
+            map[setting.Convar] = setting.Value;
+
+        foreach (ConvarSetting setting in b)
+            if (!map.TryGetValue(setting.Convar, out string? value) || !string.Equals(value, setting.Value, StringComparison.OrdinalIgnoreCase))
+                return false;
+
+        return true;
+    }
 
     /// <summary>The lowest tier's display label, for the label under the slider's left end.</summary>
     public string LowLabel => Tiers[0].Label;

@@ -14,7 +14,57 @@ namespace RustOptimizer.Service;
 public sealed class ConfigService(IRustProcessService rustProcess, IConfigBackupService configBackup) : IConfigService
 {
     /// <inheritdoc />
-    public bool ApplyPreset(ConfigPreset preset) => SetConvars(RustConfigPresets.GetConvars(preset));
+    public bool ApplyPreset(ConfigPreset preset, bool createBackup = true) => SetConvars(RustConfigPresets.GetConvars(preset), createBackup);
+
+    /// <inheritdoc />
+    public IReadOnlyDictionary<string, string> GetPresetProfile(ConfigPreset preset)
+    {
+        IReadOnlyDictionary<string, string> convars = RustConfigPresets.GetConvars(preset);
+        Dictionary<string, string> tierBySlider = new(StringComparer.OrdinalIgnoreCase);
+
+        foreach (GraphicsSlider slider in RecommendedGraphicsSliders.All)
+        {
+            // First tier whose every convar matches the preset wins - some sliders have identical
+            // Low/Medium tiers (e.g. shadows, water), same first-match rule GraphicsViewModel uses.
+            foreach (GraphicsSliderTier tier in slider.Tiers)
+            {
+                if (tier.Values.All(setting => convars.TryGetValue(setting.Convar, out string? value)
+                    && string.Equals(value, setting.Value, StringComparison.OrdinalIgnoreCase)))
+                {
+                    tierBySlider[slider.PreviewId] = tier.PreviewId;
+                    break;
+                }
+            }
+        }
+
+        return tierBySlider;
+    }
+
+    /// <inheritdoc />
+    public bool ApplyGraphicsProfile(IReadOnlyDictionary<string, string> tierBySliderPreviewId, bool createBackup = true)
+    {
+        // The shared base first, then each slider's chosen tier layered on top - the same composition
+        // ApplyPreset writes, just assembled from the profile's tier picks rather than a named preset.
+        Dictionary<string, string> convars = new(RustConfigPresets.CommonConvars, StringComparer.OrdinalIgnoreCase);
+
+        foreach (GraphicsSlider slider in RecommendedGraphicsSliders.All)
+        {
+            if (!tierBySliderPreviewId.TryGetValue(slider.PreviewId, out string? tierPreviewId))
+                continue;
+
+            foreach (GraphicsSliderTier tier in slider.Tiers)
+            {
+                if (!string.Equals(tier.PreviewId, tierPreviewId, StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                foreach (ConvarSetting setting in tier.Values)
+                    convars[setting.Convar] = setting.Value;
+                break;
+            }
+        }
+
+        return SetConvars(convars, createBackup);
+    }
 
     /// <inheritdoc />
     public IReadOnlyList<GameplayTweak> GetRecommendedGameplayTweaks() => RecommendedGameplayTweaks.All;

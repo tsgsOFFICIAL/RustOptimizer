@@ -59,10 +59,29 @@ public interface IConfigService
 {
     /// <summary>
     /// Applies a preset's convar values to Rust's client.cfg, leaving every other setting
-    /// untouched. Backs up the existing file to client.cfg.bak first. Returns <see langword="false"/>
-    /// (without writing anything) if Rust is currently running, not installed, or client.cfg is missing.
+    /// untouched. Backs up the existing file first unless <paramref name="createBackup"/> is
+    /// <see langword="false"/> (e.g. quiet profile switches on the Graphics page). Returns
+    /// <see langword="false"/> (without writing anything) if Rust is currently running, not installed,
+    /// or client.cfg is missing.
     /// </summary>
-    bool ApplyPreset(ConfigPreset preset);
+    bool ApplyPreset(ConfigPreset preset, bool createBackup = true);
+
+    /// <summary>
+    /// The tier each Graphics-page slider sits at for a built-in preset, keyed by slider
+    /// <c>PreviewId</c> → tier <c>PreviewId</c>. Lets a built-in be compared against and shown in the
+    /// same profile dropdown as user-saved <see cref="GraphicsProfile"/>s. Resolved by matching the
+    /// preset's convars against each slider's tiers.
+    /// </summary>
+    IReadOnlyDictionary<string, string> GetPresetProfile(ConfigPreset preset);
+
+    /// <summary>
+    /// Applies a custom graphics profile - the shared base convars plus, for each entry, the named
+    /// tier's convars for the named slider (keyed by slider <c>PreviewId</c> → tier <c>PreviewId</c>) -
+    /// to client.cfg. Entries naming an unknown slider or tier are ignored. Backs up client.cfg first
+    /// unless <paramref name="createBackup"/> is <see langword="false"/>, and honours the same
+    /// Rust-running/install/missing-file guards as <see cref="ApplyPreset"/>.
+    /// </summary>
+    bool ApplyGraphicsProfile(IReadOnlyDictionary<string, string> tierBySliderPreviewId, bool createBackup = true);
 
     /// <summary>Every recommended gameplay tweak this app knows about, in display order.</summary>
     IReadOnlyList<GameplayTweak> GetRecommendedGameplayTweaks();

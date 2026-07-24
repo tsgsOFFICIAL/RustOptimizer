@@ -84,6 +84,7 @@ public sealed class DashboardViewModel : ViewModelBase
         ApplyPresetCommand = new RelayCommand<string>(ApplyPreset);
         ViewSystemDetailsCommand = new RelayCommand(() => SystemDetailsRequested?.Invoke(this, EventArgs.Empty));
         ViewNetworkDetailsCommand = new RelayCommand(() => NetworkDetailsRequested?.Invoke(this, EventArgs.Empty));
+        ManageProfilesCommand = new RelayCommand(() => ManageProfilesRequested?.Invoke(this, EventArgs.Empty));
 
         CpuName = systemInfo.GetCpuName();
         GpuName = systemInfo.GetGpuName();
@@ -122,6 +123,15 @@ public sealed class DashboardViewModel : ViewModelBase
 
     /// <summary>Raises <see cref="NetworkDetailsRequested"/> to navigate to the Network page.</summary>
     public RelayCommand ViewNetworkDetailsCommand { get; }
+
+    /// <summary>
+    /// Raised when the "Manage Profiles" row on the Preset Profiles card is clicked, so the shell can
+    /// navigate to the Graphics page where profiles are created and switched.
+    /// </summary>
+    public event EventHandler? ManageProfilesRequested;
+
+    /// <summary>Raises <see cref="ManageProfilesRequested"/> to navigate to the Graphics page.</summary>
+    public RelayCommand ManageProfilesCommand { get; }
 
     /// <summary>The CPU's model name.</summary>
     public string CpuName

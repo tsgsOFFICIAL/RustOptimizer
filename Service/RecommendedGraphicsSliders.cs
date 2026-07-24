@@ -21,8 +21,8 @@ internal static class RecommendedGraphicsSliders
         new("GraphicsSliderShadowQualityLabel", "ShadowQuality",
         [
             new("GraphicsTierLow", "Low", [
-                new("graphics.shadowmode", "3"), new("graphics.shadowlights", "1"),
-                new("graphics.contactshadows", "False"), new("graphicssettings.shadowqualitypreset", "1")
+                new("graphics.shadowmode", "2"), new("graphics.shadowlights", "0"),
+                new("graphics.contactshadows", "False"), new("graphicssettings.shadowqualitypreset", "0")
             ]),
             new("GraphicsTierMedium", "Medium", [
                 new("graphics.shadowmode", "3"), new("graphics.shadowlights", "1"),
@@ -101,7 +101,7 @@ internal static class RecommendedGraphicsSliders
         new("GraphicsSliderWaterQualityLabel", "WaterQuality",
         [
             new("GraphicsTierLow", "Low", [new("water.quality", "0"), new("water.reflections", "0")]),
-            new("GraphicsTierMedium", "Medium", [new("water.quality", "0"), new("water.reflections", "0")]),
+            new("GraphicsTierMedium", "Medium", [new("water.quality", "1"), new("water.reflections", "0")]),
             new("GraphicsTierHigh", "High", [new("water.quality", "2"), new("water.reflections", "1")])
         ]),
 

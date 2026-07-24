@@ -28,6 +28,12 @@ internal static class RustConfigPresets
         return merged;
     }
 
+    /// <summary>
+    /// The shared base convars applied under every preset and custom profile alike - they don't vary
+    /// by tier, so the Graphics page's sliders don't cover them, but a profile still needs them set.
+    /// </summary>
+    public static IReadOnlyDictionary<string, string> CommonConvars => Common;
+
     /// <summary>Applied before every preset, regardless of which one is chosen.</summary>
     private static readonly Dictionary<string, string> Common = new()
     {

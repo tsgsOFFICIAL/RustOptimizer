@@ -251,10 +251,10 @@
 
                         <TextBlock Text="{Binding PresetStatusText}" TextWrapping="Wrap" Classes="muted" FontSize="11"/>
 
-                        <Button Classes="listRow outOfOrder" ToolTip.Tip="{Binding Localization[ComingSoon]}">
+                        <Button Classes="listRow" Command="{Binding ManageProfilesCommand}">
                             <Grid ColumnDefinitions="*,Auto">
                                 <TextBlock Grid.Column="0" Text="{Binding Localization[ManageProfiles]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
-                                <iconPacks:PackIconPhosphorIcons Grid.Column="1" Kind="Barricade" Width="16" Height="16" Foreground="{DynamicResource TextMutedColor}" VerticalAlignment="Center"/>
+                                <iconPacks:PackIconPhosphorIcons Grid.Column="1" Kind="CaretRight" Width="16" Height="16" Foreground="{DynamicResource TextMutedColor}" VerticalAlignment="Center"/>
                             </Grid>
                         </Button>
                     </StackPanel>
