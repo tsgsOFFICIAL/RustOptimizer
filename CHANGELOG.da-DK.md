@@ -2,6 +2,19 @@
 
 Alle væsentlige ændringer i Rust Optimizer er dokumenteret her.
 
+## 0.10.4
+
+### Grafikprofiler
+
+![Grafikprofiler](https://raw.githubusercontent.com/tsgsOFFICIAL/RustOptimizer/master/Assets/Changelog/graphics-profiles.gif)
+
+Grafik-siden har nu en profilvælger, tilgået fra Dashboardets **Administrer profiler**-link. Vælg Low End PC, Competitive eller Cinematic, og alle skydere springer til at matche; flyt en skyder bagefter, og den markeres som ugemt, så du altid ved, om det du kigger på, rent faktisk er det, der er anvendt.
+
+- **Gem dine egne profiler** - juster skyderne fra et hvilket som helst udgangspunkt, og gem resultatet under sit eget navn. Vælger du en gemt profil senere, anvendes præcis de samme indstillinger igen.
+- **Omdøb og slet** dine egne profiler. De tre indbyggede forudindstillinger kan ikke ændres.
+- Hvis dine skydere tilfældigvis lander på nøjagtig de samme indstillinger som en af de indbyggede forudindstillinger, genkender vælgeren det som den forudindstilling i stedet for at lade dig gemme en duplikat.
+- **Skyggekvalitet og vandkvalitet har nu tre reelt forskellige niveauer.** Mellem var tidligere identisk med Lav under motorhjelmen for begge, så det ikke gjorde nogen forskel at skifte mellem dem. Mellem er nu sin egen, adskilte indstilling.
+
 ## 0.10.3
 
 Ryd Cache er blevet testet på en rigtig AMD-maskine og en aktiv Steam-installation, og flere af de steder, den kiggede, viste sig ikke at være steder. Den rydder nu en hel del mere end før.

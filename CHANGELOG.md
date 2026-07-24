@@ -2,6 +2,19 @@
 
 All notable changes to Rust Optimizer are documented here.
 
+## 0.10.4
+
+### Graphics profiles
+
+![Graphics profiles](https://raw.githubusercontent.com/tsgsOFFICIAL/RustOptimizer/master/Assets/Changelog/graphics-profiles.gif)
+
+The Graphics page now has a profile picker, reachable from the Dashboard's **Manage Profiles** link. Pick Low End PC, Competitive or Cinematic and every slider snaps to match; nudge a slider afterward and it's flagged as unsaved, so you always know whether what you're looking at is actually what's applied.
+
+- **Save your own profiles** - tweak the sliders from any starting point and save the result under its own name. Picking a saved profile later reapplies its exact settings.
+- **Rename and delete** your own profiles. The three built-in presets can't be touched.
+- If your sliders happen to land on the exact same settings as one of the built-in presets, the picker recognizes it as that preset instead of letting you save a duplicate.
+- **Shadow Quality and Water Quality now have three genuinely different levels.** Medium used to be identical to Low under the hood for both, so switching between them did nothing. Medium is now its own, distinct setting.
+
 ## 0.10.3
 
 Clear Cache was tested against a real AMD machine and a live Steam install, and several of the places it looked at turned out not to be places. It now clears a good deal more than it did.
