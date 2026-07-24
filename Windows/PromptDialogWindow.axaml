@@ -1,0 +1,46 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:RustOptimizer.ViewModels"
+        xmlns:controls="using:RustOptimizer.Controls"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="210"
+        x:Class="RustOptimizer.Windows.PromptDialogWindow"
+        x:DataType="vm:PromptDialogViewModel"
+        Title="{Binding Title}"
+        Icon="/Assets/App/logo.ico"
+        Width="400" Height="210"
+        CanResize="False"
+        Background="{DynamicResource BgColor}"
+        WindowStartupLocation="CenterOwner">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <controls:TitleBar Grid.Row="0"
+                            Localization="{Binding Localization}"
+                            Title="{Binding Title}"
+                            Author="tsgsOFFICIAL"
+                            ShowMaximizeButton="False">
+            <controls:TitleBar.Icon>
+                <Image Source="/Assets/App/logo.ico"/>
+            </controls:TitleBar.Icon>
+        </controls:TitleBar>
+
+        <StackPanel Grid.Row="1" Margin="20" Spacing="10" VerticalAlignment="Center">
+            <TextBlock Text="{Binding Message}" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
+            <TextBox Name="ValueBox" Text="{Binding Value}"/>
+        </StackPanel>
+
+        <Border Grid.Row="2"
+                Padding="16"
+                BorderBrush="{DynamicResource BorderColor}"
+                BorderThickness="0,1,0,0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+                <Button Content="{Binding Localization[Cancel]}" Command="{Binding CancelCommand}" Classes="secondaryButton"/>
+                <Button Content="{Binding ConfirmLabel}" Command="{Binding ConfirmCommand}" Classes="accentButton"/>
+            </StackPanel>
+        </Border>
+
+    </Grid>
+
+</Window>

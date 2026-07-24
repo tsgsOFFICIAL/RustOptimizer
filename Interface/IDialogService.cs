@@ -28,4 +28,11 @@ public interface IDialogService
     /// thumbnail cache, admin-only files) can be opted out of, not opted into.
     /// </summary>
     Task<CleanupOutcome?> ShowClearCacheAsync(ILocalizationService localization, ICleanupService cleanup);
+
+    /// <summary>
+    /// Shows a single-line text prompt (e.g. naming a graphics profile) and returns the entered text
+    /// trimmed, or <see langword="null"/> if the user cancelled or left it blank. <paramref name="initialValue"/>
+    /// pre-fills the field (e.g. the current name when renaming).
+    /// </summary>
+    Task<string?> ShowPromptAsync(ILocalizationService localization, string title, string message, string confirmLabel, string initialValue);
 }

@@ -49,6 +49,16 @@ public sealed class DialogService : IDialogService
         return await window.ShowDialog<CleanupOutcome?>(owner);
     }
 
+    public async Task<string?> ShowPromptAsync(ILocalizationService localization, string title, string message, string confirmLabel, string initialValue)
+    {
+        if (GetOwner() is not { } owner)
+            return null;
+
+        PromptDialogViewModel viewModel = new(localization, title, message, confirmLabel, initialValue);
+        PromptDialogWindow window = new(viewModel);
+        return await window.ShowDialog<string?>(owner);
+    }
+
     private static Window? GetOwner()
         => Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
             ? desktop.MainWindow
