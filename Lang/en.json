@@ -62,6 +62,8 @@
   "GraphicsTierHigh": "High",
   "GraphicsTierCustom": "Custom",
   "GraphicsPreviewUnavailable": "No preview available",
+  "GraphicsPreviewExpandHint": "Click to compare Low vs. High",
+  "GraphicsPreviewCompareHint": "Drag the divider to compare Low vs. High",
   "GraphicsSliderShadowQualityLabel": "Shadow Quality",
   "GraphicsSliderTextureQualityLabel": "Texture Quality",
   "GraphicsSliderEffectsQualityLabel": "Effects Quality",

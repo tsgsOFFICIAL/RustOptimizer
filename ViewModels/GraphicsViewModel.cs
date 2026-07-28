@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using RustOptimizer.Service.Logging;
 using RustOptimizer.Interface;
 using System.ComponentModel;
+using Avalonia.Controls;
 using System.Linq;
 using System;
 
@@ -28,6 +29,7 @@ public sealed class GraphicsViewModel : ViewModelBase
     private GraphicsProfileOption? _selectedProfile;
     private bool _isModified;
     private string _profileStatusText = "";
+    private GraphicsPreviewLightboxViewModel? _activeLightbox;
 
     // Set while the view model, not the user, changes SelectedProfile - suppresses the apply-to-config
     // side effect so reconciling the dropdown to what client.cfg already holds doesn't re-write it.
@@ -47,6 +49,7 @@ public sealed class GraphicsViewModel : ViewModelBase
         SaveProfileCommand = new RelayCommand(() => _ = SaveAsync(), () => _isModified);
         RenameProfileCommand = new RelayCommand(() => _ = RenameAsync(), () => _selectedProfile is { IsBuiltIn: false });
         DeleteProfileCommand = new RelayCommand(() => _ = DeleteAsync(), () => _selectedProfile is { IsBuiltIn: false });
+        OpenPreviewCommand = new RelayCommand<GraphicsSliderRow>(OpenPreview);
 
         RefreshSliders();
 
@@ -58,6 +61,7 @@ public sealed class GraphicsViewModel : ViewModelBase
             if (e.PropertyName is "Item" or null)
             {
                 ProfileStatusText = "";
+                ActiveLightbox = null;
                 RefreshSliders();
             }
         };
@@ -140,6 +144,31 @@ public sealed class GraphicsViewModel : ViewModelBase
     /// <summary>Deletes the selected custom profile after confirmation.</summary>
     public RelayCommand DeleteProfileCommand { get; }
 
+    /// <summary>Opens the enlarged Low/High comparison lightbox for the clicked slider.</summary>
+    public RelayCommand<GraphicsSliderRow> OpenPreviewCommand { get; }
+
+    /// <summary>
+    /// The lightbox currently shown over the page, or <see langword="null"/> when none is open.
+    /// A view binds its overlay's visibility to this being non-null rather than a separate bool, so
+    /// there's no way for the flag and the content to disagree.
+    /// </summary>
+    public GraphicsPreviewLightboxViewModel? ActiveLightbox
+    {
+        get => _activeLightbox;
+        private set
+        {
+            if (SetProperty(ref _activeLightbox, value))
+                OnPropertyChanged(nameof(LightboxOpacity));
+        }
+    }
+
+    /// <summary>
+    /// 1 while the lightbox is open, 0 while it's closed - bound to the overlay's Opacity (with a
+    /// Transition on it) instead of switching IsVisible outright, so the scrim fades in rather than
+    /// popping onto the whole page in a single frame the moment a preview is clicked.
+    /// </summary>
+    public double LightboxOpacity => _activeLightbox is null ? 0 : 1;
+
     /// <summary>Whether sliders can be interacted with - client.cfg can't be safely written while Rust has it open.</summary>
     public bool CanApplySliders => !_sidebar.IsRustRunning;
 
@@ -202,6 +231,25 @@ public sealed class GraphicsViewModel : ViewModelBase
 
         return new GraphicsSliderRow(Localization[slider.TitleKey], slider.PreviewId, tierOptions, _configService,
             matchedIndex >= 0 ? matchedIndex : null);
+    }
+
+    /// <summary>
+    /// Builds and opens the Low/High comparison lightbox for <paramref name="row"/>. Fresh
+    /// <see cref="Control"/>s are decoded for the lightbox rather than reusing <paramref name="row"/>'s
+    /// own <see cref="GraphicsSliderRow.PreviewControl"/> - a control can only live in one place in
+    /// the visual tree at a time, and the inline thumbnail is still showing.
+    /// </summary>
+    private void OpenPreview(GraphicsSliderRow? row)
+    {
+        if (row is null)
+            return;
+
+        Control? lowImage = GraphicsPreviewImages.Build(row.PreviewId, row.Tiers[0].Tier.PreviewId);
+        Control? highImage = GraphicsPreviewImages.Build(row.PreviewId, row.Tiers[2].Tier.PreviewId);
+
+        GraphicsPreviewLightboxViewModel lightbox = new(Localization, row.Title, lowImage, highImage, row.LowLabel, row.HighLabel);
+        lightbox.CloseRequested += () => ActiveLightbox = null;
+        ActiveLightbox = lightbox;
     }
 
     /// <summary>Whether every convar in <paramref name="tier"/> currently matches its value in client.cfg.</summary>

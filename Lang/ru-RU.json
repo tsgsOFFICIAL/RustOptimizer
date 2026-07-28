@@ -62,6 +62,8 @@
   "GraphicsTierHigh": "Высокое",
   "GraphicsTierCustom": "Пользовательское",
   "GraphicsPreviewUnavailable": "Предпросмотр недоступен",
+  "GraphicsPreviewExpandHint": "Нажмите, чтобы сравнить Низкое и Высокое",
+  "GraphicsPreviewCompareHint": "Перетащите разделитель, чтобы сравнить Низкое и Высокое",
   "GraphicsSliderShadowQualityLabel": "Качество теней",
   "GraphicsSliderTextureQualityLabel": "Качество текстур",
   "GraphicsSliderEffectsQualityLabel": "Качество эффектов",

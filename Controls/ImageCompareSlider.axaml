@@ -1,0 +1,45 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:iconPacks="https://github.com/MahApps/IconPacks.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="270"
+             x:Class="RustOptimizer.Controls.ImageCompareSlider"
+             x:Name="Root">
+
+    <!-- Rounded corners are baked in here rather than exposed as a bindable property - UserControl
+         has no CornerRadius of its own, and this control only ever needs one look. -->
+    <Border CornerRadius="10" ClipToBounds="True">
+        <Grid x:Name="RootGrid" Background="Transparent" Cursor="SizeWestEast"
+              PointerPressed="OnPointerPressed" PointerMoved="OnPointerMoved" PointerReleased="OnPointerReleased">
+
+            <!-- "After" fills the whole frame; "Before" sits on top of it, clipped in code-behind to
+                 reveal only the portion left of the handle - see ImageCompareSlider.axaml.cs. -->
+            <ContentPresenter x:Name="AfterPresenter" Content="{Binding #Root.AfterContent}"
+                              HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"/>
+            <ContentPresenter x:Name="BeforePresenter" Content="{Binding #Root.BeforeContent}"
+                              HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"/>
+
+            <Border x:Name="Divider" Width="2" Background="White"
+                    HorizontalAlignment="Left" VerticalAlignment="Stretch" IsHitTestVisible="False"
+                    BoxShadow="0 0 6 0 #80000000"/>
+
+            <Border x:Name="Handle" Width="34" Height="34" CornerRadius="17" Background="White"
+                    HorizontalAlignment="Left" VerticalAlignment="Center" IsHitTestVisible="False"
+                    BoxShadow="0 1 6 0 #80000000">
+                <iconPacks:PackIconPhosphorIcons Kind="ArrowsLeftRight" Width="18" Height="18" Foreground="Black"
+                                                  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+
+            <Border HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10" Padding="7,3"
+                    Background="#AA000000" CornerRadius="6" IsHitTestVisible="False">
+                <TextBlock Text="{Binding #Root.BeforeLabel}" Foreground="White" FontSize="12" FontWeight="Bold"/>
+            </Border>
+            <Border HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10" Padding="7,3"
+                    Background="#AA000000" CornerRadius="6" IsHitTestVisible="False">
+                <TextBlock Text="{Binding #Root.AfterLabel}" Foreground="White" FontSize="12" FontWeight="Bold"/>
+            </Border>
+        </Grid>
+    </Border>
+
+</UserControl>

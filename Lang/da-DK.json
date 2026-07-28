@@ -62,6 +62,8 @@
   "GraphicsTierHigh": "Høj",
   "GraphicsTierCustom": "Brugerdefineret",
   "GraphicsPreviewUnavailable": "Ingen forhåndsvisning tilgængelig",
+  "GraphicsPreviewExpandHint": "Klik for at sammenligne Lav og Høj",
+  "GraphicsPreviewCompareHint": "Træk i skillelinjen for at sammenligne Lav og Høj",
   "GraphicsSliderShadowQualityLabel": "Skyggekvalitet",
   "GraphicsSliderTextureQualityLabel": "Teksturkvalitet",
   "GraphicsSliderEffectsQualityLabel": "Effektkvalitet",

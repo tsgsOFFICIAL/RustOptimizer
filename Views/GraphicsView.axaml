@@ -3,6 +3,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:RustOptimizer.ViewModels"
+             xmlns:controls="using:RustOptimizer.Controls"
+             xmlns:iconPacks="https://github.com/MahApps/IconPacks.Avalonia"
              mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="900"
              x:Class="RustOptimizer.Views.GraphicsView"
              x:DataType="vm:GraphicsViewModel">
@@ -19,8 +21,8 @@
             <Setter Property="BorderThickness" Value="0,1,0,0"/>
         </Style>
         <Style Selector="Border.previewFrame">
-            <Setter Property="Width" Value="220"/>
-            <Setter Property="Height" Value="124"/>
+            <Setter Property="Width" Value="300"/>
+            <Setter Property="Height" Value="169"/>
             <Setter Property="CornerRadius" Value="8"/>
             <Setter Property="ClipToBounds" Value="True"/>
             <Setter Property="Background" Value="{DynamicResource BorderColorTransparent}"/>
@@ -29,8 +31,30 @@
             <Setter Property="FontSize" Value="11"/>
             <Setter Property="Foreground" Value="{DynamicResource TextMutedColor}"/>
         </Style>
+        <Style Selector="Button.previewButton">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+        </Style>
+        <Style Selector="Border.previewHoverTint">
+            <Setter Property="Background" Value="{DynamicResource WhiteColor}"/>
+            <Setter Property="Opacity" Value="0"/>
+            <Setter Property="IsHitTestVisible" Value="False"/>
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="Opacity" Duration="0:0:0.1"/>
+                </Transitions>
+            </Setter>
+        </Style>
+        <Style Selector="Button.previewButton:pointerover Border.previewHoverTint">
+            <Setter Property="Opacity" Value="0.08"/>
+        </Style>
     </UserControl.Styles>
 
+    <Grid>
     <ScrollViewer>
         <StackPanel Margin="24" Spacing="24">
 
@@ -86,7 +110,7 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate x:DataType="vm:GraphicsSliderRow">
                                 <Border Classes="sliderRow">
-                                    <Grid ColumnDefinitions="*,220">
+                                    <Grid ColumnDefinitions="*,300">
 
                                         <!-- Slider is the main point of focus - title, drag handle, and Low/Medium/High labels. -->
                                         <StackPanel Grid.Column="0" Spacing="6" Margin="0,0,24,0" VerticalAlignment="Center">
@@ -106,15 +130,27 @@
                                             </Grid>
                                         </StackPanel>
 
-                                        <!-- In-game preview for the currently selected tier - updates immediately when the slider moves. -->
+                                        <!-- In-game preview for the currently selected tier - updates immediately when the slider moves.
+                                             Clicking it opens the enlarged Low/High comparison lightbox; disabled when there's nothing
+                                             to show yet, since the placeholder text isn't worth enlarging. -->
                                         <Border Grid.Column="1" Classes="previewFrame">
-                                            <Grid>
-                                                <ContentControl Content="{Binding PreviewControl}" IsVisible="{Binding HasPreviewImage}"
-                                                                 HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"/>
-                                                <TextBlock Classes="muted" FontSize="11" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" MaxWidth="180"
-                                                           IsVisible="{Binding HasNoPreviewImage}"
-                                                           Text="{Binding $parent[ItemsControl].((vm:GraphicsViewModel)DataContext).Localization[GraphicsPreviewUnavailable]}"/>
-                                            </Grid>
+                                            <Button Classes="previewButton" IsEnabled="{Binding HasPreviewImage}"
+                                                    Command="{Binding $parent[ItemsControl].((vm:GraphicsViewModel)DataContext).OpenPreviewCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    ToolTip.Tip="{Binding $parent[ItemsControl].((vm:GraphicsViewModel)DataContext).Localization[GraphicsPreviewExpandHint]}">
+                                                <Grid>
+                                                    <ContentControl Content="{Binding PreviewControl}" IsVisible="{Binding HasPreviewImage}"
+                                                                     HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"/>
+                                                    <TextBlock Classes="muted" FontSize="11" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" MaxWidth="240"
+                                                               IsVisible="{Binding HasNoPreviewImage}"
+                                                               Text="{Binding $parent[ItemsControl].((vm:GraphicsViewModel)DataContext).Localization[GraphicsPreviewUnavailable]}"/>
+                                                    <Border Classes="previewHoverTint"/>
+                                                    <Border IsVisible="{Binding HasPreviewImage}" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                                                            Margin="8" Padding="6" CornerRadius="6" Background="#AA000000" IsHitTestVisible="False">
+                                                        <iconPacks:PackIconPhosphorIcons Kind="MagnifyingGlassPlus" Width="14" Height="14" Foreground="White"/>
+                                                    </Border>
+                                                </Grid>
+                                            </Button>
                                         </Border>
                                     </Grid>
                                 </Border>
@@ -126,5 +162,59 @@
 
         </StackPanel>
     </ScrollViewer>
+
+    <!-- Preview lightbox - a scrim covering the page plus a centered card. The scrim is a plain
+         Border with a code-behind PointerPressed handler (OnScrimPressed), not a Button: a Button
+         pulls in FluentTheme's own ControlTheme, which defines its own pointerover/pressed brushes
+         for the templated ContentPresenter - those are Style-precedence-privileged over a plain
+         class Setter, so no amount of overriding in UserControl.Styles reliably keeps FluentTheme's
+         own color from winning for a frame. A Border has no such baked-in states, so its Background
+         is exactly what's set below, always - no theme to fight.
+
+         Only the scrim fades - it's a flat color, so easing its Opacity in/out just looks like a
+         backdrop darkening. The card is a different story: fading a whole modal's Opacity means the
+         page behind it is see-through for the entire transition, so its text visibly ghosts through
+         the card's own text and image underneath it. The card instead just pops in at full opacity
+         via IsVisible - no transition on it at all. -->
+    <Grid>
+        <Border Background="#CC000000"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                IsHitTestVisible="{Binding ActiveLightbox, Converter={x:Static ObjectConverters.IsNotNull}}"
+                Opacity="{Binding LightboxOpacity}"
+                PointerPressed="OnScrimPressed">
+            <Border.Transitions>
+                <Transitions>
+                    <DoubleTransition Property="Opacity" Duration="0:0:0.15"/>
+                </Transitions>
+            </Border.Transitions>
+        </Border>
+
+        <Border Classes="card" Width="820" MaxHeight="640" HorizontalAlignment="Center" VerticalAlignment="Center"
+                IsVisible="{Binding ActiveLightbox, Converter={x:Static ObjectConverters.IsNotNull}}">
+            <ContentControl Content="{Binding ActiveLightbox}">
+                <ContentControl.ContentTemplate>
+                    <DataTemplate x:DataType="vm:GraphicsPreviewLightboxViewModel">
+                        <StackPanel Spacing="14">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBlock Grid.Column="0" Text="{Binding Title}" FontSize="18" FontWeight="Bold"
+                                           Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
+                                <Button Grid.Column="1" Classes="secondaryButton" Padding="8" Command="{Binding CloseCommand}">
+                                    <iconPacks:PackIconPhosphorIcons Kind="X" Width="14" Height="14"/>
+                                </Button>
+                            </Grid>
+
+                            <controls:ImageCompareSlider Height="440"
+                                                          BeforeContent="{Binding LowImage}" AfterContent="{Binding HighImage}"
+                                                          BeforeLabel="{Binding LowLabel}" AfterLabel="{Binding HighLabel}"/>
+
+                            <TextBlock Text="{Binding CompareHint}" Classes="muted" FontSize="12" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ContentControl.ContentTemplate>
+            </ContentControl>
+        </Border>
+    </Grid>
+
+    </Grid>
 
 </UserControl>
