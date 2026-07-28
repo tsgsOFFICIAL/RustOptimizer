@@ -2,6 +2,21 @@
 
 All notable changes to Rust Optimizer are documented here.
 
+## 0.10.5
+
+### Graphics previews
+
+![Graphics preview compare](https://raw.githubusercontent.com/tsgsOFFICIAL/RustOptimizer/master/Assets/Changelog/graphics-preview-compare.gif)
+
+Every quality slider on the Graphics page now ships with real in-game screenshots - one per tier, across all seven sliders - shown next to each slider instead of a blank "no preview available" placeholder.
+
+- Click a preview to open it enlarged, with a draggable divider comparing that slider's Low and High tiers side by side - drag anywhere in the frame to reveal more of one or the other.
+- Press **Escape** to close the enlarged preview.
+
+### Fixes
+
+- Fixed **Low End PC** and **Competitive** incorrectly showing Texture Quality as "Custom" the moment they were applied. Both presets wrote anisotropic filtering to a different value than the Low/Medium tier they otherwise matched exactly, so no tier ever fully matched and the slider fell back to "Custom" - even though nothing was actually off-preset.
+
 ## 0.10.4
 
 ### Graphics profiles

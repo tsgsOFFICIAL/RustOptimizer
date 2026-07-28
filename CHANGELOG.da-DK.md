@@ -2,6 +2,21 @@
 
 Alle væsentlige ændringer i Rust Optimizer er dokumenteret her.
 
+## 0.10.5
+
+### Grafik-forhåndsvisninger
+
+![Sammenlign grafik-forhåndsvisning](https://raw.githubusercontent.com/tsgsOFFICIAL/RustOptimizer/master/Assets/Changelog/graphics-preview-compare.gif)
+
+Alle kvalitetsskydere på Grafik-siden leveres nu med rigtige in-game-screenshots - ét per niveau, for alle syv skydere - vist ved siden af hver skyder i stedet for en tom "ingen forhåndsvisning tilgængelig"-pladsholder.
+
+- Klik på en forhåndsvisning for at åbne den forstørret, med en flytbar skillelinje, der sammenligner skyderens Lav- og Høj-niveau side om side - træk hvor som helst i billedet for at afsløre mere af det ene eller det andet.
+- Tryk på **Escape** for at lukke den forstørrede forhåndsvisning.
+
+### Rettelser
+
+- Rettet at **Low End PC** og **Competitive** viste Teksturkvalitet som "Brugerdefineret", i samme øjeblik de blev anvendt. Begge forudindstillinger skrev anisotropisk filtrering til en anden værdi end det Lav-/Mellem-niveau, de ellers matchede præcist, så intet niveau nogensinde matchede fuldt ud, og skyderen faldt tilbage til "Brugerdefineret" - selvom intet reelt afveg fra forudindstillingen.
+
 ## 0.10.4
 
 ### Grafikprofiler
