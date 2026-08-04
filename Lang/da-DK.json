@@ -191,6 +191,12 @@
   "ClearCache": "Ryd cache",
   "OptimizeStartup": "Optimer opstart",
   "UpdateDrivers": "Opdater drivere",
+  "UpdateDriversIntro": "Rust Optimizer kan ikke selv tjekke for driveropdateringer, da der ikke findes én kilde, der pålideligt følger med i den nyeste version for hver enhed. Her er det, der er registreret på dit system, med et direkte link til at tjekke hver enkelt.",
+  "UpdateDriversLoadingText": "Registrerer hardware...",
+  "UpdateDriversNoLinkText": "Ingen kendt driverside for denne - tjek producentens supportside.",
+  "UpdateDriversCheckButtonLabel": "Tjek",
+  "UpdateDriversOtherLabel": "Andre drivere",
+  "UpdateDriversOtherDetected": "Lyd, netværk, chipset og alt andet, Windows kan tjekke for dig.",
 
   "ClearCacheDescription": "Rydder midlertidige filer, shader-caches, Steams downloadcaches og spillogs. Rust kan tage lidt længere tid om at starte næste gang, mens shaders bygges igen.",
   "ClearCacheRecycleBin": "Tøm papirkurven",

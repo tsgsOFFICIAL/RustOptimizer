@@ -191,6 +191,12 @@
   "ClearCache": "Clear Cache",
   "OptimizeStartup": "Optimize Startup",
   "UpdateDrivers": "Update Drivers",
+  "UpdateDriversIntro": "Rust Optimizer can't check for driver updates on its own, since there's no single source that reliably tracks the latest version for every device. Here's what's detected on your system, with a direct link to check each one.",
+  "UpdateDriversLoadingText": "Detecting hardware...",
+  "UpdateDriversNoLinkText": "No known driver page for this - check your manufacturer's support site.",
+  "UpdateDriversCheckButtonLabel": "Check",
+  "UpdateDriversOtherLabel": "Other drivers",
+  "UpdateDriversOtherDetected": "Audio, network, chipset and everything else Windows can check for you.",
 
   "ClearCacheDescription": "Clears temporary files, shader caches, Steam download caches and game logs. Rust may take a little longer to start next time while shaders rebuild.",
   "ClearCacheRecycleBin": "Empty Recycle Bin",
