@@ -2,6 +2,15 @@
 
 All notable changes to Rust Optimizer are documented here.
 
+## 0.11.0
+
+### Update Drivers, wired up
+
+The Dashboard's **Update Drivers** button now does something. However, Rust Optimizer unfortunately can't yet reliably tell whether a driver update is actually available. There's no single source that tracks the latest version for every device, so instead, it shows what's detected on your system and links straight to where to check.
+
+- Direct links for your **CPU**, **GPU** and **motherboard**, resolved from their vendor (Intel/AMD/NVIDIA, and ASUS/MSI/Gigabyte/ASRock for motherboards). Whichever applies to your hardware.
+- An **Other drivers** row links to Windows Update's own optional updates, covering audio, network, chipset, and everything else outside those three.
+
 ## 0.10.5
 
 ### Graphics previews
@@ -34,7 +43,7 @@ The Graphics page now has a profile picker, reachable from the Dashboard's **Man
 
 Clear Cache was tested against a real AMD machine and a live Steam install, and several of the places it looked at turned out not to be places. It now clears a good deal more than it did.
 
-- **Steam's built-in browser is now cleared** - the store, community and overlay pages all cache through it, and it had grown to around 500 MB without ever being touched. This is now routinely the largest single thing Clear Cache frees. Your sign-in and store settings are left alone.
+- **Steam's built-in browser is now cleared** - the store, community, and overlay pages all cache through it, and it had grown to around 500 MB without ever being touched. This is now routinely the largest single thing Clear Cache frees. Your sign-in and store settings are left alone.
 - **Steam's depot cache was never being cleared** - it was looked for one folder away from where it actually lives. Around 55 MB on a typical install.
 - Clear Cache now also clears Steam's download staging folder and its crash dumps. Game artwork and Steam's own logs are deliberately left alone, since artwork costs a re-download to rebuild and the logs are what Steam support asks for.
 - **More AMD shader caches are now cleared** - Vulkan, OpenGL and DirectX 9, plus a second DirectX cache that was being missed entirely. The OpenGL cache was previously looked for under NVIDIA's name for it, so on an AMD machine it was never found, and one folder was being looked for that simply doesn't exist on any driver.
@@ -61,7 +70,7 @@ Grouped into **Appearance**, **Application**, **Updates**, **Units** and **Data*
 - **Start with Windows** - launches Rust Optimizer when you log in. Per-user, so it never asks for administrator rights.
 - **Update settings** - check for a newer version on startup, and optionally install it automatically. Auto-install is off by default, since applying an update restarts the app.
 - **Network speed units** - `MB/s` to match file sizes, or `Mbps` to match how connections are advertised. The Network page follows your choice.
-- **Log settings** - keep logs for 7, 30 or 90 days, open the log folder directly, and switch on **verbose logging**.
+- **Log settings** - keep logs for 7, 30, or 90 days, open the log folder directly, and switch on **verbose logging**.
 
 > Turn verbose logging on *before* reproducing a problem. The log will then explain what the app was actually doing - which paths it looked at, what it found, and how long each step took.
 
@@ -69,7 +78,7 @@ Grouped into **Appearance**, **Application**, **Updates**, **Units** and **Data*
 
 ### About
 
-- Added an **Application information** section - version, build date, operating system and licence - so a bug report can include the details that matter without hunting for them.
+- Added an **Application information** section - version, build date, operating system, and licence - so a bug report can include the details that matter without hunting for them.
 - Moved the Ko-fi link into the footer beside GitHub and Discord, reachable from every page instead of only this one.
 
 ### Elsewhere
@@ -80,10 +89,10 @@ Grouped into **Appearance**, **Application**, **Updates**, **Units** and **Data*
 
 - Plain buttons had sharper corners than every other button in the app.
 - The Danish and Russian names for *Backup & Restore* were cut off in the sidebar.
-- Graphics, Gameplay, Settings and About sat at a different width from every other page, leaving their headings out of line.
+- Graphics, Gameplay, Settings, and About sat at a different width from every other page, leaving their headings out of line.
 
 ## 0.9.0
-- Added **Clear Cache** to the Dashboard's Quick Actions: clears Windows temporary files, GPU shader caches (NVIDIA, AMD, Intel and DirectX), Steam's download, depot and store caches, Rust's Unity logs, and application crash dumps - then reports how much it actually freed underneath the button.
+- Added **Clear Cache** to the Dashboard's Quick Actions: clears Windows temporary files, GPU shader caches (NVIDIA, AMD, Intel, and DirectX), Steam's download, depot, and store caches, Rust's Unity logs, and application crash dumps - then reports how much it actually freed underneath the button.
 - Clear Cache asks before it runs, with three things you can switch off first: emptying the Recycle Bin, clearing the thumbnail cache, and including system files (which asks for administrator approval). Everything else it clears is safe to remove and rebuilds on its own.
 - Clear Cache shows its progress while it works, naming each group as it goes, and can be stopped part-way - a cancelled run still reports what it managed to free.
 - Clear Cache leaves shader caches alone while Rust is running - and tells you it did, rather than silently freeing less than you expected. Files that are genuinely in use are skipped and counted rather than treated as errors.

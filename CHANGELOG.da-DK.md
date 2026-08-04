@@ -2,6 +2,15 @@
 
 Alle væsentlige ændringer i Rust Optimizer er dokumenteret her.
 
+## 0.11.0
+
+### Opdater drivere, koblet til
+
+Dashboardets knap **Opdater drivere** gør nu noget. Rust Optimizer kan dog desværre endnu ikke pålideligt afgøre, om en driveropdatering rent faktisk er tilgængelig. Der findes ikke én kilde, der følger med i den nyeste version for hver enhed, så i stedet viser den, hvad der er registreret på dit system, og linker direkte til, hvor du kan tjekke.
+
+- Direkte links til din **CPU**, **GPU** og **bundkort**, fundet ud fra producenten (Intel/AMD/NVIDIA, og ASUS/MSI/Gigabyte/ASRock for bundkort). Alt efter hvad der passer til din hardware.
+- En **Andre drivere**-række linker til Windows Updates egne valgfrie opdateringer, som dækker lyd, netværk, chipset og alt andet uden for de tre ovenfor.
+
 ## 0.10.5
 
 ### Grafik-forhåndsvisninger
