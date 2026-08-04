@@ -1,0 +1,77 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:RustOptimizer.ViewModels"
+        xmlns:controls="using:RustOptimizer.Controls"
+        mc:Ignorable="d" d:DesignWidth="460" d:DesignHeight="480"
+        x:Class="RustOptimizer.Windows.UpdateDriversWindow"
+        x:DataType="vm:UpdateDriversViewModel"
+        Title="{Binding Localization[UpdateDrivers]}"
+        Icon="/Assets/App/logo.ico"
+        Width="460" Height="480"
+        CanResize="False"
+        Background="{DynamicResource BgColor}"
+        WindowStartupLocation="CenterOwner">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <controls:TitleBar Grid.Row="0"
+                           Localization="{Binding Localization}"
+                           Title="{Binding Localization[UpdateDrivers]}"
+                           Author="tsgsOFFICIAL"
+                           ShowMaximizeButton="False">
+            <controls:TitleBar.Icon>
+                <Image Source="/Assets/App/logo.ico" />
+            </controls:TitleBar.Icon>
+        </controls:TitleBar>
+
+        <StackPanel Grid.Row="1" Margin="20" Spacing="16">
+            <TextBlock Text="{Binding Localization[UpdateDriversIntro]}" TextWrapping="Wrap"
+                       Foreground="{DynamicResource TextColor}" />
+
+            <TextBlock Text="{Binding Localization[UpdateDriversLoadingText]}" Classes="muted" FontSize="12"
+                       IsVisible="{Binding IsLoading}" />
+
+            <ItemsControl ItemsSource="{Binding Rows}" IsVisible="{Binding !IsLoading}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:DriverCheckRow">
+                        <Border BorderBrush="{DynamicResource BorderColor}" BorderThickness="0,1,0,0" Padding="0,12">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <StackPanel Grid.Column="0" Spacing="2" Margin="0,0,12,0">
+                                    <TextBlock Text="{Binding Label}" FontWeight="SemiBold"
+                                               Foreground="{DynamicResource TextColor}" />
+                                    <TextBlock Text="{Binding Detected}" Classes="muted" FontSize="12"
+                                               TextWrapping="Wrap" />
+                                </StackPanel>
+                                <Button Grid.Column="1"
+                                        Content="{Binding $parent[ItemsControl].((vm:UpdateDriversViewModel)DataContext).Localization[UpdateDriversCheckButtonLabel]}"
+                                        Command="{Binding $parent[ItemsControl].((vm:UpdateDriversViewModel)DataContext).OpenLinkCommand}"
+                                        CommandParameter="{Binding LinkUrl}"
+                                        Classes="secondaryButton" VerticalAlignment="Center"
+                                        IsVisible="{Binding HasLink}" />
+                                <TextBlock Grid.Column="1"
+                                           Text="{Binding $parent[ItemsControl].((vm:UpdateDriversViewModel)DataContext).Localization[UpdateDriversNoLinkText]}"
+                                           Classes="muted" FontSize="11" TextWrapping="Wrap" MaxWidth="140"
+                                           VerticalAlignment="Center"
+                                           IsVisible="{Binding !HasLink}" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+
+        <Border Grid.Row="2"
+                Padding="16"
+                BorderBrush="{DynamicResource BorderColor}"
+                BorderThickness="0,1,0,0">
+            <Button Content="{Binding Localization[Close]}"
+                    Classes="accentButton"
+                    HorizontalAlignment="Right"
+                    Command="{Binding CloseCommand}" />
+        </Border>
+
+    </Grid>
+
+</Window>

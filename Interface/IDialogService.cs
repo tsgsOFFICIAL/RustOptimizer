@@ -35,4 +35,10 @@ public interface IDialogService
     /// pre-fills the field (e.g. the current name when renaming).
     /// </summary>
     Task<string?> ShowPromptAsync(ILocalizationService localization, string title, string message, string confirmLabel, string initialValue);
+
+    /// <summary>
+    /// Shows the "Update Drivers" prompt: what's detected for the CPU, GPU and motherboard, each with
+    /// a link to its vendor's own driver page where one is known.
+    /// </summary>
+    Task ShowUpdateDriversAsync(ILocalizationService localization, ISystemInfoService systemInfo);
 }

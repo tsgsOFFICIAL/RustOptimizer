@@ -59,6 +59,15 @@ public sealed class DialogService : IDialogService
         return await window.ShowDialog<string?>(owner);
     }
 
+    public async Task ShowUpdateDriversAsync(ILocalizationService localization, ISystemInfoService systemInfo)
+    {
+        if (GetOwner() is not { } owner)
+            return;
+
+        UpdateDriversWindow window = new(new UpdateDriversViewModel(localization, systemInfo));
+        await window.ShowDialog(owner);
+    }
+
     private static Window? GetOwner()
         => Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
             ? desktop.MainWindow

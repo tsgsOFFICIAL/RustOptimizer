@@ -85,6 +85,7 @@ public sealed class DashboardViewModel : ViewModelBase
         ViewSystemDetailsCommand = new RelayCommand(() => SystemDetailsRequested?.Invoke(this, EventArgs.Empty));
         ViewNetworkDetailsCommand = new RelayCommand(() => NetworkDetailsRequested?.Invoke(this, EventArgs.Empty));
         ManageProfilesCommand = new RelayCommand(() => ManageProfilesRequested?.Invoke(this, EventArgs.Empty));
+        UpdateDriversCommand = new RelayCommand(() => _ = _dialogs.ShowUpdateDriversAsync(Localization, _systemInfo));
 
         CpuName = systemInfo.GetCpuName();
         GpuName = systemInfo.GetGpuName();
@@ -132,6 +133,9 @@ public sealed class DashboardViewModel : ViewModelBase
 
     /// <summary>Raises <see cref="ManageProfilesRequested"/> to navigate to the Graphics page.</summary>
     public RelayCommand ManageProfilesCommand { get; }
+
+    /// <summary>Shows the "Update Drivers" prompt.</summary>
+    public RelayCommand UpdateDriversCommand { get; }
 
     /// <summary>The CPU's model name.</summary>
     public string CpuName

@@ -208,11 +208,11 @@
                             </Grid>
                         </Button>
 
-                        <Button Classes="listRow outOfOrder" ToolTip.Tip="{Binding Localization[ComingSoon]}">
+                        <Button Classes="listRow" Command="{Binding UpdateDriversCommand}">
                             <Grid ColumnDefinitions="Auto,*,Auto">
                                 <iconPacks:PackIconPhosphorIcons Grid.Column="0" Kind="DownloadSimple" Width="18" Height="18" Foreground="{DynamicResource TextMutedColor}" Margin="0,0,10,0"/>
                                 <TextBlock Grid.Column="1" Text="{Binding Localization[UpdateDrivers]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
-                                <iconPacks:PackIconPhosphorIcons Grid.Column="2" Kind="Barricade" Width="16" Height="16" Foreground="{DynamicResource TextMutedColor}"/>
+                                <iconPacks:PackIconPhosphorIcons Grid.Column="2" Kind="CaretRight" Width="16" Height="16" Foreground="{DynamicResource TextMutedColor}"/>
                             </Grid>
                         </Button>
                     </StackPanel>
