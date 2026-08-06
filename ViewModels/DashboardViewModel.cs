@@ -80,6 +80,7 @@ public sealed class DashboardViewModel : ViewModelBase
         });
 
         VerifyRustFilesCommand = new RelayCommand(VerifyRustFiles);
+        OptimizeStartupCommand = new RelayCommand(OptimizeStartup);
         ClearCacheCommand = new RelayCommand(() => _ = ClearCacheAsync());
         ApplyPresetCommand = new RelayCommand<string>(ApplyPreset);
         ViewSystemDetailsCommand = new RelayCommand(() => SystemDetailsRequested?.Invoke(this, EventArgs.Empty));
@@ -106,6 +107,9 @@ public sealed class DashboardViewModel : ViewModelBase
 
     /// <summary>Verifies Rust's game files via Steam.</summary>
     public RelayCommand VerifyRustFilesCommand { get; }
+
+    /// <summary>Opens Task Manager, so the user can review and disable their own startup apps.</summary>
+    public RelayCommand OptimizeStartupCommand { get; }
 
     /// <summary>Prompts for cleanup options, then clears the caches the user left enabled.</summary>
     public RelayCommand ClearCacheCommand { get; }
@@ -399,6 +403,16 @@ public sealed class DashboardViewModel : ViewModelBase
     private void VerifyRustFiles()
     {
         _rustProcess.VerifyFiles();
+    }
+
+    /// <summary>
+    /// Opens Task Manager. There's no supported way to land it directly on the Startup Apps tab or
+    /// pre-sorted by impact - column sort and tab selection are UI state Windows doesn't expose a hook
+    /// for - so this just gets the user to the right tool rather than faking control we don't have.
+    /// </summary>
+    private void OptimizeStartup()
+    {
+        Utility.OpenUrl("taskmgr.exe");
     }
 
     /// <summary>Applies the preset profile named by <paramref name="tag"/>.</summary>
