@@ -2,6 +2,16 @@
 
 All notable changes to Rust Optimizer are documented here.
 
+## 0.12.0
+
+### Optimize Startup, wired up
+
+The Dashboard's **Optimize Startup** button now opens Task Manager, where Windows already shows each app's actual startup impact. There's no supported way to land directly on the Startup Apps tab or have it pre-sorted by impact - Windows doesn't expose a hook for either - so this just gets you to the right tool rather than faking control we don't have.
+
+### Fixes
+
+- Fixed a longer dialog title (e.g. "Administrator permission required") overflowing past the window's edge and colliding with the minimize/close buttons. The title bar wasn't given enough room for a longer title alongside the app name and version - confirm prompts and the profile name prompt are now wide enough, and grow to fit a taller message instead of clipping it.
+
 ## 0.11.0
 
 ### Update Drivers, wired up

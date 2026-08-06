@@ -2,6 +2,16 @@
 
 Alle væsentlige ændringer i Rust Optimizer er dokumenteret her.
 
+## 0.12.0
+
+### Optimer opstart, koblet til
+
+Dashboardets knap **Optimer opstart** åbner nu Jobliste, hvor Windows allerede viser hver apps reelle startpåvirkning. Der findes ingen understøttet måde at lande direkte på fanen Startapps eller få den sorteret efter påvirkning på forhånd - Windows stiller ikke noget hook til rådighed til nogen af delene - så dette får dig blot hen til det rigtige værktøj i stedet for at foregive en kontrol, vi ikke har.
+
+### Rettelser
+
+- Rettet at en længere dialogtitel (f.eks. "Administratorrettighed påkrævet") løb ud over vinduets kant og kolliderede med minimer-/luk-knapperne. Titellinjen fik ikke nok plads til en længere titel sammen med appnavnet og versionen - bekræftelsesprompter og prompten til profilnavn er nu brede nok og vokser for at passe til en højere besked i stedet for at klippe den af.
+
 ## 0.11.0
 
 ### Opdater drivere, koblet til
