@@ -2,6 +2,12 @@
 
 Alle væsentlige ændringer i Rust Optimizer er dokumenteret her.
 
+## 0.12.1
+
+### Rettelser
+
+- Rettet at Systemsiden og Dashboardet viste mindre RAM end der faktisk er installeret (f.eks. "61.6 GB" for et 64 GB-sæt), og fejlagtigt advarede om at 16 GB eller mere anbefales, selv når præcis 16 GB var installeret. Begge steder aflæser nu RAM-modulernes faktiske mærkepladekapacitet i stedet for det, Windows rapporterer som brugbart, hvilket altid er en smule mindre - reserveret til firmware, integreret grafik og chipsæt.
+
 ## 0.12.0
 
 ### Optimer opstart, koblet til

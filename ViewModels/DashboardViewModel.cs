@@ -91,7 +91,7 @@ public sealed class DashboardViewModel : ViewModelBase
         CpuName = systemInfo.GetCpuName();
         GpuName = systemInfo.GetGpuName();
         OsDescription = systemInfo.GetOsDescription();
-        RamText = FormatTotalMemory(systemInfo.GetMemoryInfo());
+        RamText = FormatTotalMemory(systemInfo.GetInstalledMemoryBytes());
 
         IsRustInstalled = _rustProcess.GetInstallPath() != null;
     }
@@ -315,13 +315,13 @@ public sealed class DashboardViewModel : ViewModelBase
     /// <summary>Loads the System score off the UI thread, independent of whether the System page itself has ever been visited.</summary>
     private async Task LoadSystemScoreAsync()
     {
-        (GamingTweaksSettings gaming, IReadOnlyList<PowerPlanInfo> plans, MemorySpeedInfo memorySpeed, IReadOnlyList<StorageDeviceInfo> storageDevices, DisplayModeInfo display)
+        (GamingTweaksSettings gaming, IReadOnlyList<PowerPlanInfo> plans, ulong installedMemoryBytes, MemorySpeedInfo memorySpeed, IReadOnlyList<StorageDeviceInfo> storageDevices, DisplayModeInfo display)
             = await Task.Run(() => (_systemTweaks.GetGamingTweaksSettings(), _systemTweaks.GetPowerPlans(),
-                _systemInfo.GetMemorySpeedInfo(), _systemInfo.GetStorageDevices(), _systemInfo.GetDisplayModeInfo()));
+                _systemInfo.GetInstalledMemoryBytes(), _systemInfo.GetMemorySpeedInfo(), _systemInfo.GetStorageDevices(), _systemInfo.GetDisplayModeInfo()));
 
         string? activePlanId = plans.FirstOrDefault(p => p.IsActive).Id;
         double? rustDriveFreePercent = SystemOptimizationRecommendations.FindRustDriveFreePercent(_rustProcess.GetInstallPath(), storageDevices);
-        SystemOptimizationInputs inputs = new(gaming, activePlanId, _systemInfo.GetMemoryInfo(), memorySpeed, rustDriveFreePercent, display);
+        SystemOptimizationInputs inputs = new(gaming, activePlanId, installedMemoryBytes, memorySpeed, rustDriveFreePercent, display);
 
         SystemScore = SystemOptimizationRecommendations.Score(inputs);
         _systemOutstandingLabelKeys = SystemOptimizationRecommendations.GetOutstandingLabelKeys(inputs);
@@ -425,14 +425,14 @@ public sealed class DashboardViewModel : ViewModelBase
         PresetStatusText = Localization[success ? "PresetApplied" : "PresetApplyFailed"];
     }
 
-    /// <summary>Formats total RAM capacity, or <see cref="NotAvailable"/> if unknown.</summary>
-    private static string FormatTotalMemory(MemoryInfo memory)
+    /// <summary>Formats total installed RAM capacity, or <see cref="NotAvailable"/> if unknown.</summary>
+    private static string FormatTotalMemory(ulong installedBytes)
     {
-        if (memory.TotalBytes == 0)
+        if (installedBytes == 0)
             return NotAvailable;
 
         const double bytesPerGb = 1024.0 * 1024.0 * 1024.0;
-        double totalGb = memory.TotalBytes / bytesPerGb;
+        double totalGb = installedBytes / bytesPerGb;
         return $"{totalGb:0.#} GB";
     }
 }

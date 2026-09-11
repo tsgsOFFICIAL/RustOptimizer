@@ -43,7 +43,7 @@ public readonly record struct OptimizationCategoryScore(int Optimized, int Total
 public readonly record struct SystemOptimizationInputs(
     GamingTweaksSettings Gaming,
     string? ActivePowerPlanId,
-    MemoryInfo Memory,
+    ulong InstalledMemoryBytes,
     MemorySpeedInfo MemorySpeed,
     double? RustDriveFreePercent,
     DisplayModeInfo Display);
@@ -80,8 +80,13 @@ public static class SystemOptimizationRecommendations
         string.Equals(planId, HighPerformancePlanId, StringComparison.OrdinalIgnoreCase)
         || string.Equals(planId, UltimatePerformancePlanId, StringComparison.OrdinalIgnoreCase);
 
-    /// <summary>At least 16 GB of physical RAM is recommended for Rust.</summary>
-    public static bool IsMemorySizeRecommended(ulong totalBytes) => totalBytes >= MinimumRecommendedMemoryBytes;
+    /// <summary>
+    /// At least 16 GB of installed physical RAM is recommended for Rust. Takes nameplate capacity
+    /// (<see cref="ISystemInfoService.GetInstalledMemoryBytes"/>), not the OS-usable total, which
+    /// the OS reports as somewhat less (memory reserved for firmware/integrated graphics/chipset) -
+    /// a 16 GB kit commonly shows up as only ~15.9 GB usable.
+    /// </summary>
+    public static bool IsMemorySizeRecommended(ulong installedBytes) => installedBytes >= MinimumRecommendedMemoryBytes;
 
     /// <summary>RAM running at its rated speed is recommended - anything lower means its XMP/EXPO profile isn't enabled in BIOS.</summary>
     public static bool IsMemorySpeedRecommended(int currentMhz, int ratedMhz) => currentMhz >= ratedMhz;
@@ -130,7 +135,7 @@ public static class SystemOptimizationRecommendations
         yield return (IsGameModeRecommended(inputs.Gaming.GameModeEnabled), "GameModeLabel");
         yield return (IsBackgroundRecordingRecommended(inputs.Gaming.BackgroundRecordingEnabled), "BackgroundRecordingLabel");
         yield return (IsPowerPlanRecommended(inputs.ActivePowerPlanId), "PowerPlanTitle");
-        yield return (IsMemorySizeRecommended(inputs.Memory.TotalBytes), "RamLabel");
+        yield return (IsMemorySizeRecommended(inputs.InstalledMemoryBytes), "RamLabel");
 
         if (inputs.Gaming.FullscreenOptimizationsDisabledForRust is { } disabled)
             yield return (IsFullscreenOptimizationsRecommended(disabled), "FullscreenOptimizationsLabel");

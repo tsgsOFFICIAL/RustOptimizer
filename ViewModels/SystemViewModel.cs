@@ -77,7 +77,7 @@ public sealed class SystemViewModel : ViewModelBase
     private int? _maxResolutionWidth;
     private int? _maxResolutionHeight;
     private double? _rustDriveFreePercent;
-    private bool _memorySizeWarningVisible;
+    private ulong? _installedMemoryBytes;
 
     private IReadOnlyList<RamModuleRow> _ramModules = [];
     private IReadOnlyList<StorageDeviceRow> _storageDevices = [];
@@ -118,10 +118,10 @@ public sealed class SystemViewModel : ViewModelBase
         MemoryInfo memory = _systemInfo.GetMemoryInfo();
         RamText = FormatMemory(memory);
         RamUsagePercent = ComputeUsagePercent(memory);
-        MemorySizeWarningVisible = !SystemOptimizationRecommendations.IsMemorySizeRecommended(memory.TotalBytes);
 
         // Each section loads independently so a slow one (GPU driver lookup can take seconds on
         // some machines) never blocks the others from appearing as soon as they're ready.
+        _ = LoadInstalledMemoryAsync();
         _ = LoadMemorySpeedAsync();
         _ = LoadCpuDetailsAsync();
         _ = LoadMotherboardAsync();
@@ -132,6 +132,13 @@ public sealed class SystemViewModel : ViewModelBase
         _ = LoadStorageDevicesAsync();
         _ = LoadPowerPlansAsync();
         _ = LoadGamingTweaksAsync();
+    }
+
+    /// <summary>Loads the installed RAM's total nameplate capacity, for <see cref="MemorySizeWarningVisible"/>.</summary>
+    private async Task LoadInstalledMemoryAsync()
+    {
+        _installedMemoryBytes = await Task.Run(_systemInfo.GetInstalledMemoryBytes);
+        OnPropertyChanged(nameof(MemorySizeWarningVisible));
     }
 
     /// <summary>Loads current/rated RAM clock speed.</summary>
@@ -388,12 +395,9 @@ public sealed class SystemViewModel : ViewModelBase
         private set => SetProperty(ref _ramUsagePercent, value);
     }
 
-    /// <summary>Whether the memory-size warning icon should show - true when total RAM is below the recommended minimum.</summary>
-    public bool MemorySizeWarningVisible
-    {
-        get => _memorySizeWarningVisible;
-        private set => SetProperty(ref _memorySizeWarningVisible, value);
-    }
+    /// <summary>Whether the memory-size warning icon should show - true when installed RAM is below the recommended minimum.</summary>
+    public bool MemorySizeWarningVisible =>
+        _installedMemoryBytes is { } installed && !SystemOptimizationRecommendations.IsMemorySizeRecommended(installed);
 
     /// <summary>Formatted motherboard manufacturer and model.</summary>
     public string MotherboardText

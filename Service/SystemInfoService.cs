@@ -50,6 +50,7 @@ public sealed class SystemInfoService(ILocalizationService localization) : ISyst
     private OsDetails? _osDetails;
     private string? _gpuDriverVersion;
     private bool _gpuDriverVersionResolved;
+    private ulong? _installedMemoryBytes;
 
     private Computer? _hardwareMonitor;
     private IHardware? _cpuHardware;
@@ -138,6 +139,36 @@ public sealed class SystemInfoService(ILocalizationService localization) : ISyst
             AppLog.Warn("SystemInfoService", "Failed to read memory info via LibreHardwareMonitor.", ex);
             return default;
         }
+    }
+
+    /// <inheritdoc />
+    public ulong GetInstalledMemoryBytes()
+    {
+        if (_installedMemoryBytes is { } cached)
+            return cached;
+
+        ulong total = 0;
+        try
+        {
+            using ManagementObjectSearcher searcher = new("SELECT Capacity FROM Win32_PhysicalMemory");
+            using ManagementObjectCollection modules = searcher.Get();
+
+            foreach (ManagementBaseObject module in modules)
+            {
+                using (module)
+                {
+                    if (module["Capacity"] is ulong capacity)
+                        total += capacity;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            AppLog.Warn("SystemInfoService", "Failed to read installed RAM capacity via WMI.", ex);
+        }
+
+        _installedMemoryBytes = total;
+        return total;
     }
 
     /// <inheritdoc />

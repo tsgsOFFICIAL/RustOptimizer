@@ -90,6 +90,14 @@ public interface ISystemInfoService
     MemoryInfo GetMemoryInfo();
 
     /// <summary>
+    /// Gets the total nameplate capacity of every installed RAM stick, as reported by
+    /// <c>Win32_PhysicalMemory</c>. Unlike <see cref="GetMemoryInfo"/>'s total, this isn't reduced
+    /// by memory the OS reserves for firmware/integrated graphics/chipset, so a 16 GB kit reads as
+    /// exactly 16 GB rather than ~15.9 GB. Resolved once and cached.
+    /// </summary>
+    ulong GetInstalledMemoryBytes();
+
+    /// <summary>
     /// Gets system-wide CPU load as a percentage, measured since the previous call.
     /// Returns <see langword="null"/> on the first call, since there's no prior sample yet.
     /// </summary>
