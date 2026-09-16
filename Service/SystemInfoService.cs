@@ -596,7 +596,13 @@ public sealed class SystemInfoService(ILocalizationService localization) : ISyst
         return result;
     }
 
-    /// <summary>Reads current (<c>ConfiguredClockSpeed</c>) and rated (<c>Speed</c>) DRAM speed via WMI.</summary>
+    /// <summary>
+    /// Reads current (<c>ConfiguredClockSpeed</c>) and rated (<c>Speed</c>) DRAM speed via WMI.
+    /// <c>Speed</c> is meant to be the module's fixed SPD-rated ceiling, but on some motherboard
+    /// firmware it instead mirrors whatever profile is currently active - it can rise alongside
+    /// <c>ConfiguredClockSpeed</c> right after enabling XMP/EXPO, rather than staying constant.
+    /// This is a firmware/WMI reporting quirk, not something we can correct for from here.
+    /// </summary>
     private static MemorySpeedInfo ReadMemorySpeedFromWmi()
     {
         try

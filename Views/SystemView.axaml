@@ -155,7 +155,13 @@
                                 </StackPanel>
                                 <StackPanel Grid.Column="1" Spacing="0">
                                     <TextBlock Text="{Binding Localization[MaxMemorySpeedLabel]}" Classes="infoLabel"/>
-                                    <TextBlock Text="{Binding MaxMemorySpeedText}" Classes="infoValue"/>
+                                    <Grid ColumnDefinitions="Auto,Auto">
+                                        <TextBlock Grid.Column="0" Text="{Binding MaxMemorySpeedText}" Classes="infoValue" VerticalAlignment="Center"/>
+                                        <Border Grid.Column="1" Background="Transparent" Margin="6,0,0,0" VerticalAlignment="Center"
+                                                ToolTip.Tip="{Binding Localization[MaxMemorySpeedTooltip]}">
+                                            <iconPacks:PackIconPhosphorIcons Kind="Info" Width="14" Height="14" Foreground="{DynamicResource TextMutedColor}"/>
+                                        </Border>
+                                    </Grid>
                                 </StackPanel>
                             </Grid>
 
