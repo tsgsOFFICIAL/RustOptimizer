@@ -611,13 +611,13 @@ public sealed class DashboardViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Opens Task Manager. There's no supported way to land it directly on the Startup Apps tab or
-    /// pre-sorted by impact - column sort and tab selection are UI state Windows doesn't expose a hook
-    /// for - so this just gets the user to the right tool rather than faking control we don't have.
+    /// Opens Windows Settings' own Startup Apps page directly via its documented URI scheme -
+    /// already sorted with a "Startup impact" rating per app, unlike Task Manager's Startup tab,
+    /// which offers no way to land pre-selected on that tab or pre-sorted by impact.
     /// </summary>
     private void OptimizeStartup()
     {
-        Utility.OpenUrl("taskmgr.exe");
+        Utility.OpenUrl("ms-settings:startupapps");
     }
 
     /// <summary>Applies the preset profile named by <paramref name="tag"/>.</summary>
