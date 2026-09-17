@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System;
 
 namespace RustOptimizer.Interface;
 
@@ -78,6 +79,13 @@ public sealed class AppSettings
     /// presets aren't included - they're defined in code and always available.
     /// </summary>
     public List<GraphicsProfile> GraphicsProfiles { get; set; } = [];
+
+    /// <summary>
+    /// When Smart Optimization last built a plan (the Dashboard's "Last scan" value), or
+    /// <see langword="null"/> if it's never run. Persisted so the timestamp survives closing and
+    /// reopening the app, rather than resetting to "Never" every launch.
+    /// </summary>
+    public DateTime? LastScanTime { get; set; }
 }
 
 /// <summary>

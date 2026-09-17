@@ -26,6 +26,7 @@ public sealed class DashboardViewModel : ViewModelBase
     private readonly ICleanupService _cleanup;
     private readonly IDialogService _dialogs;
     private readonly ISmartOptimizationService _smartOptimization;
+    private readonly IAppSettingsService _settings;
     private readonly SidebarViewModel _sidebar;
     private const string NotAvailable = "N/A";
 
@@ -56,7 +57,7 @@ public sealed class DashboardViewModel : ViewModelBase
     /// <summary>Creates the view model, resolves the card's hardware identity strings once, and kicks off the System/Network scores' async loads.</summary>
     public DashboardViewModel(ILocalizationService localization, ISystemInfoService systemInfo, ISystemTweaksService systemTweaks,
         INetworkTweaksService networkTweaks, IRustProcessService rustProcess, IConfigService configService,
-        ICleanupService cleanup, IDialogService dialogs, ISmartOptimizationService smartOptimization, SidebarViewModel sidebar)
+        ICleanupService cleanup, IDialogService dialogs, ISmartOptimizationService smartOptimization, IAppSettingsService settings, SidebarViewModel sidebar)
         : base(localization)
     {
         _rustProcess = rustProcess;
@@ -67,8 +68,12 @@ public sealed class DashboardViewModel : ViewModelBase
         _cleanup = cleanup;
         _dialogs = dialogs;
         _smartOptimization = smartOptimization;
+        _settings = settings;
         _sidebar = sidebar;
         _sidebar.PropertyChanged += OnSidebarPropertyChanged;
+
+        // Persisted, so "Last scan" survives closing and reopening the app instead of resetting to "Never".
+        _lastScanTime = _settings.Current.LastScanTime;
 
         // SystemIssuesSummaryText/NetworkIssuesSummaryText/GameplayIssuesSummaryText are built from
         // localized strings in C#, not a plain {Binding Localization[Key]} lookup, so they need to be
@@ -459,8 +464,11 @@ public sealed class DashboardViewModel : ViewModelBase
 
         // "Last scan" tracks when the system was last checked, not when something was last
         // applied - so it updates here, before either early return, rather than only after a
-        // successful apply.
+        // successful apply. Persisted immediately so it survives closing the app, not just kept
+        // in memory for the session.
         _lastScanTime = DateTime.Now;
+        _settings.Current.LastScanTime = _lastScanTime;
+        _settings.Save();
         OnPropertyChanged(nameof(LastScanText));
 
         if (plan.IsEmpty)

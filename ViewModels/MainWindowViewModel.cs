@@ -68,7 +68,7 @@ public sealed class MainWindowViewModel : ViewModelBase
         OpenDiscordCommand = new RelayCommand(() => Utility.OpenUrl(ProjectLinks.Discord));
         OpenKofiCommand = new RelayCommand(() => Utility.OpenUrl(ProjectLinks.KoFi));
 
-        _dashboard = new DashboardViewModel(localization, systemInfo, systemTweaks, networkTweaks, rustProcess, configService, cleanup, dialogs, smartOptimization, Sidebar);
+        _dashboard = new DashboardViewModel(localization, systemInfo, systemTweaks, networkTweaks, rustProcess, configService, cleanup, dialogs, smartOptimization, settings, Sidebar);
         _dashboard.SystemDetailsRequested += (_, _) => Sidebar.NavigateTo(SidebarPage.System);
         _dashboard.NetworkDetailsRequested += (_, _) => Sidebar.NavigateTo(SidebarPage.Network);
         _dashboard.GameplayDetailsRequested += (_, _) => Sidebar.NavigateTo(SidebarPage.Gameplay);
@@ -156,7 +156,7 @@ public sealed class MainWindowViewModel : ViewModelBase
     {
         CurrentPage = page switch
         {
-            SidebarPage.Dashboard => _dashboard ??= new DashboardViewModel(Localization, _systemInfo, _systemTweaks, _networkTweaks, _rustProcess, _configService, _cleanup, _dialogs, _smartOptimization, Sidebar),
+            SidebarPage.Dashboard => _dashboard ??= new DashboardViewModel(Localization, _systemInfo, _systemTweaks, _networkTweaks, _rustProcess, _configService, _cleanup, _dialogs, _smartOptimization, _settings, Sidebar),
             SidebarPage.Optimizer => _optimizer ??= new OptimizerViewModel(Localization, _smartOptimization, _dialogs, _systemTweaks, _networkTweaks, _configService, _systemInfo, _rustProcess, Sidebar),
             SidebarPage.System => _system ??= new SystemViewModel(Localization, _systemInfo, _systemTweaks, _rustProcess),
             SidebarPage.Graphics => _graphics ??= new GraphicsViewModel(Localization, _configService, _settings, _dialogs, Sidebar),
