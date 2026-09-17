@@ -425,14 +425,21 @@ public sealed class DashboardViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Builds a Smart Optimization plan and, unless there's nothing outstanding, shows the confirm
-    /// prompt and applies it on confirmation - refreshing every tile and the "Last scan" time
-    /// afterward. Shared logic with the Optimizer page's own button lives in
+    /// Builds a Smart Optimization plan - updating "Last scan" immediately, since that reflects
+    /// when the system was last checked, not when something was last applied - and, unless
+    /// there's nothing outstanding, shows the confirm prompt and applies it on confirmation,
+    /// refreshing every tile. Shared logic with the Optimizer page's own button lives in
     /// <see cref="ISmartOptimizationService"/>, so both drive identical behavior.
     /// </summary>
     private async Task RunSmartOptimizationAsync()
     {
         SmartOptimizationPlan plan = await Task.Run(_smartOptimization.BuildPlan);
+
+        // "Last scan" tracks when the system was last checked, not when something was last
+        // applied - so it updates here, before either early return, rather than only after a
+        // successful apply.
+        _lastScanTime = DateTime.Now;
+        OnPropertyChanged(nameof(LastScanText));
 
         if (plan.IsEmpty)
         {
@@ -447,9 +454,6 @@ public sealed class DashboardViewModel : ViewModelBase
         RefreshNetworkScore();
         RefreshGameplayScore();
         RefreshGraphicsProfileStatus();
-
-        _lastScanTime = DateTime.Now;
-        OnPropertyChanged(nameof(LastScanText));
 
         SmartOptimizationStatusText = Localization[HasPartialFailure(plan, outcome) ? "SmartOptimizationPartialText" : "SmartOptimizationAppliedText"];
     }
