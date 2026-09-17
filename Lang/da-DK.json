@@ -378,7 +378,9 @@
   "BindCatalogUseActionLabel": "Brug Denne Handling",
 
   "BindBuilderTitle": "Opret en Binding Manuelt",
-  "BindBuilderIntro": "Byg en eller flere kommandoer pr. tryk. Tilføj en anden cyklusfase for at få tasten til at skifte mellem dem ved hvert tryk, ligesom Rusts egne lyd-/synsfelt-bindinger.",
+  "BindBuilderIntro": "Byg en eller flere kommandoer pr. tryk. Tilføj en anden cyklusfase for at få tasten til at skifte mellem dem ved hvert tryk - eller start fra et rigtigt eksempel nedenfor og tilpas det.",
+  "BindBuilderExamplesPlaceholder": "Indlæs et eksempel...",
+  "BindBuilderLoadExampleLabel": "Indlæs",
   "BindBuilderStageLabel": "Fase",
   "BindBuilderRemoveStageLabel": "Fjern Fase",
   "BindBuilderAddStageLabel": "+ Tilføj Cyklusfase",

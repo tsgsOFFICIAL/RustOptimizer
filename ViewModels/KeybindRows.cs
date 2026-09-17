@@ -14,3 +14,6 @@ public sealed record CatalogActionRow(RustAction Action, string DisplayName, str
 
 /// <summary>One entry in the manual macro builder's per-line convar picker - a curated convar, or the "Custom command" sentinel (<see cref="Entry"/> null) for free text.</summary>
 public sealed record ConvarPickerOption(Service.ConvarEditorEntry? Entry, string DisplayText);
+
+/// <summary>One loadable example in the manual macro builder's "Load Example" picker.</summary>
+public sealed record ExampleOption(Service.BindMacroExample Example, string DisplayText, string DescriptionText);

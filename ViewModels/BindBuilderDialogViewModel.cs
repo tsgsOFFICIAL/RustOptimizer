@@ -43,6 +43,15 @@ public sealed class BindBuilderDialogViewModel : ViewModelBase
             if (stage is not null && Stages.Count > 1)
                 Stages.Remove(stage);
         });
+        Examples =
+        [
+            .. BindMacroExamples.All.Select(example => new ExampleOption(example, Localization[example.LabelKey], Localization[example.DescriptionKey])),
+        ];
+        LoadExampleCommand = new RelayCommand<ExampleOption>(option =>
+        {
+            if (option is not null)
+                LoadExample(option.Example);
+        });
         SaveCommand = new RelayCommand(() =>
         {
             string command = KeybindCommandBuilder.Build(Stages.Select(stage => stage.ToStage()).ToList());
@@ -70,6 +79,16 @@ public sealed class BindBuilderDialogViewModel : ViewModelBase
     /// <summary>Removes a stage, as long as one would still remain.</summary>
     public RelayCommand<BindStageEditorRow> RemoveStageCommand { get; }
 
+    /// <summary>
+    /// Ready-made toggle-cycle macros (see <see cref="BindMacroExamples"/>) offered as loadable
+    /// starting points - real, working binds copied from this app's reference file, not generic
+    /// suggestions, so they only ever show up here rather than in the "Choose from list" catalog.
+    /// </summary>
+    public IReadOnlyList<ExampleOption> Examples { get; }
+
+    /// <summary>Replaces every current stage with the picked example's, ready to edit further.</summary>
+    public RelayCommand<ExampleOption> LoadExampleCommand { get; }
+
     /// <summary>Builds the final command from every stage/line and closes with it.</summary>
     public RelayCommand SaveCommand { get; }
 
@@ -96,6 +115,25 @@ public sealed class BindBuilderDialogViewModel : ViewModelBase
     }
 
     private void HookLine(BindLineEditorRow line) => line.PropertyChanged += (_, _) => RaisePreviewChanged();
+
+    /// <summary>Replaces every stage with the example's, rebuilt as editable rows via <see cref="BindLineEditorRow.FromLine"/>.</summary>
+    private void LoadExample(BindMacroExample example)
+    {
+        Stages.Clear();
+
+        foreach (BindStage stage in example.Stages)
+        {
+            BindStageEditorRow stageRow = new(Localization, _options);
+            stageRow.Lines.Clear();
+            foreach (BindCommandLine line in stage.Lines)
+                stageRow.Lines.Add(BindLineEditorRow.FromLine(Localization, _options, line));
+
+            HookStage(stageRow);
+            Stages.Add(stageRow);
+        }
+
+        RaisePreviewChanged();
+    }
 
     private void RaisePreviewChanged()
     {

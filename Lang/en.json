@@ -379,7 +379,9 @@
   "BindCatalogUseActionLabel": "Use This Action",
 
   "BindBuilderTitle": "Create a Bind Manually",
-  "BindBuilderIntro": "Build one or more commands per press. Add a second cycle stage to make the key toggle between them on each press, just like Rust's own audio/FOV toggle binds.",
+  "BindBuilderIntro": "Build one or more commands per press. Add a second cycle stage to make the key toggle between them on each press - or start from a real example below and edit it.",
+  "BindBuilderExamplesPlaceholder": "Load an example...",
+  "BindBuilderLoadExampleLabel": "Load",
   "BindBuilderStageLabel": "Stage",
   "BindBuilderRemoveStageLabel": "Remove Stage",
   "BindBuilderAddStageLabel": "+ Add Cycle Stage",

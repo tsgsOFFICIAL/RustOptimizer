@@ -46,7 +46,16 @@ public sealed class KeybindsService(IRustProcessService rustProcess, IConfigBack
     }
 
     /// <inheritdoc />
-    public IReadOnlyList<RustAction> GetKnownActions() => RustActionCatalog.All;
+    /// <remarks>
+    /// Excludes every "~"-prefixed <c>meta.exec</c> cycling macro from <see cref="RustActionCatalog"/> -
+    /// those are one player's own custom toggle binds, not generic Rust actions, so they don't belong
+    /// in a "pick a known action" catalog. They still work for <em>naming</em> a bind that happens to
+    /// match one (see <see cref="GetKeyBindings"/>'s use of <see cref="ActionsByCommand"/>) - they're
+    /// only hidden from the browsable list here. See <see cref="BindMacroExamples"/> for where they
+    /// resurface, as loadable starting points in the manual macro builder instead.
+    /// </remarks>
+    public IReadOnlyList<RustAction> GetKnownActions() =>
+        RustActionCatalog.All.Where(action => !action.Command.StartsWith('~')).ToList();
 
     /// <inheritdoc />
     public bool SetKeyBinding(KeyToken token, string command, bool createBackup = true)

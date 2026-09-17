@@ -36,8 +36,24 @@
             </controls:TitleBar.Icon>
         </controls:TitleBar>
 
-        <TextBlock Grid.Row="1" Margin="20,14,20,0" Text="{Binding Localization[BindBuilderIntro]}"
-                   TextWrapping="Wrap" FontSize="12" Foreground="{DynamicResource TextColor}"/>
+        <StackPanel Grid.Row="1" Margin="20,14,20,0" Spacing="10">
+            <TextBlock Text="{Binding Localization[BindBuilderIntro]}" TextWrapping="Wrap" FontSize="12" Foreground="{DynamicResource TextColor}"/>
+            <Grid ColumnDefinitions="*,Auto">
+                <ComboBox Grid.Column="0" x:Name="ExamplePicker" ItemsSource="{Binding Examples}" HorizontalAlignment="Stretch"
+                          PlaceholderText="{Binding Localization[BindBuilderExamplesPlaceholder]}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate x:DataType="vm:ExampleOption">
+                            <StackPanel>
+                                <TextBlock Text="{Binding DisplayText}" FontSize="12"/>
+                                <TextBlock Text="{Binding DescriptionText}" FontSize="10" Classes="muted"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <Button Grid.Column="1" Content="{Binding Localization[BindBuilderLoadExampleLabel]}" Classes="secondaryButton" Margin="8,0,0,0"
+                        Command="{Binding LoadExampleCommand}" CommandParameter="{Binding #ExamplePicker.SelectedItem}"/>
+            </Grid>
+        </StackPanel>
 
         <ScrollViewer Grid.Row="2" Margin="20,12,20,0">
             <ItemsControl ItemsSource="{Binding Stages}">
@@ -68,9 +84,9 @@
                                     </ItemsControl.ItemsPanel>
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate x:DataType="vm:BindLineEditorRow">
-                                            <Grid ColumnDefinitions="180,*,Auto" ColumnSpacing="8">
+                                            <Grid ColumnDefinitions="180,*,Auto" ColumnSpacing="8" VerticalAlignment="Center">
                                                 <ComboBox Grid.Column="0" ItemsSource="{Binding Options}" SelectedItem="{Binding SelectedConvar}"
-                                                          HorizontalAlignment="Stretch">
+                                                          HorizontalAlignment="Stretch" VerticalAlignment="Center">
                                                     <ComboBox.ItemTemplate>
                                                         <DataTemplate x:DataType="vm:ConvarPickerOption">
                                                             <TextBlock Text="{Binding DisplayText}"/>
@@ -78,7 +94,7 @@
                                                     </ComboBox.ItemTemplate>
                                                 </ComboBox>
 
-                                                <Grid Grid.Column="1" ColumnDefinitions="*,Auto" IsVisible="{Binding IsSlider}">
+                                                <Grid Grid.Column="1" ColumnDefinitions="*,Auto" VerticalAlignment="Center" IsVisible="{Binding IsSlider}">
                                                     <Slider Grid.Column="0" Minimum="{Binding SliderMin}" Maximum="{Binding SliderMax}"
                                                             TickFrequency="{Binding SliderStep}" IsSnapToTickEnabled="True"
                                                             Value="{Binding SliderValue}" VerticalAlignment="Center"/>
@@ -98,7 +114,7 @@
                                                          FontFamily="Consolas,Cascadia Mono,monospace"/>
 
                                                 <Button Grid.Column="2" Content="✕" Width="28" Height="28" Padding="0" FontSize="12"
-                                                        Classes="secondaryButton"
+                                                        Classes="secondaryButton" VerticalAlignment="Center"
                                                         IsVisible="{Binding $parent[ItemsControl].((vm:BindStageEditorRow)DataContext).CanRemoveLine}"
                                                         Command="{Binding $parent[ItemsControl].((vm:BindStageEditorRow)DataContext).RemoveLineCommand}"
                                                         CommandParameter="{Binding}"/>

@@ -4,15 +4,21 @@ using RustOptimizer.Interface;
 namespace RustOptimizer.Service;
 
 /// <summary>
-/// Every action Rust's own default keys.cfg binds, one entry per distinct command string (several
+/// Every action this app can put a friendly name to, one entry per distinct command string (several
 /// keys share a command, e.g. Tab and I both bind <c>inventory.toggle</c> - that's one catalog entry
-/// used by two <see cref="KeyBindingRow"/>s, not two entries). Commands are copied verbatim from a
-/// real default keys.cfg, including the exact quoting/escaping of the <c>~meta.exec "A" "B"</c>
-/// toggle macros - <see cref="KeybindsService"/> matches a bind line's command against
-/// <see cref="RustAction.Command"/> by exact string equality, so a single wrong character here just
-/// means that one action shows up unmatched under "Other" rather than under its real name; nothing
-/// breaks. Deliberately scoped to what's provably real rather than every Rust console command that
-/// exists - most of the rest are server/admin/debug commands nobody binds to a key.
+/// used by two <see cref="KeyBindingRow"/>s, not two entries). The plain, single-purpose commands are
+/// verified straight from Rust's own shipped <c>cfg/keys_default.cfg</c> (including the multi-command
+/// combos it builds when the same key gets more than one <c>bind_default</c> line, e.g. <c>e</c>
+/// becoming <c>+use;+nextskin</c>). The <c>~meta.exec "A" "B"</c> toggle-cycle entries are different -
+/// they're not Rust defaults at all, they're one real player's own custom macros, copied verbatim from
+/// this app's ground-truth reference <c>keys.cfg</c> so they're still recognized and named nicely if a
+/// user's own bindings happen to match them. That distinction matters:
+/// <see cref="KeybindsService.GetKnownActions"/> deliberately excludes every "~"-prefixed entry from
+/// what "Choose from list" offers - a personal macro isn't a generic action to suggest to everyone, so
+/// it only appears there as a loadable example (<see cref="BindMacroExamples"/>), never as a catalog
+/// pick. <see cref="KeybindsService"/> matches a bind line's command against <see cref="RustAction.Command"/>
+/// by exact string equality, so a single wrong character here just means that one action shows up
+/// unmatched under "Other" rather than under its real name; nothing breaks.
 /// </summary>
 internal static class RustActionCatalog
 {

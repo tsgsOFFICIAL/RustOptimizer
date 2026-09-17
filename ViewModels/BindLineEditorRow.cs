@@ -1,7 +1,10 @@
+using System.Text.RegularExpressions;
 using RustOptimizer.ViewModels.Mvvm;
 using RustOptimizer.Interface;
 using RustOptimizer.Service;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 
 namespace RustOptimizer.ViewModels;
 
@@ -115,4 +118,52 @@ public sealed class BindLineEditorRow : ViewModelBase
 
     /// <summary>Converts this row to the immutable <see cref="BindCommandLine"/> the builder consumes.</summary>
     public BindCommandLine ToLine() => new(SelectedConvar.Entry?.ConvarKey, RawText);
+
+    /// <summary>Matches <c>showtoast 3 "&lt;message&gt;"</c> - the only shape <see cref="ConvarEditorCatalog"/>'s <c>showtoast</c> entry ever produces or accepts back.</summary>
+    private static readonly Regex ShowToastRegex = new("^showtoast\\s+3\\s+\"(.*)\"$", RegexOptions.Compiled);
+
+    /// <summary>
+    /// Rebuilds an editor row from an already-known <see cref="BindCommandLine"/> - used to load a
+    /// <see cref="BindMacroExample"/> into the builder as editable rows instead of opaque text.
+    /// Trusts <paramref name="line"/>'s own <see cref="BindCommandLine.ConvarKey"/> to find the
+    /// matching curated entry (rather than re-guessing it from <see cref="BindCommandLine.RawText"/>)
+    /// and only needs to parse back out the value portion; falls back to a plain Custom row, with
+    /// <see cref="BindCommandLine.RawText"/> shown verbatim, whenever there's no match - never a loss
+    /// of information, just a plainer editor for it.
+    /// </summary>
+    public static BindLineEditorRow FromLine(ILocalizationService localization, IReadOnlyList<ConvarPickerOption> options, BindCommandLine line)
+    {
+        BindLineEditorRow row = new(localization, options);
+
+        ConvarPickerOption? match = line.ConvarKey is { } key
+            ? options.FirstOrDefault(option => option.Entry?.ConvarKey == key)
+            : null;
+
+        if (match is null)
+        {
+            row.CustomText = line.RawText;
+            return row;
+        }
+
+        row.SelectedConvar = match;
+        ConvarEditorEntry entry = match.Entry!.Value;
+        string valuePart = line.RawText.Length > entry.ConvarKey.Length
+            ? line.RawText[(entry.ConvarKey.Length + 1)..].Trim()
+            : "";
+
+        switch (entry.Kind)
+        {
+            case ConvarEditorKind.Slider when double.TryParse(valuePart, NumberStyles.Float, CultureInfo.InvariantCulture, out double numeric):
+                row.SliderValue = numeric;
+                break;
+            case ConvarEditorKind.Toggle:
+                row.ToggleOn = valuePart == entry.ToggleOnValue;
+                break;
+            case ConvarEditorKind.Text when ShowToastRegex.Match(line.RawText) is { Success: true } toastMatch:
+                row.TextValue = toastMatch.Groups[1].Value;
+                break;
+        }
+
+        return row;
+    }
 }
