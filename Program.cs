@@ -69,6 +69,7 @@ namespace RustOptimizer
                     .AddSingleton<IConfigService, ConfigService>()
                     .AddSingleton<ICleanupService, CleanupService>()
                     .AddSingleton<ISmartOptimizationService, SmartOptimizationService>()
+                    .AddSingleton<IKeybindsService, KeybindsService>()
                     .BuildServiceProvider();
 #pragma warning restore CA1416
 

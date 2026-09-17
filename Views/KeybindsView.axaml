@@ -1,0 +1,167 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:iconPacks="https://github.com/MahApps/IconPacks.Avalonia"
+             xmlns:vm="using:RustOptimizer.ViewModels"
+             xmlns:avconverters="using:Avalonia.Data.Converters"
+             mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="900"
+             x:Class="RustOptimizer.Views.KeybindsView"
+             x:DataType="vm:KeybindsViewModel">
+
+    <UserControl.Styles>
+        <Style Selector="TextBlock.cardTitle">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextColor}"/>
+        </Style>
+        <Style Selector="Border.bindRow">
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding" Value="10,8"/>
+        </Style>
+        <Style Selector="Border.bindRow:pointerover">
+            <Setter Property="Background" Value="{DynamicResource BorderColorTransparent}"/>
+        </Style>
+        <Style Selector="Button.categoryHeader">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="8,10"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="CornerRadius" Value="6"/>
+        </Style>
+        <Style Selector="Button.categoryHeader:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource BorderColorTransparent}"/>
+        </Style>
+    </UserControl.Styles>
+
+    <UserControl.Resources>
+        <DataTemplate x:Key="BindRowTemplate" x:DataType="vm:KeybindRow">
+            <Border Classes="bindRow">
+                <Grid ColumnDefinitions="*,Auto,Auto,Auto">
+                    <TextBlock Grid.Column="0" Text="{Binding ActionText}" FontSize="12" TextWrapping="Wrap"
+                               VerticalAlignment="Center" Foreground="{DynamicResource TextColor}"/>
+                    <Border Grid.Column="1" Classes="pill" Margin="8,0,8,0" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding KeyText}"/>
+                    </Border>
+                    <Button Grid.Column="2" Classes="linkIcon" Margin="0,0,4,0"
+                            Command="{Binding $parent[UserControl].((vm:KeybindsViewModel)DataContext).ChangeKeyCommand}"
+                            CommandParameter="{Binding}"
+                            IsEnabled="{Binding $parent[UserControl].((vm:KeybindsViewModel)DataContext).CanEdit}"
+                            ToolTip.Tip="{Binding $parent[UserControl].((vm:KeybindsViewModel)DataContext).Localization[KeybindChangeLabel]}">
+                        <iconPacks:PackIconPhosphorIcons Kind="PencilSimple" Width="16" Height="16" Foreground="{DynamicResource TextMutedColor}"/>
+                    </Button>
+                    <Button Grid.Column="3" Classes="linkIcon"
+                            Command="{Binding $parent[UserControl].((vm:KeybindsViewModel)DataContext).RemoveKeyCommand}"
+                            CommandParameter="{Binding}"
+                            IsEnabled="{Binding $parent[UserControl].((vm:KeybindsViewModel)DataContext).CanEdit}"
+                            ToolTip.Tip="{Binding $parent[UserControl].((vm:KeybindsViewModel)DataContext).Localization[KeybindRemoveLabel]}">
+                        <iconPacks:PackIconPhosphorIcons Kind="Trash" Width="16" Height="16" Foreground="{DynamicResource TextMutedColor}"/>
+                    </Button>
+                </Grid>
+            </Border>
+        </DataTemplate>
+
+        <!-- Same as above, plus a muted category tag - only needed once grouping is bypassed by search. -->
+        <DataTemplate x:Key="FlatBindRowTemplate" x:DataType="vm:KeybindRow">
+            <Border Classes="bindRow">
+                <Grid ColumnDefinitions="*,Auto,Auto,Auto">
+                    <StackPanel Grid.Column="0" Spacing="1" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding ActionText}" FontSize="12" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
+                        <TextBlock Text="{Binding CategoryLabel}" FontSize="10" Classes="muted"/>
+                    </StackPanel>
+                    <Border Grid.Column="1" Classes="pill" Margin="8,0,8,0" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding KeyText}"/>
+                    </Border>
+                    <Button Grid.Column="2" Classes="linkIcon" Margin="0,0,4,0"
+                            Command="{Binding $parent[UserControl].((vm:KeybindsViewModel)DataContext).ChangeKeyCommand}"
+                            CommandParameter="{Binding}"
+                            IsEnabled="{Binding $parent[UserControl].((vm:KeybindsViewModel)DataContext).CanEdit}"
+                            ToolTip.Tip="{Binding $parent[UserControl].((vm:KeybindsViewModel)DataContext).Localization[KeybindChangeLabel]}">
+                        <iconPacks:PackIconPhosphorIcons Kind="PencilSimple" Width="16" Height="16" Foreground="{DynamicResource TextMutedColor}"/>
+                    </Button>
+                    <Button Grid.Column="3" Classes="linkIcon"
+                            Command="{Binding $parent[UserControl].((vm:KeybindsViewModel)DataContext).RemoveKeyCommand}"
+                            CommandParameter="{Binding}"
+                            IsEnabled="{Binding $parent[UserControl].((vm:KeybindsViewModel)DataContext).CanEdit}"
+                            ToolTip.Tip="{Binding $parent[UserControl].((vm:KeybindsViewModel)DataContext).Localization[KeybindRemoveLabel]}">
+                        <iconPacks:PackIconPhosphorIcons Kind="Trash" Width="16" Height="16" Foreground="{DynamicResource TextMutedColor}"/>
+                    </Button>
+                </Grid>
+            </Border>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <ScrollViewer>
+        <StackPanel Margin="24" Spacing="20">
+
+            <StackPanel Spacing="4">
+                <TextBlock Text="{Binding Localization[NavKeybinds]}" FontSize="26" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>
+                <TextBlock Text="{Binding Localization[KeybindsPageSubtitle]}" Classes="muted"/>
+            </StackPanel>
+
+            <!-- Add a bind -->
+            <Border Classes="card" Padding="20">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="{Binding Localization[KeybindAddTitle]}" Classes="cardTitle"/>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Content="{Binding Localization[KeybindChooseFromListLabel]}" Classes="accentButton"
+                                Command="{Binding ChooseFromListCommand}" IsEnabled="{Binding CanEdit}"/>
+                        <Button Content="{Binding Localization[KeybindCreateManuallyLabel]}" Classes="secondaryButton"
+                                Command="{Binding CreateManuallyCommand}" IsEnabled="{Binding CanEdit}"/>
+                    </StackPanel>
+                    <TextBlock Text="{Binding Localization[KeybindsRustRunningNotice]}" Classes="muted" FontSize="11" TextWrapping="Wrap"
+                               IsVisible="{Binding !CanEdit}"/>
+                    <TextBlock Text="{Binding StatusText}" Classes="muted" FontSize="11" TextWrapping="Wrap"
+                               IsVisible="{Binding StatusText, Converter={x:Static avconverters:StringConverters.IsNotNullOrEmpty}}"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Bind list: collapsible categories while browsing, a flat filtered list while searching -->
+            <Border Classes="card" Padding="20">
+                <StackPanel Spacing="12">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <TextBlock Grid.Column="0" Text="{Binding Localization[KeybindListTitle]}" Classes="cardTitle" VerticalAlignment="Center"/>
+                        <TextBox Grid.Column="1" Width="220" Text="{Binding SearchText}"
+                                 Watermark="{Binding Localization[KeybindSearchWatermark]}"/>
+                    </Grid>
+
+                    <ItemsControl ItemsSource="{Binding FilteredRows}" ItemTemplate="{StaticResource FlatBindRowTemplate}"
+                                  IsVisible="{Binding IsSearching}"/>
+
+                    <ItemsControl ItemsSource="{Binding Groups}" IsVisible="{Binding !IsSearching}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:KeybindCategoryGroup">
+                                <StackPanel Spacing="2" Margin="0,0,0,4">
+                                    <Button Classes="categoryHeader"
+                                            Command="{Binding $parent[UserControl].((vm:KeybindsViewModel)DataContext).ToggleGroupCommand}"
+                                            CommandParameter="{Binding}">
+                                        <Grid ColumnDefinitions="Auto,*,Auto">
+                                            <iconPacks:PackIconPhosphorIcons Grid.Column="0" Kind="CaretDown" Width="14" Height="14"
+                                                                              Margin="0,0,8,0" VerticalAlignment="Center"
+                                                                              Foreground="{DynamicResource TextMutedColor}"
+                                                                              IsVisible="{Binding IsExpanded}"/>
+                                            <iconPacks:PackIconPhosphorIcons Grid.Column="0" Kind="CaretRight" Width="14" Height="14"
+                                                                              Margin="0,0,8,0" VerticalAlignment="Center"
+                                                                              Foreground="{DynamicResource TextMutedColor}"
+                                                                              IsVisible="{Binding !IsExpanded}"/>
+                                            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding CategoryLabel}" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextColor}"/>
+                                                <Border Classes="pill">
+                                                    <TextBlock Text="{Binding Rows.Count}" FontSize="10"/>
+                                                </Border>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Button>
+
+                                    <ItemsControl ItemsSource="{Binding Rows}" ItemTemplate="{StaticResource BindRowTemplate}"
+                                                  Margin="22,0,0,0" IsVisible="{Binding IsExpanded}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+
+</UserControl>

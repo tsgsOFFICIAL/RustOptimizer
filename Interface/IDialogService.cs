@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace RustOptimizer.Interface;
@@ -48,4 +49,28 @@ public interface IDialogService
     /// <see langword="null"/> if the user cancelled before anything ran.
     /// </summary>
     Task<SmartOptimizationOutcome?> ShowSmartOptimizationAsync(ILocalizationService localization, ISmartOptimizationService smartOptimization, SmartOptimizationPlan plan);
+
+    /// <summary>
+    /// Shows the key-capture dialog: pick a modifier plus a key, either by clicking or by physically
+    /// pressing the combination, with every key's free/used status shown live.
+    /// <paramref name="existingBindings"/> is what's currently bound, for that status.
+    /// <paramref name="excludeToken"/> - the token already being edited, if any - is never reported
+    /// as a conflict with itself. Returns the chosen <see cref="KeyToken"/>, or <see langword="null"/>
+    /// if the user cancelled.
+    /// </summary>
+    Task<KeyToken?> ShowKeyCaptureAsync(ILocalizationService localization, IReadOnlyList<KeyBindingRow> existingBindings, KeyToken? excludeToken);
+
+    /// <summary>
+    /// Shows the "Choose from list" bind catalog: every known Rust action, searchable, with a
+    /// description preview. Returns the picked action's command string, or <see langword="null"/> if
+    /// the user cancelled.
+    /// </summary>
+    Task<string?> ShowBindCatalogAsync(ILocalizationService localization, IReadOnlyList<RustAction> actions);
+
+    /// <summary>
+    /// Shows the manual macro builder: one or more cycle stages, each with one or more command lines
+    /// built from curated convar editors or typed as raw custom commands. Returns the assembled
+    /// command string, or <see langword="null"/> if the user cancelled.
+    /// </summary>
+    Task<string?> ShowBindBuilderAsync(ILocalizationService localization);
 }

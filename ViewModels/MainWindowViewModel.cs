@@ -25,6 +25,7 @@ public sealed class MainWindowViewModel : ViewModelBase
     private readonly ICleanupService _cleanup;
     private readonly IConfigBackupService _configBackup;
     private readonly ISmartOptimizationService _smartOptimization;
+    private readonly IKeybindsService _keybindsService;
 
     private DashboardViewModel? _dashboard;
     private OptimizerViewModel? _optimizer;
@@ -32,6 +33,7 @@ public sealed class MainWindowViewModel : ViewModelBase
     private GraphicsViewModel? _graphics;
     private NetworkViewModel? _network;
     private GameplayViewModel? _gameplay;
+    private KeybindsViewModel? _keybinds;
     private SettingsViewModel? _settingsPage;
     private AboutViewModel? _about;
     private UtilitiesViewModel? _utilities;
@@ -44,7 +46,7 @@ public sealed class MainWindowViewModel : ViewModelBase
     public MainWindowViewModel(IThemeService theme, ILocalizationService localization, IUpdateService updates,
         IRustProcessService rustProcess, ISystemInfoService systemInfo, ISystemTweaksService systemTweaks,
         INetworkTweaksService networkTweaks, IDialogService dialogs, IConfigService configService, IConfigBackupService configBackup,
-        ICleanupService cleanup, ISmartOptimizationService smartOptimization, IAppSettingsService settings)
+        ICleanupService cleanup, ISmartOptimizationService smartOptimization, IKeybindsService keybindsService, IAppSettingsService settings)
         : base(localization)
     {
         _theme = theme;
@@ -59,6 +61,7 @@ public sealed class MainWindowViewModel : ViewModelBase
         _cleanup = cleanup;
         _configBackup = configBackup;
         _smartOptimization = smartOptimization;
+        _keybindsService = keybindsService;
 
         Sidebar = new SidebarViewModel(localization, rustProcess);
         Sidebar.NavigationRequested += (_, page) => Navigate(page);
@@ -162,6 +165,7 @@ public sealed class MainWindowViewModel : ViewModelBase
             SidebarPage.Graphics => _graphics ??= new GraphicsViewModel(Localization, _configService, _settings, _dialogs, Sidebar),
             SidebarPage.Network => _network ??= new NetworkViewModel(Localization, _networkTweaks, _settings, _dialogs),
             SidebarPage.Gameplay => _gameplay ??= new GameplayViewModel(Localization, _configService, Sidebar),
+            SidebarPage.Keybinds => _keybinds ??= new KeybindsViewModel(Localization, _keybindsService, _dialogs, Sidebar),
             // SettingsViewModel reads the Windows registry for the "start with Windows" toggle;
             // this app only ever runs on Windows (see app.manifest), same as Program.cs assumes.
 #pragma warning disable CA1416

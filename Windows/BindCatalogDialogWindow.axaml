@@ -1,0 +1,75 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:RustOptimizer.ViewModels"
+        xmlns:controls="using:RustOptimizer.Controls"
+        xmlns:avconverters="using:Avalonia.Data.Converters"
+        mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="520"
+        x:Class="RustOptimizer.Windows.BindCatalogDialogWindow"
+        x:DataType="vm:BindCatalogDialogViewModel"
+        Title="{Binding Localization[BindCatalogTitle]}"
+        Icon="/Assets/App/logo.ico"
+        Width="640" Height="520"
+        CanResize="False"
+        Background="{DynamicResource BgColor}"
+        WindowStartupLocation="CenterOwner">
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto">
+
+        <controls:TitleBar Grid.Row="0"
+                           Localization="{Binding Localization}"
+                           Title="{Binding Localization[BindCatalogTitle]}"
+                           Author="tsgsOFFICIAL"
+                           ShowMaximizeButton="False">
+            <controls:TitleBar.Icon>
+                <Image Source="/Assets/App/logo.ico"/>
+            </controls:TitleBar.Icon>
+        </controls:TitleBar>
+
+        <TextBox Grid.Row="1" Margin="20,14,20,0" Text="{Binding SearchText}"
+                 Watermark="{Binding Localization[BindCatalogSearchWatermark]}"/>
+
+        <Grid Grid.Row="2" Margin="20,12,20,0" ColumnDefinitions="260,16,*">
+
+            <ListBox Grid.Column="0" ItemsSource="{Binding FilteredRows}" SelectedItem="{Binding SelectedRow}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate x:DataType="vm:CatalogActionRow">
+                        <DockPanel LastChildFill="True" DoubleTapped="OnRowDoubleTapped">
+                            <TextBlock DockPanel.Dock="Top" Text="{Binding DisplayName}" FontSize="12" Foreground="{DynamicResource TextColor}"/>
+                            <TextBlock DockPanel.Dock="Top" Text="{Binding CategoryLabel}" FontSize="10" Classes="muted"/>
+                        </DockPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <Border Grid.Column="2" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" CornerRadius="8" Padding="16">
+                <StackPanel Spacing="10" IsVisible="{Binding SelectedRow, Converter={x:Static avconverters:ObjectConverters.IsNotNull}}">
+                    <TextBlock Text="{Binding SelectedRow.DisplayName}" FontSize="15" FontWeight="SemiBold" Foreground="{DynamicResource TextColor}" TextWrapping="Wrap"/>
+                    <TextBlock Text="{Binding SelectedRow.CategoryLabel}" FontSize="11" Classes="muted"/>
+                    <TextBlock Text="{Binding SelectedRow.DescriptionText}" FontSize="12" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
+                    <StackPanel Spacing="2">
+                        <TextBlock Text="{Binding Localization[BindCatalogCommandLabel]}" FontSize="10" Classes="muted"/>
+                        <TextBlock Text="{Binding SelectedRow.Action.Command}" FontSize="11" FontFamily="Consolas,Cascadia Mono,monospace"
+                                   TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+        </Grid>
+
+        <Border Grid.Row="3"
+                Padding="16"
+                BorderBrush="{DynamicResource BorderColor}"
+                BorderThickness="0,1,0,0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+                <Button Content="{Binding Localization[Cancel]}" Command="{Binding CancelCommand}" Classes="secondaryButton"/>
+                <Button Content="{Binding Localization[BindCatalogUseActionLabel]}" Classes="accentButton"
+                        Command="{Binding SelectCommand}" CommandParameter="{Binding SelectedRow}"
+                        IsEnabled="{Binding SelectedRow, Converter={x:Static avconverters:ObjectConverters.IsNotNull}}"/>
+            </StackPanel>
+        </Border>
+
+    </Grid>
+
+</Window>

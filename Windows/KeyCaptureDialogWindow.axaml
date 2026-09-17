@@ -1,0 +1,282 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:RustOptimizer.ViewModels"
+        xmlns:controls="using:RustOptimizer.Controls"
+        mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="640"
+        x:Class="RustOptimizer.Windows.KeyCaptureDialogWindow"
+        x:DataType="vm:KeyCaptureDialogViewModel"
+        Title="{Binding Localization[KeyCaptureTitle]}"
+        Icon="/Assets/App/logo.ico"
+        Width="900" Height="640"
+        CanResize="False"
+        Background="{DynamicResource BgColor}"
+        WindowStartupLocation="CenterOwner">
+
+    <Window.Styles>
+        <Style Selector="Button.keyChip">
+            <Setter Property="Background" Value="{DynamicResource BorderColorTransparent}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="5" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="Foreground" Value="{DynamicResource TextColor}" />
+            <Setter Property="Height" Value="36" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        <Style Selector="Button.keyChip:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource BorderColor}" />
+        </Style>
+        <Style Selector="Button.keyChip.used">
+            <Setter Property="Opacity" Value="0.5" />
+        </Style>
+        <Style Selector="Button.keyChip.dim">
+            <Setter Property="Opacity" Value="0.28" />
+        </Style>
+        <Style Selector="Button.keyChip.armed">
+            <Setter Property="Background" Value="{StaticResource AccentColor}" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="BorderBrush" Value="{StaticResource AccentColor}" />
+        </Style>
+    </Window.Styles>
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto">
+
+        <controls:TitleBar Grid.Row="0"
+                           Localization="{Binding Localization}"
+                           Title="{Binding Localization[KeyCaptureTitle]}"
+                           Author="tsgsOFFICIAL"
+                           ShowMaximizeButton="False">
+            <controls:TitleBar.Icon>
+                <Image Source="/Assets/App/logo.ico"/>
+            </controls:TitleBar.Icon>
+        </controls:TitleBar>
+
+        <StackPanel Grid.Row="1" Margin="20,16,20,0" Spacing="8" IsVisible="{Binding !IsConfirmingConflict}">
+            <TextBlock Text="{Binding Localization[KeyCaptureIntro]}" TextWrapping="Wrap" FontSize="12" Foreground="{DynamicResource TextColor}"/>
+            <Grid ColumnDefinitions="Auto,*,Auto">
+                <TextBox Grid.Column="0" Width="220" Text="{Binding SearchText}"
+                         Watermark="{Binding Localization[KeyCaptureSearchWatermark]}"/>
+                <Border Grid.Column="2" IsVisible="{Binding HasSelectedModifier}"
+                        Background="{StaticResource AccentColor}" CornerRadius="4" Padding="8,4">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Text="{Binding SelectedModifier.DisplayName}" FontSize="11" FontWeight="SemiBold" Foreground="White"/>
+                        <Button Content="✕" Classes="keyChip" Height="18" Width="18" FontSize="10"
+                                Background="Transparent" BorderThickness="0" Foreground="White"
+                                Command="{Binding ClearModifierCommand}"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="2" Margin="20,12,20,0" IsVisible="{Binding !IsConfirmingConflict}">
+            <StackPanel Orientation="Horizontal" Spacing="24">
+
+                <!-- Keyboard -->
+                <StackPanel Spacing="4" Width="600">
+
+                    <!-- Function row -->
+                    <StackPanel Orientation="Horizontal" Spacing="4">
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [escape]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Rectangle Width="20"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [f1]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [f2]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [f3]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [f4]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Rectangle Width="12"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [f5]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [f6]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [f7]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [f8]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Rectangle Width="12"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [f9]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [f10]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [f11]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [f12]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                    </StackPanel>
+
+                    <Rectangle Height="6"/>
+
+                    <!-- Number row -->
+                    <StackPanel Orientation="Horizontal" Spacing="4">
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [backquote]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [1]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [2]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [3]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [4]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [5]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [6]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [7]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [8]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [9]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [0]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [minus]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [plus]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="72" DataContext="{Binding [backspace]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                    </StackPanel>
+
+                    <!-- Tab row -->
+                    <StackPanel Orientation="Horizontal" Spacing="4">
+                        <Button Classes="keyChip" Width="56" DataContext="{Binding [tab]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [q]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [w]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [e]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [r]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [t]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [y]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [u]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [i]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [o]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [p]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [leftbracket]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [rightbracket]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="56" DataContext="{Binding [backslash]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                    </StackPanel>
+
+                    <!-- Home row -->
+                    <StackPanel Orientation="Horizontal" Spacing="4">
+                        <Button Classes="keyChip" Width="64" DataContext="{Binding [capslock]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [a]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [s]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [d]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [f]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [g]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [h]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [j]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [k]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [l]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [semicolon]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [quote]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="68" DataContext="{Binding [enter]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                    </StackPanel>
+
+                    <!-- Bottom letter row -->
+                    <StackPanel Orientation="Horizontal" Spacing="4">
+                        <Button Classes="keyChip" Width="80" DataContext="{Binding [leftshift]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" Classes.armed="{Binding IsArmedModifier}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [z]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [x]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [c]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [v]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [b]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [n]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [m]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [comma]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [period]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="40" DataContext="{Binding [slash]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="100" DataContext="{Binding [rightshift]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" Classes.armed="{Binding IsArmedModifier}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                    </StackPanel>
+
+                    <!-- Bottom modifier/space row -->
+                    <StackPanel Orientation="Horizontal" Spacing="4">
+                        <Button Classes="keyChip" Width="52" DataContext="{Binding [leftctrl]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" Classes.armed="{Binding IsArmedModifier}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="52" DataContext="{Binding [leftcommand]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="52" DataContext="{Binding [leftalt]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" Classes.armed="{Binding IsArmedModifier}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="256" DataContext="{Binding [space]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="52" DataContext="{Binding [rightalt]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" Classes.armed="{Binding IsArmedModifier}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="52" DataContext="{Binding [menu]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="52" DataContext="{Binding [rightctrl]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" Classes.armed="{Binding IsArmedModifier}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                    </StackPanel>
+
+                    <Rectangle Height="10"/>
+
+                    <!-- Navigation cluster + arrows -->
+                    <StackPanel Orientation="Horizontal" Spacing="16">
+                        <StackPanel Spacing="4">
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <Button Classes="keyChip" Width="56" DataContext="{Binding [insert]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                                <Button Classes="keyChip" Width="56" DataContext="{Binding [home]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                                <Button Classes="keyChip" Width="56" DataContext="{Binding [pageup]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <Button Classes="keyChip" Width="56" DataContext="{Binding [delete]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                                <Button Classes="keyChip" Width="56" DataContext="{Binding [end]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                                <Button Classes="keyChip" Width="56" DataContext="{Binding [pagedown]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <Button Classes="keyChip" Width="56" DataContext="{Binding [scrolllock]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                                <Button Classes="keyChip" Width="56" DataContext="{Binding [pause]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel Spacing="4" VerticalAlignment="Bottom">
+                            <Button Classes="keyChip" Width="40" HorizontalAlignment="Center" DataContext="{Binding [uparrow]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <Button Classes="keyChip" Width="40" DataContext="{Binding [leftarrow]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                                <Button Classes="keyChip" Width="40" DataContext="{Binding [downarrow]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                                <Button Classes="keyChip" Width="40" DataContext="{Binding [rightarrow]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel Spacing="4">
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <Button Classes="keyChip" Width="40" DataContext="{Binding [numpad7]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                                <Button Classes="keyChip" Width="40" DataContext="{Binding [numpad8]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                                <Button Classes="keyChip" Width="40" DataContext="{Binding [numpad9]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                                <Button Classes="keyChip" Width="40" DataContext="{Binding [numpaddivide]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <Button Classes="keyChip" Width="40" DataContext="{Binding [numpad4]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                                <Button Classes="keyChip" Width="40" DataContext="{Binding [numpad5]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                                <Button Classes="keyChip" Width="40" DataContext="{Binding [numpad6]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                                <Button Classes="keyChip" Width="40" DataContext="{Binding [numpadmultiply]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <Button Classes="keyChip" Width="40" DataContext="{Binding [numpad1]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                                <Button Classes="keyChip" Width="40" DataContext="{Binding [numpad2]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                                <Button Classes="keyChip" Width="40" DataContext="{Binding [numpad3]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                                <Button Classes="keyChip" Width="40" DataContext="{Binding [numpadminus]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <Button Classes="keyChip" Width="84" DataContext="{Binding [numpad0]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                                <Button Classes="keyChip" Width="40" DataContext="{Binding [numpadperiod]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                                <Button Classes="keyChip" Width="40" DataContext="{Binding [numpadplus]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+
+                </StackPanel>
+
+                <!-- Mouse -->
+                <Border BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" CornerRadius="24" Padding="10,16" Width="150" VerticalAlignment="Top">
+                    <StackPanel Spacing="4" HorizontalAlignment="Center">
+                        <TextBlock Text="{Binding Localization[KeyCaptureMouseLabel]}" FontSize="11" Foreground="{DynamicResource TextMutedColor}" HorizontalAlignment="Center" Margin="0,0,0,4"/>
+                        <Button Classes="keyChip" Width="60" DataContext="{Binding [mousewheelup]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <StackPanel Orientation="Horizontal" Spacing="4">
+                            <Button Classes="keyChip" Width="60" DataContext="{Binding [mouse0]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                            <Button Classes="keyChip" Width="60" DataContext="{Binding [mouse1]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        </StackPanel>
+                        <Button Classes="keyChip" Width="60" DataContext="{Binding [mouse2]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="60" DataContext="{Binding [mousewheeldown]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Rectangle Height="8"/>
+                        <Button Classes="keyChip" Width="126" DataContext="{Binding [mouse3]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                        <Button Classes="keyChip" Width="126" DataContext="{Binding [mouse4]}" Content="{Binding DisplayName}" Classes.used="{Binding !IsFree}" Classes.dim="{Binding !IsMatch}" ToolTip.Tip="{Binding TooltipText}" Command="{Binding $parent[Window].((vm:KeyCaptureDialogViewModel)DataContext).PressKeyCommand}" CommandParameter="{Binding Token}"/>
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <StackPanel Grid.Row="1" Grid.RowSpan="2" Margin="20,16,20,0" Spacing="16" IsVisible="{Binding IsConfirmingConflict}">
+            <TextBlock Text="{Binding ConflictMessage}" TextWrapping="Wrap" FontSize="13" Foreground="{StaticResource AccentColor}" FontWeight="SemiBold"/>
+            <TextBlock Text="{Binding Localization[KeyCaptureConflictQuestion]}" TextWrapping="Wrap" FontSize="12" Foreground="{DynamicResource TextColor}"/>
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Content="{Binding Localization[Cancel]}" Command="{Binding CancelConflictCommand}" Classes="secondaryButton"/>
+                <Button Content="{Binding Localization[KeyCaptureUseAnywayLabel]}" Command="{Binding ConfirmConflictCommand}" Classes="dangerButton"/>
+            </StackPanel>
+        </StackPanel>
+
+        <Border Grid.Row="3"
+                Padding="16"
+                BorderBrush="{DynamicResource BorderColor}"
+                BorderThickness="0,1,0,0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+                <Button Content="{Binding Localization[Cancel]}" Command="{Binding CancelCommand}" Classes="secondaryButton"/>
+            </StackPanel>
+        </Border>
+
+    </Grid>
+
+</Window>

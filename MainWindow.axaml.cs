@@ -38,10 +38,11 @@ namespace RustOptimizer
             NetworkTweaksService networkTweaks = new();
             ConfigService configService = new(rustProcess, configBackup);
             SmartOptimizationService smartOptimization = new(systemTweaks, networkTweaks, configService, configBackup, systemInfo, rustProcess);
+            KeybindsService keybindsService = new(rustProcess, configBackup);
 
             return new MainWindowViewModel(theme, localization, new UpdateService(), rustProcess,
                 systemInfo, systemTweaks, networkTweaks, new DialogService(),
-                configService, configBackup, new CleanupService(rustProcess), smartOptimization, settings);
+                configService, configBackup, new CleanupService(rustProcess), smartOptimization, keybindsService, settings);
         }
 
         /// <summary>Creates the window bound to the given view model and wires up the startup update check.</summary>

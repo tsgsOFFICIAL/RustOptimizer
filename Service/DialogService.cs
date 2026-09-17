@@ -1,4 +1,5 @@
 using Avalonia.Controls.ApplicationLifetimes;
+using System.Collections.Generic;
 using RustOptimizer.ViewModels;
 using RustOptimizer.Interface;
 using System.Threading.Tasks;
@@ -76,6 +77,36 @@ public sealed class DialogService : IDialogService
         SmartOptimizationDialogViewModel viewModel = new(localization, smartOptimization, plan);
         SmartOptimizationDialogWindow window = new(viewModel);
         return await window.ShowDialog<SmartOptimizationOutcome?>(owner);
+    }
+
+    public async Task<KeyToken?> ShowKeyCaptureAsync(ILocalizationService localization, IReadOnlyList<KeyBindingRow> existingBindings, KeyToken? excludeToken)
+    {
+        if (GetOwner() is not { } owner)
+            return null;
+
+        KeyCaptureDialogViewModel viewModel = new(localization, existingBindings, excludeToken);
+        KeyCaptureDialogWindow window = new(viewModel);
+        return await window.ShowDialog<KeyToken?>(owner);
+    }
+
+    public async Task<string?> ShowBindCatalogAsync(ILocalizationService localization, IReadOnlyList<RustAction> actions)
+    {
+        if (GetOwner() is not { } owner)
+            return null;
+
+        BindCatalogDialogViewModel viewModel = new(localization, actions);
+        BindCatalogDialogWindow window = new(viewModel);
+        return await window.ShowDialog<string?>(owner);
+    }
+
+    public async Task<string?> ShowBindBuilderAsync(ILocalizationService localization)
+    {
+        if (GetOwner() is not { } owner)
+            return null;
+
+        BindBuilderDialogViewModel viewModel = new(localization);
+        BindBuilderDialogWindow window = new(viewModel);
+        return await window.ShowDialog<string?>(owner);
     }
 
     private static Window? GetOwner()

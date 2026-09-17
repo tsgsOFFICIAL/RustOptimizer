@@ -1,0 +1,144 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:RustOptimizer.ViewModels"
+        xmlns:controls="using:RustOptimizer.Controls"
+        mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="620"
+        x:Class="RustOptimizer.Windows.BindBuilderDialogWindow"
+        x:DataType="vm:BindBuilderDialogViewModel"
+        Title="{Binding Localization[BindBuilderTitle]}"
+        Icon="/Assets/App/logo.ico"
+        Width="640" Height="620"
+        CanResize="False"
+        Background="{DynamicResource BgColor}"
+        WindowStartupLocation="CenterOwner">
+
+    <Window.Styles>
+        <Style Selector="Border.stageCard">
+            <Setter Property="Background" Value="{DynamicResource BorderColorTransparent}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Padding" Value="14" />
+        </Style>
+    </Window.Styles>
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto,Auto">
+
+        <controls:TitleBar Grid.Row="0"
+                           Localization="{Binding Localization}"
+                           Title="{Binding Localization[BindBuilderTitle]}"
+                           Author="tsgsOFFICIAL"
+                           ShowMaximizeButton="False">
+            <controls:TitleBar.Icon>
+                <Image Source="/Assets/App/logo.ico"/>
+            </controls:TitleBar.Icon>
+        </controls:TitleBar>
+
+        <TextBlock Grid.Row="1" Margin="20,14,20,0" Text="{Binding Localization[BindBuilderIntro]}"
+                   TextWrapping="Wrap" FontSize="12" Foreground="{DynamicResource TextColor}"/>
+
+        <ScrollViewer Grid.Row="2" Margin="20,12,20,0">
+            <ItemsControl ItemsSource="{Binding Stages}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Spacing="10"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:BindStageEditorRow">
+                        <Border Classes="stageCard">
+                            <StackPanel Spacing="10">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TextBlock Grid.Column="0" Text="{Binding Localization[BindBuilderStageLabel]}"
+                                               FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource TextColor}"/>
+                                    <Button Grid.Column="1" Content="{Binding Localization[BindBuilderRemoveStageLabel]}"
+                                            Classes="secondaryButton" FontSize="11" Padding="8,3"
+                                            IsVisible="{Binding $parent[Window].((vm:BindBuilderDialogViewModel)DataContext).CanRemoveStage}"
+                                            Command="{Binding $parent[Window].((vm:BindBuilderDialogViewModel)DataContext).RemoveStageCommand}"
+                                            CommandParameter="{Binding}"/>
+                                </Grid>
+
+                                <ItemsControl ItemsSource="{Binding Lines}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Spacing="8"/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate x:DataType="vm:BindLineEditorRow">
+                                            <Grid ColumnDefinitions="180,*,Auto" ColumnSpacing="8">
+                                                <ComboBox Grid.Column="0" ItemsSource="{Binding Options}" SelectedItem="{Binding SelectedConvar}"
+                                                          HorizontalAlignment="Stretch">
+                                                    <ComboBox.ItemTemplate>
+                                                        <DataTemplate x:DataType="vm:ConvarPickerOption">
+                                                            <TextBlock Text="{Binding DisplayText}"/>
+                                                        </DataTemplate>
+                                                    </ComboBox.ItemTemplate>
+                                                </ComboBox>
+
+                                                <Grid Grid.Column="1" ColumnDefinitions="*,Auto" IsVisible="{Binding IsSlider}">
+                                                    <Slider Grid.Column="0" Minimum="{Binding SliderMin}" Maximum="{Binding SliderMax}"
+                                                            TickFrequency="{Binding SliderStep}" IsSnapToTickEnabled="True"
+                                                            Value="{Binding SliderValue}" VerticalAlignment="Center"/>
+                                                    <TextBlock Grid.Column="1" Text="{Binding SliderValue}" Width="44" TextAlignment="Right"
+                                                               VerticalAlignment="Center" FontSize="12" Foreground="{DynamicResource TextColor}" Margin="6,0,0,0"/>
+                                                </Grid>
+
+                                                <ToggleSwitch Grid.Column="1" IsVisible="{Binding IsToggle}" IsChecked="{Binding ToggleOn}"
+                                                              OnContent="{Binding Localization[BindBuilderOnLabel]}" OffContent="{Binding Localization[BindBuilderOffLabel]}"
+                                                              HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+                                                <TextBox Grid.Column="1" IsVisible="{Binding IsText}" Text="{Binding TextValue}"
+                                                         Watermark="{Binding Localization[BindBuilderToastWatermark]}" VerticalAlignment="Center"/>
+
+                                                <TextBox Grid.Column="1" IsVisible="{Binding IsCustom}" Text="{Binding CustomText}"
+                                                         Watermark="{Binding Localization[BindBuilderCustomWatermark]}" VerticalAlignment="Center"
+                                                         FontFamily="Consolas,Cascadia Mono,monospace"/>
+
+                                                <Button Grid.Column="2" Content="✕" Width="28" Height="28" Padding="0" FontSize="12"
+                                                        Classes="secondaryButton"
+                                                        IsVisible="{Binding $parent[ItemsControl].((vm:BindStageEditorRow)DataContext).CanRemoveLine}"
+                                                        Command="{Binding $parent[ItemsControl].((vm:BindStageEditorRow)DataContext).RemoveLineCommand}"
+                                                        CommandParameter="{Binding}"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+
+                                <Button Content="{Binding Localization[BindBuilderAddCommandLabel]}" Classes="secondaryButton" FontSize="11"
+                                        Padding="10,4" HorizontalAlignment="Left" Command="{Binding AddLineCommand}"/>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <StackPanel Grid.Row="3" Margin="20,12,20,0" Spacing="6">
+            <Button Content="{Binding Localization[BindBuilderAddStageLabel]}" Classes="secondaryButton" HorizontalAlignment="Left"
+                    Command="{Binding AddStageCommand}"/>
+            <Border Background="{DynamicResource BorderColorTransparent}" CornerRadius="6" Padding="10,8">
+                <StackPanel Spacing="2">
+                    <TextBlock Text="{Binding Localization[BindBuilderPreviewLabel]}" FontSize="10" Classes="muted"/>
+                    <TextBlock Text="{Binding PreviewText}" FontSize="11" FontFamily="Consolas,Cascadia Mono,monospace"
+                               TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+
+        <Border Grid.Row="4"
+                Padding="16"
+                BorderBrush="{DynamicResource BorderColor}"
+                BorderThickness="0,1,0,0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+                <Button Content="{Binding Localization[Cancel]}" Command="{Binding CancelCommand}" Classes="secondaryButton"/>
+                <Button Content="{Binding Localization[BindBuilderSaveLabel]}" Command="{Binding SaveCommand}"
+                        Classes="accentButton" IsEnabled="{Binding CanSave}"/>
+            </StackPanel>
+        </Border>
+
+    </Grid>
+
+</Window>
