@@ -350,8 +350,30 @@ public sealed class DashboardViewModel : ViewModelBase
         }
     }
 
-    /// <summary>The hero card's "Last scan" value - "Never" until the first Smart Optimization run this session, then the time it finished.</summary>
-    public string LastScanText => _lastScanTime is { } time ? time.ToString("t") : Localization["LastScanNever"];
+    /// <summary>
+    /// The hero card's "Last scan" value - "Never" until the first Smart Optimization run this
+    /// session, then just the time ("2:59 PM") for a scan from earlier today, "Yesterday, 2:59 PM"
+    /// for one from the day before, or a full date for anything older - so a stale scan doesn't
+    /// read as if it just happened.
+    /// </summary>
+    public string LastScanText
+    {
+        get
+        {
+            if (_lastScanTime is not { } time)
+                return Localization["LastScanNever"];
+
+            string timePart = time.ToString("t");
+            DateTime today = DateTime.Now.Date;
+
+            if (time.Date == today)
+                return timePart;
+
+            return time.Date == today.AddDays(-1)
+                ? $"{Localization["Yesterday"]}, {timePart}"
+                : $"{time:yyyy-MM-dd}, {timePart}";
+        }
+    }
 
     /// <summary>Status line shown under the Smart Optimization button after a run - "already optimized", what was applied, or that some changes couldn't complete.</summary>
     public string SmartOptimizationStatusText
