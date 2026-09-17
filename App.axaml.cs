@@ -42,6 +42,7 @@ namespace RustOptimizer
             IConfigService configService = services.GetRequiredService<IConfigService>();
             IConfigBackupService configBackup = services.GetRequiredService<IConfigBackupService>();
             ICleanupService cleanup = services.GetRequiredService<ICleanupService>();
+            ISmartOptimizationService smartOptimization = services.GetRequiredService<ISmartOptimizationService>();
 
             // Settings first: the theme and language services both source their value from here.
             settings.Initialize();
@@ -53,7 +54,7 @@ namespace RustOptimizer
             AppLog.ApplyRetention(settings.Current.LogRetentionDays);
             AppLog.ApplyVerbose(settings.Current.VerboseLogging);
 
-            MainWindowViewModel viewModel = new(theme, localization, updates, rustProcess, systemInfo, systemTweaks, networkTweaks, dialogs, configService, configBackup, cleanup, settings);
+            MainWindowViewModel viewModel = new(theme, localization, updates, rustProcess, systemInfo, systemTweaks, networkTweaks, dialogs, configService, configBackup, cleanup, smartOptimization, settings);
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
                 desktop.MainWindow = new MainWindow(viewModel);

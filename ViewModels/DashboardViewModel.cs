@@ -13,7 +13,8 @@ namespace RustOptimizer.ViewModels;
 /// once - live usage and deeper detail live on the full System page, reachable via
 /// <see cref="SystemDetailsRequested"/>. Rust's running state is tracked by <see cref="SidebarViewModel"/>
 /// (always visible, already polling it) rather than polled again here. Also drives the
-/// Optimization Overview's System and Network tiles, scored from the same tweaks their own pages use.
+/// Optimization Overview's four tiles (System/Network/Gameplay scored, Graphics a profile-match
+/// badge) and the Smart Optimization hero button, via <see cref="ISmartOptimizationService"/>.
 /// </summary>
 public sealed class DashboardViewModel : ViewModelBase
 {
@@ -24,6 +25,7 @@ public sealed class DashboardViewModel : ViewModelBase
     private readonly ISystemInfoService _systemInfo;
     private readonly ICleanupService _cleanup;
     private readonly IDialogService _dialogs;
+    private readonly ISmartOptimizationService _smartOptimization;
     private readonly SidebarViewModel _sidebar;
     private const string NotAvailable = "N/A";
 
@@ -42,6 +44,10 @@ public sealed class DashboardViewModel : ViewModelBase
     private IReadOnlyList<string> _systemOutstandingLabelKeys = [];
     private OptimizationCategoryScore _networkScore;
     private IReadOnlyList<string> _networkOutstandingLabelKeys = [];
+    private OptimizationCategoryScore _gameplayScore;
+    private IReadOnlyList<string> _gameplayOutstandingLabelKeys = [];
+    private DateTime? _lastScanTime;
+    private string _smartOptimizationStatusText = "";
 
     // Keeps each tile's "what's wrong" summary compact - beyond this many, the rest are only a
     // click away on the tile's own full page anyway.
@@ -50,7 +56,7 @@ public sealed class DashboardViewModel : ViewModelBase
     /// <summary>Creates the view model, resolves the card's hardware identity strings once, and kicks off the System/Network scores' async loads.</summary>
     public DashboardViewModel(ILocalizationService localization, ISystemInfoService systemInfo, ISystemTweaksService systemTweaks,
         INetworkTweaksService networkTweaks, IRustProcessService rustProcess, IConfigService configService,
-        ICleanupService cleanup, IDialogService dialogs, SidebarViewModel sidebar)
+        ICleanupService cleanup, IDialogService dialogs, ISmartOptimizationService smartOptimization, SidebarViewModel sidebar)
         : base(localization)
     {
         _rustProcess = rustProcess;
@@ -60,24 +66,28 @@ public sealed class DashboardViewModel : ViewModelBase
         _systemInfo = systemInfo;
         _cleanup = cleanup;
         _dialogs = dialogs;
+        _smartOptimization = smartOptimization;
         _sidebar = sidebar;
         _sidebar.PropertyChanged += OnSidebarPropertyChanged;
 
-        // SystemIssuesSummaryText/NetworkIssuesSummaryText are built from localized strings in C#,
-        // not a plain {Binding Localization[Key]} lookup, so they need to be manually re-raised on language switch.
+        // SystemIssuesSummaryText/NetworkIssuesSummaryText/GameplayIssuesSummaryText are built from
+        // localized strings in C#, not a plain {Binding Localization[Key]} lookup, so they need to be
+        // manually re-raised on language switch. GraphicsProfileStatusText/LastScanText read
+        // Localization directly in their getters, so re-raising them just re-invokes those getters.
         Localization.PropertyChanged += (_, e) =>
         {
             if (e.PropertyName is "Item" or null)
             {
                 OnPropertyChanged(nameof(SystemIssuesSummaryText));
                 OnPropertyChanged(nameof(NetworkIssuesSummaryText));
+                OnPropertyChanged(nameof(GameplayIssuesSummaryText));
+                OnPropertyChanged(nameof(GraphicsProfileStatusText));
+                OnPropertyChanged(nameof(GraphicsProfileTagText));
+                OnPropertyChanged(nameof(LastScanText));
             }
         };
 
-        RunSmartOptimizationCommand = new RelayCommand(() =>
-        {
-            // Mock data only for now - no real optimization logic wired up yet.
-        });
+        RunSmartOptimizationCommand = new RelayCommand(() => _ = RunSmartOptimizationAsync());
 
         VerifyRustFilesCommand = new RelayCommand(VerifyRustFiles);
         OptimizeStartupCommand = new RelayCommand(OptimizeStartup);
@@ -85,6 +95,7 @@ public sealed class DashboardViewModel : ViewModelBase
         ApplyPresetCommand = new RelayCommand<string>(ApplyPreset);
         ViewSystemDetailsCommand = new RelayCommand(() => SystemDetailsRequested?.Invoke(this, EventArgs.Empty));
         ViewNetworkDetailsCommand = new RelayCommand(() => NetworkDetailsRequested?.Invoke(this, EventArgs.Empty));
+        ViewGameplayDetailsCommand = new RelayCommand(() => GameplayDetailsRequested?.Invoke(this, EventArgs.Empty));
         ManageProfilesCommand = new RelayCommand(() => ManageProfilesRequested?.Invoke(this, EventArgs.Empty));
         UpdateDriversCommand = new RelayCommand(() => _ = _dialogs.ShowUpdateDriversAsync(Localization, _systemInfo));
 
@@ -102,7 +113,7 @@ public sealed class DashboardViewModel : ViewModelBase
     /// </summary>
     public event EventHandler? SystemDetailsRequested;
 
-    /// <summary>Placeholder command for the not-yet-implemented smart optimization feature.</summary>
+    /// <summary>Builds and, on confirmation, applies a Smart Optimization plan. See <see cref="RunSmartOptimizationAsync"/>.</summary>
     public RelayCommand RunSmartOptimizationCommand { get; }
 
     /// <summary>Verifies Rust's game files via Steam.</summary>
@@ -128,6 +139,15 @@ public sealed class DashboardViewModel : ViewModelBase
 
     /// <summary>Raises <see cref="NetworkDetailsRequested"/> to navigate to the Network page.</summary>
     public RelayCommand ViewNetworkDetailsCommand { get; }
+
+    /// <summary>
+    /// Raised when the Optimization Overview's Gameplay tile is clicked, so the shell can navigate
+    /// to the full Gameplay page.
+    /// </summary>
+    public event EventHandler? GameplayDetailsRequested;
+
+    /// <summary>Raises <see cref="GameplayDetailsRequested"/> to navigate to the Gameplay page.</summary>
+    public RelayCommand ViewGameplayDetailsCommand { get; }
 
     /// <summary>
     /// Raised when the "Manage Profiles" row on the Preset Profiles card is clicked, so the shell can
@@ -264,6 +284,83 @@ public sealed class DashboardViewModel : ViewModelBase
     public string NetworkIssuesSummaryText => BuildIssuesSummaryText(_networkOutstandingLabelKeys);
 
     /// <summary>
+    /// The Gameplay category's optimization tally for the Optimization Overview - how many of the
+    /// "recommended for everyone" Gameplay tweaks are currently applied, scored via
+    /// <see cref="GameplayOptimizationRecommendations"/>. Zero/zero until <see cref="LoadGameplayScoreAsync"/> finishes.
+    /// </summary>
+    public OptimizationCategoryScore GameplayScore
+    {
+        get => _gameplayScore;
+        private set => SetProperty(ref _gameplayScore, value);
+    }
+
+    /// <summary>
+    /// A short, comma-separated preview of which "recommended for everyone" Gameplay tweaks aren't
+    /// applied yet, or "" once every one of them is. Capped at <see cref="MaxIssuesShown"/>, same as
+    /// <see cref="SystemIssuesSummaryText"/>.
+    /// </summary>
+    public string GameplayIssuesSummaryText => BuildIssuesSummaryText(_gameplayOutstandingLabelKeys);
+
+    /// <summary>
+    /// The Graphics tile's badge text: the matched built-in preset's name, <c>"Custom"</c> if
+    /// client.cfg matches none of them, or <see cref="NotAvailable"/> if Rust isn't installed.
+    /// Unlike System/Network/Gameplay, graphics quality has no single "correct" value, so this is a
+    /// status badge rather than a numeric score - see <see cref="ISmartOptimizationService"/>'s own
+    /// reasoning for never treating a graphics preset as right/wrong.
+    /// </summary>
+    public string GraphicsProfileStatusText
+    {
+        get
+        {
+            if (!IsRustInstalled)
+                return NotAvailable;
+
+            if (_configService.CurrentConfigMatchesPreset(ConfigPreset.LowEndPc))
+                return Localization["ProfileLowEndPc"];
+            if (_configService.CurrentConfigMatchesPreset(ConfigPreset.Competitive))
+                return Localization["ProfileCompetitive"];
+            if (_configService.CurrentConfigMatchesPreset(ConfigPreset.Cinematic))
+                return Localization["ProfileCinematic"];
+
+            return Localization["GraphicsProfileCustom"];
+        }
+    }
+
+    /// <summary>
+    /// The matched built-in preset's own descriptive tag ("High FPS"/"Recommended"/"Best Quality" -
+    /// the same tags the Preset Profiles card shows next to each preset), or "" for Custom/not
+    /// installed. Fills the Graphics tile's second line so it carries the same visual weight as the
+    /// scored tiles' progress bar row, without inventing a fake score for it.
+    /// </summary>
+    public string GraphicsProfileTagText
+    {
+        get
+        {
+            if (!IsRustInstalled)
+                return "";
+
+            if (_configService.CurrentConfigMatchesPreset(ConfigPreset.LowEndPc))
+                return Localization["TagHighFps"];
+            if (_configService.CurrentConfigMatchesPreset(ConfigPreset.Competitive))
+                return Localization["TagRecommended"];
+            if (_configService.CurrentConfigMatchesPreset(ConfigPreset.Cinematic))
+                return Localization["TagBestQuality"];
+
+            return "";
+        }
+    }
+
+    /// <summary>The hero card's "Last scan" value - "Never" until the first Smart Optimization run this session, then the time it finished.</summary>
+    public string LastScanText => _lastScanTime is { } time ? time.ToString("t") : Localization["LastScanNever"];
+
+    /// <summary>Status line shown under the Smart Optimization button after a run - "already optimized", what was applied, or that some changes couldn't complete.</summary>
+    public string SmartOptimizationStatusText
+    {
+        get => _smartOptimizationStatusText;
+        private set => SetProperty(ref _smartOptimizationStatusText, value);
+    }
+
+    /// <summary>
     /// Builds a tile's "what's wrong" summary from its outstanding check label keys, capped at
     /// <see cref="MaxIssuesShown"/> - shared by <see cref="SystemIssuesSummaryText"/> and
     /// <see cref="NetworkIssuesSummaryText"/> so both tiles read identically.
@@ -297,6 +394,80 @@ public sealed class DashboardViewModel : ViewModelBase
     /// tweaks made on the Network page while this view model sat cached wouldn't otherwise be reflected.
     /// </summary>
     public void RefreshNetworkScore() => _ = LoadNetworkScoreAsync();
+
+    /// <summary>
+    /// Re-fetches <see cref="GameplayScore"/>. Call whenever the Dashboard becomes visible again -
+    /// tweaks made on the Gameplay page while this view model sat cached wouldn't otherwise be reflected.
+    /// </summary>
+    public void RefreshGameplayScore() => _ = LoadGameplayScoreAsync();
+
+    /// <summary>Re-raises <see cref="GraphicsProfileStatusText"/>/<see cref="GraphicsProfileTagText"/> so they re-read client.cfg. Call whenever the Dashboard becomes visible again, same as the score refreshes.</summary>
+    public void RefreshGraphicsProfileStatus()
+    {
+        OnPropertyChanged(nameof(GraphicsProfileStatusText));
+        OnPropertyChanged(nameof(GraphicsProfileTagText));
+    }
+
+    /// <summary>Loads the Gameplay score off the UI thread, independent of whether the Gameplay page itself has ever been visited.</summary>
+    private async Task LoadGameplayScoreAsync()
+    {
+        (IReadOnlyList<GameplayTweak> tweaks, IReadOnlyDictionary<string, string> current) = await Task.Run(() =>
+        {
+            IReadOnlyList<GameplayTweak> t = _configService.GetRecommendedGameplayTweaks();
+            IReadOnlyDictionary<string, string> c = _configService.ReadConvars(t.SelectMany(tweak => tweak.Convars.Select(cv => cv.Convar)).ToList());
+            return (t, c);
+        });
+
+        GameplayOptimizationInputs inputs = new(tweaks, current);
+        GameplayScore = GameplayOptimizationRecommendations.Score(inputs);
+        _gameplayOutstandingLabelKeys = GameplayOptimizationRecommendations.GetOutstandingLabelKeys(inputs);
+        OnPropertyChanged(nameof(GameplayIssuesSummaryText));
+    }
+
+    /// <summary>
+    /// Builds a Smart Optimization plan and, unless there's nothing outstanding, shows the confirm
+    /// prompt and applies it on confirmation - refreshing every tile and the "Last scan" time
+    /// afterward. Shared logic with the Optimizer page's own button lives in
+    /// <see cref="ISmartOptimizationService"/>, so both drive identical behavior.
+    /// </summary>
+    private async Task RunSmartOptimizationAsync()
+    {
+        SmartOptimizationPlan plan = await Task.Run(_smartOptimization.BuildPlan);
+
+        if (plan.IsEmpty)
+        {
+            SmartOptimizationStatusText = Localization["OptimizerAlreadyOptimizedText"];
+            return;
+        }
+
+        if (await _dialogs.ShowSmartOptimizationAsync(Localization, _smartOptimization, plan) is not { } outcome)
+            return;
+
+        RefreshSystemScore();
+        RefreshNetworkScore();
+        RefreshGameplayScore();
+        RefreshGraphicsProfileStatus();
+
+        _lastScanTime = DateTime.Now;
+        OnPropertyChanged(nameof(LastScanText));
+
+        SmartOptimizationStatusText = Localization[HasPartialFailure(plan, outcome) ? "SmartOptimizationPartialText" : "SmartOptimizationAppliedText"];
+    }
+
+    /// <summary>
+    /// Whether anything the plan asked for didn't actually happen - a requested Network batch that
+    /// failed or was declined, or a requested Gameplay/Graphics write that failed (most commonly
+    /// because Rust was running at apply time, which <see cref="IConfigService.SetConvars"/> always
+    /// refuses). Drives whether the post-run status reads "applied" or "partially applied".
+    /// </summary>
+    private static bool HasPartialFailure(SmartOptimizationPlan plan, SmartOptimizationOutcome outcome)
+    {
+        bool networkFailed = outcome.NetworkChangesRequested > 0 && (!outcome.NetworkChangesApplied || outcome.NetworkElevationCancelled);
+        bool gameplayFailed = plan.Changes.Any(c => c.Category == OptimizationCategory.Gameplay) && !outcome.GameplayChangesApplied;
+        bool graphicsFailed = plan.RecommendedGraphicsPreset is not null && !outcome.GraphicsPresetApplied;
+
+        return networkFailed || gameplayFailed || graphicsFailed;
+    }
 
     /// <summary>Loads the Network score off the UI thread, independent of whether the Network page itself has ever been visited.</summary>
     private async Task LoadNetworkScoreAsync()
@@ -423,6 +594,9 @@ public sealed class DashboardViewModel : ViewModelBase
 
         bool success = _configService.ApplyPreset(preset);
         PresetStatusText = Localization[success ? "PresetApplied" : "PresetApplyFailed"];
+
+        if (success)
+            RefreshGraphicsProfileStatus();
     }
 
     /// <summary>Formats total installed RAM capacity, or <see cref="NotAvailable"/> if unknown.</summary>

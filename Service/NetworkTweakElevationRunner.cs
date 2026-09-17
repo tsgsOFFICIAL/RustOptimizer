@@ -1,5 +1,6 @@
 using RustOptimizer.Service.Logging;
 using System.Runtime.Versioning;
+using System.Collections.Generic;
 using RustOptimizer.Interface;
 
 namespace RustOptimizer.Service;
@@ -33,6 +34,22 @@ public static class NetworkTweakElevationRunner
         };
 
         return success ? 0 : 1;
+    }
+
+    /// <summary>
+    /// Applies every given network tweak in this one elevated process - one UAC prompt for Smart
+    /// Optimization's whole batch instead of one per tweak. Best-effort: a failure on one key
+    /// doesn't stop the rest from being attempted. Returns 0 only if every tweak in the batch
+    /// succeeded, matching <see cref="Run"/>'s single-tweak contract.
+    /// </summary>
+    [SupportedOSPlatform("windows")]
+    public static int RunBatch(IReadOnlyList<(string Key, string Value)> tweaks)
+    {
+        bool allSucceeded = true;
+        foreach ((string key, string value) in tweaks)
+            allSucceeded &= Run(key, value) == 0;
+
+        return allSucceeded ? 0 : 1;
     }
 
     /// <summary>Logs an unrecognized tweak key and reports failure.</summary>

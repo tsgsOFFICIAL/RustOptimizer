@@ -41,4 +41,11 @@ public interface IDialogService
     /// a link to its vendor's own driver page where one is known.
     /// </summary>
     Task ShowUpdateDriversAsync(ILocalizationService localization, ISystemInfoService systemInfo);
+
+    /// <summary>
+    /// Shows the Smart Optimization confirm prompt for an already-built <paramref name="plan"/> and,
+    /// if confirmed, applies it itself before closing. Returns the applied outcome, or
+    /// <see langword="null"/> if the user cancelled before anything ran.
+    /// </summary>
+    Task<SmartOptimizationOutcome?> ShowSmartOptimizationAsync(ILocalizationService localization, ISmartOptimizationService smartOptimization, SmartOptimizationPlan plan);
 }

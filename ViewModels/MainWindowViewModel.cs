@@ -24,8 +24,10 @@ public sealed class MainWindowViewModel : ViewModelBase
     private readonly IConfigService _configService;
     private readonly ICleanupService _cleanup;
     private readonly IConfigBackupService _configBackup;
+    private readonly ISmartOptimizationService _smartOptimization;
 
     private DashboardViewModel? _dashboard;
+    private OptimizerViewModel? _optimizer;
     private SystemViewModel? _system;
     private GraphicsViewModel? _graphics;
     private NetworkViewModel? _network;
@@ -42,7 +44,7 @@ public sealed class MainWindowViewModel : ViewModelBase
     public MainWindowViewModel(IThemeService theme, ILocalizationService localization, IUpdateService updates,
         IRustProcessService rustProcess, ISystemInfoService systemInfo, ISystemTweaksService systemTweaks,
         INetworkTweaksService networkTweaks, IDialogService dialogs, IConfigService configService, IConfigBackupService configBackup,
-        ICleanupService cleanup, IAppSettingsService settings)
+        ICleanupService cleanup, ISmartOptimizationService smartOptimization, IAppSettingsService settings)
         : base(localization)
     {
         _theme = theme;
@@ -56,6 +58,7 @@ public sealed class MainWindowViewModel : ViewModelBase
         _configService = configService;
         _cleanup = cleanup;
         _configBackup = configBackup;
+        _smartOptimization = smartOptimization;
 
         Sidebar = new SidebarViewModel(localization, rustProcess);
         Sidebar.NavigationRequested += (_, page) => Navigate(page);
@@ -65,9 +68,10 @@ public sealed class MainWindowViewModel : ViewModelBase
         OpenDiscordCommand = new RelayCommand(() => Utility.OpenUrl(ProjectLinks.Discord));
         OpenKofiCommand = new RelayCommand(() => Utility.OpenUrl(ProjectLinks.KoFi));
 
-        _dashboard = new DashboardViewModel(localization, systemInfo, systemTweaks, networkTweaks, rustProcess, configService, cleanup, dialogs, Sidebar);
+        _dashboard = new DashboardViewModel(localization, systemInfo, systemTweaks, networkTweaks, rustProcess, configService, cleanup, dialogs, smartOptimization, Sidebar);
         _dashboard.SystemDetailsRequested += (_, _) => Sidebar.NavigateTo(SidebarPage.System);
         _dashboard.NetworkDetailsRequested += (_, _) => Sidebar.NavigateTo(SidebarPage.Network);
+        _dashboard.GameplayDetailsRequested += (_, _) => Sidebar.NavigateTo(SidebarPage.Gameplay);
         _dashboard.ManageProfilesRequested += (_, _) => Sidebar.NavigateTo(SidebarPage.Graphics);
         CurrentPage = _dashboard;
     }
@@ -145,14 +149,15 @@ public sealed class MainWindowViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Swaps <see cref="CurrentPage"/> to match the sidebar selection. Dashboard/System/Graphics/Network/Gameplay/
-    /// Settings/About/Utilities/BackupRestore have real content; every other page is still a "coming soon" placeholder pending later phases.
+    /// Swaps <see cref="CurrentPage"/> to match the sidebar selection. Every page has real content
+    /// except whatever <see cref="ShowComingSoon"/> still covers.
     /// </summary>
     private void Navigate(SidebarPage page)
     {
         CurrentPage = page switch
         {
-            SidebarPage.Dashboard => _dashboard ??= new DashboardViewModel(Localization, _systemInfo, _systemTweaks, _networkTweaks, _rustProcess, _configService, _cleanup, _dialogs, Sidebar),
+            SidebarPage.Dashboard => _dashboard ??= new DashboardViewModel(Localization, _systemInfo, _systemTweaks, _networkTweaks, _rustProcess, _configService, _cleanup, _dialogs, _smartOptimization, Sidebar),
+            SidebarPage.Optimizer => _optimizer ??= new OptimizerViewModel(Localization, _smartOptimization, _dialogs, _systemTweaks, _networkTweaks, _configService, _systemInfo, _rustProcess, Sidebar),
             SidebarPage.System => _system ??= new SystemViewModel(Localization, _systemInfo, _systemTweaks, _rustProcess),
             SidebarPage.Graphics => _graphics ??= new GraphicsViewModel(Localization, _configService, _settings, _dialogs, Sidebar),
             SidebarPage.Network => _network ??= new NetworkViewModel(Localization, _networkTweaks, _settings, _dialogs),

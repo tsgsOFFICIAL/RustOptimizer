@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using RustOptimizer.Service.Logging;
+using System.Collections.Generic;
 using RustOptimizer.Interface;
 using RustOptimizer.Service;
 using Avalonia;
@@ -23,14 +24,17 @@ namespace RustOptimizer
             // Elevated re-launches (see ElevationHelper) are handled before the DI container/Avalonia
             // lifetime are built at all, since neither path ever shows a window.
 #pragma warning disable CA1416 // This app only ever runs on Windows (see app.manifest); both elevated runners are Windows-only.
-            if (args is ["--apply-network-tweak", _, _] or [CleanupElevationRunner.Argument])
+            if (args is ["--apply-network-tweak", _, _] or ["--apply-network-tweaks", ..] or [CleanupElevationRunner.Argument])
             {
                 int exitCode;
                 try
                 {
-                    exitCode = args[0] == CleanupElevationRunner.Argument
-                        ? CleanupElevationRunner.Run()
-                        : NetworkTweakElevationRunner.Run(args[1], args[2]);
+                    exitCode = args[0] switch
+                    {
+                        CleanupElevationRunner.Argument => CleanupElevationRunner.Run(),
+                        "--apply-network-tweaks" => NetworkTweakElevationRunner.RunBatch(ParseNetworkTweakPairs(args)),
+                        _ => NetworkTweakElevationRunner.Run(args[1], args[2])
+                    };
                 }
                 catch (Exception ex)
                 {
@@ -64,6 +68,7 @@ namespace RustOptimizer
                     .AddSingleton<IConfigBackupService, ConfigBackupService>()
                     .AddSingleton<IConfigService, ConfigService>()
                     .AddSingleton<ICleanupService, CleanupService>()
+                    .AddSingleton<ISmartOptimizationService, SmartOptimizationService>()
                     .BuildServiceProvider();
 #pragma warning restore CA1416
 
@@ -89,5 +94,19 @@ namespace RustOptimizer
 #endif
                 .WithInterFont()
                 .LogToTrace();
+
+        /// <summary>
+        /// Pairs up "--apply-network-tweaks key1 value1 key2 value2 ..." into (key, value) tuples for
+        /// <see cref="NetworkTweakElevationRunner.RunBatch"/>. A trailing unpaired key (a malformed
+        /// re-launch - this app only ever constructs these args itself) is simply dropped.
+        /// </summary>
+        private static IReadOnlyList<(string Key, string Value)> ParseNetworkTweakPairs(string[] args)
+        {
+            List<(string, string)> pairs = [];
+            for (int i = 1; i + 1 < args.Length; i += 2)
+                pairs.Add((args[i], args[i + 1]));
+
+            return pairs;
+        }
     }
 }

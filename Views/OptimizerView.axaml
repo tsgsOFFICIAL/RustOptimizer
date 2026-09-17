@@ -1,0 +1,160 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:iconPacks="https://github.com/MahApps/IconPacks.Avalonia"
+             xmlns:vm="using:RustOptimizer.ViewModels"
+             xmlns:converters="using:RustOptimizer.Converters"
+             xmlns:avconverters="using:Avalonia.Data.Converters"
+             mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="900"
+             x:Class="RustOptimizer.Views.OptimizerView"
+             x:DataType="vm:OptimizerViewModel">
+
+    <UserControl.Styles>
+        <Style Selector="TextBlock.cardTitle">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextColor}"/>
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer>
+        <StackPanel Margin="24" Spacing="24">
+
+            <StackPanel Spacing="4">
+                <TextBlock Text="{Binding Localization[NavOptimizer]}" FontSize="26" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>
+                <TextBlock Text="{Binding Localization[OptimizerPageSubtitle]}" Classes="muted"/>
+            </StackPanel>
+
+            <!-- Hero -->
+            <Border Classes="card" Padding="24">
+                <StackPanel Spacing="12">
+                    <StackPanel Orientation="Horizontal" Spacing="16" VerticalAlignment="Center">
+                        <Button Classes="accentButton" Command="{Binding RunSmartOptimizationCommand}">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <iconPacks:PackIconPhosphorIcons Kind="RocketLaunch" Width="16" Height="16"/>
+                                <TextBlock Text="{Binding Localization[RunSmartOptimization]}" FontWeight="Bold"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                    <TextBlock Text="{Binding StatusText}" Classes="muted" FontSize="12" TextWrapping="Wrap"
+                               IsVisible="{Binding StatusText, Converter={x:Static avconverters:StringConverters.IsNotNullOrEmpty}}"/>
+
+                    <Border Background="{DynamicResource BorderColorTransparent}" CornerRadius="10" Padding="14" IsVisible="{Binding HasGraphicsRecommendation}">
+                        <StackPanel Spacing="4">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <iconPacks:PackIconPhosphorIcons Kind="Sparkle" Width="16" Height="16" Foreground="{StaticResource GraphicsColor}"/>
+                                <TextBlock FontSize="12" Foreground="{DynamicResource TextColor}">
+                                    <Run Text="{Binding Localization[GraphicsLabel]}"/>
+                                    <Run Text=": "/>
+                                    <Run Text="{Binding GraphicsRecommendationPresetText}" FontWeight="Bold"/>
+                                </TextBlock>
+                            </StackPanel>
+                            <TextBlock Text="{Binding GraphicsRecommendationReasonText}" Classes="muted" FontSize="11" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" MinWidth="0">
+
+                <!-- System -->
+                <Border Grid.Row="0" Grid.Column="0" Classes="card" Margin="0,0,8,16">
+                    <StackPanel Spacing="10">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <iconPacks:PackIconPhosphorIcons Kind="ShieldCheck" Width="20" Height="20"
+                                                              Foreground="{Binding SystemScore.Status, Converter={x:Static converters:OptimizationStatusColorConverter.Instance}}"/>
+                            <TextBlock Text="{Binding Localization[SystemLabel]}" Classes="cardTitle"/>
+                        </StackPanel>
+                        <TextBlock Text="{Binding SystemScore.SettingsText}" Classes="muted" FontSize="11"/>
+                        <ProgressBar Classes="thinBar" Minimum="0" Maximum="{Binding SystemScore.Total}" Value="{Binding SystemScore.Optimized}"
+                                     Foreground="{Binding SystemScore.Status, Converter={x:Static converters:OptimizationStatusColorConverter.Instance}}"/>
+                        <TextBlock Text="{Binding SystemOutstandingText}" FontSize="12" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"
+                                   IsVisible="{Binding SystemOutstandingText, Converter={x:Static avconverters:StringConverters.IsNotNullOrEmpty}}"/>
+                        <TextBlock Text="{Binding Localization[StatusGood]}" FontSize="12" Foreground="{StaticResource SuccessColor}"
+                                   IsVisible="{Binding SystemScore.Status, Converter={x:Static avconverters:ObjectConverters.Equal}, ConverterParameter={x:Static vm:OptimizationStatus.Optimized}}"/>
+                        <Button Classes="listRow" Command="{Binding ViewSystemPageCommand}">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBlock Grid.Column="0" Text="{Binding Localization[MoreDetails]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
+                                <iconPacks:PackIconPhosphorIcons Grid.Column="1" Kind="CaretRight" Width="16" Height="16" Foreground="{DynamicResource TextMutedColor}" VerticalAlignment="Center"/>
+                            </Grid>
+                        </Button>
+                    </StackPanel>
+                </Border>
+
+                <!-- Network -->
+                <Border Grid.Row="0" Grid.Column="1" Classes="card" Margin="8,0,0,16">
+                    <StackPanel Spacing="10">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <iconPacks:PackIconPhosphorIcons Kind="WifiHigh" Width="20" Height="20"
+                                                              Foreground="{Binding NetworkScore.Status, Converter={x:Static converters:OptimizationStatusColorConverter.Instance}}"/>
+                            <TextBlock Text="{Binding Localization[NetworkLabel]}" Classes="cardTitle"/>
+                        </StackPanel>
+                        <TextBlock Text="{Binding NetworkScore.SettingsText}" Classes="muted" FontSize="11"/>
+                        <ProgressBar Classes="thinBar" Minimum="0" Maximum="{Binding NetworkScore.Total}" Value="{Binding NetworkScore.Optimized}"
+                                     Foreground="{Binding NetworkScore.Status, Converter={x:Static converters:OptimizationStatusColorConverter.Instance}}"/>
+                        <TextBlock Text="{Binding NetworkOutstandingText}" FontSize="12" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"
+                                   IsVisible="{Binding NetworkOutstandingText, Converter={x:Static avconverters:StringConverters.IsNotNullOrEmpty}}"/>
+                        <TextBlock Text="{Binding Localization[StatusGood]}" FontSize="12" Foreground="{StaticResource SuccessColor}"
+                                   IsVisible="{Binding NetworkScore.Status, Converter={x:Static avconverters:ObjectConverters.Equal}, ConverterParameter={x:Static vm:OptimizationStatus.Optimized}}"/>
+                        <Button Classes="listRow" Command="{Binding ViewNetworkPageCommand}">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBlock Grid.Column="0" Text="{Binding Localization[MoreDetails]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
+                                <iconPacks:PackIconPhosphorIcons Grid.Column="1" Kind="CaretRight" Width="16" Height="16" Foreground="{DynamicResource TextMutedColor}" VerticalAlignment="Center"/>
+                            </Grid>
+                        </Button>
+                    </StackPanel>
+                </Border>
+
+                <!-- Gameplay -->
+                <Border Grid.Row="1" Grid.Column="0" Classes="card" Margin="0,0,8,0">
+                    <StackPanel Spacing="10">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <iconPacks:PackIconPhosphorIcons Kind="CrosshairSimple" Width="20" Height="20"
+                                                              Foreground="{Binding GameplayScore.Status, Converter={x:Static converters:OptimizationStatusColorConverter.Instance}}"/>
+                            <TextBlock Text="{Binding Localization[GameplayLabel]}" Classes="cardTitle"/>
+                        </StackPanel>
+                        <TextBlock Text="{Binding GameplayScore.SettingsText}" Classes="muted" FontSize="11"/>
+                        <ProgressBar Classes="thinBar" Minimum="0" Maximum="{Binding GameplayScore.Total}" Value="{Binding GameplayScore.Optimized}"
+                                     Foreground="{Binding GameplayScore.Status, Converter={x:Static converters:OptimizationStatusColorConverter.Instance}}"/>
+                        <TextBlock Text="{Binding GameplayOutstandingText}" FontSize="12" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"
+                                   IsVisible="{Binding GameplayOutstandingText, Converter={x:Static avconverters:StringConverters.IsNotNullOrEmpty}}"/>
+                        <TextBlock Text="{Binding Localization[StatusGood]}" FontSize="12" Foreground="{StaticResource SuccessColor}"
+                                   IsVisible="{Binding GameplayScore.Status, Converter={x:Static avconverters:ObjectConverters.Equal}, ConverterParameter={x:Static vm:OptimizationStatus.Optimized}}"/>
+                        <Button Classes="listRow" Command="{Binding ViewGameplayPageCommand}">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBlock Grid.Column="0" Text="{Binding Localization[MoreDetails]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
+                                <iconPacks:PackIconPhosphorIcons Grid.Column="1" Kind="CaretRight" Width="16" Height="16" Foreground="{DynamicResource TextMutedColor}" VerticalAlignment="Center"/>
+                            </Grid>
+                        </Button>
+                    </StackPanel>
+                </Border>
+
+                <!-- Graphics -->
+                <Border Grid.Row="1" Grid.Column="1" Classes="card" Margin="8,0,0,0">
+                    <StackPanel Spacing="10">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <iconPacks:PackIconPhosphorIcons Kind="Monitor" Width="20" Height="20" Foreground="{StaticResource GraphicsColor}"/>
+                            <TextBlock Text="{Binding Localization[GraphicsLabel]}" Classes="cardTitle"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock Text="{Binding GraphicsProfileStatusText}" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource GraphicsColor}"/>
+                            <Border Classes="pill" IsVisible="{Binding GraphicsProfileTagText, Converter={x:Static avconverters:StringConverters.IsNotNullOrEmpty}}">
+                                <TextBlock Text="{Binding GraphicsProfileTagText}"/>
+                            </Border>
+                        </StackPanel>
+                        <TextBlock Text="{Binding Localization[GraphicsPageSubtitle]}" Classes="muted" FontSize="11" TextWrapping="Wrap"/>
+                        <Button Classes="listRow" Command="{Binding ViewGraphicsPageCommand}">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBlock Grid.Column="0" Text="{Binding Localization[MoreDetails]}" FontSize="12" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center"/>
+                                <iconPacks:PackIconPhosphorIcons Grid.Column="1" Kind="CaretRight" Width="16" Height="16" Foreground="{DynamicResource TextMutedColor}" VerticalAlignment="Center"/>
+                            </Grid>
+                        </Button>
+                    </StackPanel>
+                </Border>
+
+            </Grid>
+
+        </StackPanel>
+    </ScrollViewer>
+
+</UserControl>

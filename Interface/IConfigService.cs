@@ -67,6 +67,14 @@ public interface IConfigService
     bool ApplyPreset(ConfigPreset preset, bool createBackup = true);
 
     /// <summary>
+    /// Whether every convar <paramref name="preset"/> sets currently matches client.cfg exactly -
+    /// i.e. the preset is already applied, whether or not it was applied through this app. Used to
+    /// tell "never configured/custom" apart from "already on a recognized preset" without
+    /// reconstructing the Graphics page's own slider-tier matching.
+    /// </summary>
+    bool CurrentConfigMatchesPreset(ConfigPreset preset);
+
+    /// <summary>
     /// The tier each Graphics-page slider sits at for a built-in preset, keyed by slider
     /// <c>PreviewId</c> → tier <c>PreviewId</c>. Lets a built-in be compared against and shown in the
     /// same profile dropdown as user-saved <see cref="GraphicsProfile"/>s. Resolved by matching the

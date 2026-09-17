@@ -7,10 +7,7 @@ using System;
 
 namespace RustOptimizer.Controls;
 
-/// <summary>
-/// The pages reachable from the sidebar nav rail. <see cref="Optimizer"/> is still a "coming soon"
-/// placeholder - every other page has real content.
-/// </summary>
+/// <summary>The pages reachable from the sidebar nav rail.</summary>
 public enum SidebarPage
 {
     Dashboard,

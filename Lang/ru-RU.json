@@ -43,14 +43,31 @@
   "LastScanNever": "Никогда",
 
   "OptimizationOverviewTitle": "Обзор оптимизации",
-  "PerformanceLabel": "Производительность",
+  "GameplayLabel": "Геймплей",
   "SystemLabel": "Система",
   "NetworkLabel": "Сеть",
   "GraphicsLabel": "Графика",
+  "GraphicsProfileCustom": "Пользовательский",
   "StatusNotOptimized": "Не оптимизировано",
   "StatusPartiallyOptimized": "Частично оптимизировано",
   "StatusGood": "Хорошо",
   "IssuesMoreFormat": "{0} +{1} ещё",
+
+  "OptimizerPageSubtitle": "Все рекомендуемые настройки в одном месте, или позвольте Умной оптимизации применить их все сразу.",
+  "OptimizerAlreadyOptimizedText": "Всё уже оптимизировано. Сейчас ничего не требуется.",
+
+  "SmartOptimizationDialogIntro": "Вот что сейчас изменит умная оптимизация:",
+  "SmartOptimizationApplyFormat": "Применить изменения: {0}",
+  "SmartOptimizationApplyOneFormat": "Применить {0} изменение",
+  "SmartOptimizationApplyingText": "Применение...",
+  "SmartOptimizationElevationNotice": "Для этого нужны права администратора - Windows запросит их один раз для всех изменений сразу.",
+  "SmartOptimizationRustRunningNotice": "Закройте Rust, чтобы также применить изменения графики/геймплея ниже.",
+  "SmartOptimizationGraphicsChangeFormat": "Профиль графики → {0}",
+  "SmartOptimizationAppliedText": "Умная оптимизация применена.",
+  "SmartOptimizationPartialText": "Умная оптимизация применена - некоторые изменения не удалось выполнить.",
+  "PresetRecommendationReasonLowEndPc": "У вашей системы {0:0.#} ГБ ОЗУ, меньше рекомендуемых 16 ГБ, поэтому Low-End PC обеспечит плавную работу.",
+  "PresetRecommendationReasonCompetitive": "У вашей системы {0:0.#} ГБ ОЗУ и монитор с частотой {1} Гц, поэтому Competitive обеспечит достаточно высокий FPS, чтобы использовать это.",
+  "PresetRecommendationReasonCinematic": "Ваша система с запасом превышает рекомендуемые требования, поэтому Cinematic даст максимальное визуальное качество.",
 
   "SystemPageSubtitle": "Подробная информация об оборудовании и ОС.",
 

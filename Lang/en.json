@@ -43,14 +43,31 @@
   "LastScanNever": "Never",
 
   "OptimizationOverviewTitle": "Optimization Overview",
-  "PerformanceLabel": "Performance",
+  "GameplayLabel": "Gameplay",
   "SystemLabel": "System",
   "NetworkLabel": "Network",
   "GraphicsLabel": "Graphics",
+  "GraphicsProfileCustom": "Custom",
   "StatusNotOptimized": "Not optimized",
   "StatusPartiallyOptimized": "Partially optimized",
   "StatusGood": "Good",
   "IssuesMoreFormat": "{0} +{1} more",
+
+  "OptimizerPageSubtitle": "Every recommended tweak at a glance, or let Smart Optimization apply all of them at once.",
+  "OptimizerAlreadyOptimizedText": "You're all optimized. Nothing outstanding right now.",
+
+  "SmartOptimizationDialogIntro": "Here's what Smart Optimization is about to change:",
+  "SmartOptimizationApplyFormat": "Apply {0} changes",
+  "SmartOptimizationApplyOneFormat": "Apply {0} change",
+  "SmartOptimizationApplyingText": "Applying...",
+  "SmartOptimizationElevationNotice": "These need administrator permission - Windows will prompt once for all of them together.",
+  "SmartOptimizationRustRunningNotice": "Close Rust to also apply the Graphics/Gameplay changes below.",
+  "SmartOptimizationGraphicsChangeFormat": "Graphics Profile → {0}",
+  "SmartOptimizationAppliedText": "Smart Optimization applied.",
+  "SmartOptimizationPartialText": "Smart Optimization applied - some changes couldn't be completed.",
+  "PresetRecommendationReasonLowEndPc": "Your system has {0:0.#} GB of RAM, below the recommended 16 GB, so Low-End PC keeps things smooth.",
+  "PresetRecommendationReasonCompetitive": "Your system has {0:0.#} GB of RAM and a {1} Hz display, so Competitive keeps frame rate high enough to make the most of it.",
+  "PresetRecommendationReasonCinematic": "Your system comfortably exceeds the recommended spec, so Cinematic gets you the most visual quality.",
 
   "SystemPageSubtitle": "Detailed hardware and OS information.",
 

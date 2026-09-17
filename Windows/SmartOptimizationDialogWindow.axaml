@@ -1,0 +1,86 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:RustOptimizer.ViewModels"
+        xmlns:controls="using:RustOptimizer.Controls"
+        mc:Ignorable="d" d:DesignWidth="460" d:DesignHeight="520"
+        x:Class="RustOptimizer.Windows.SmartOptimizationDialogWindow"
+        x:DataType="vm:SmartOptimizationDialogViewModel"
+        Title="{Binding Localization[RunSmartOptimization]}"
+        Icon="/Assets/App/logo.ico"
+        Width="460" MinHeight="360" SizeToContent="Height" MaxHeight="640"
+        CanResize="False"
+        Background="{DynamicResource BgColor}"
+        WindowStartupLocation="CenterOwner">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <controls:TitleBar Grid.Row="0"
+                           Localization="{Binding Localization}"
+                           Title="{Binding Localization[RunSmartOptimization]}"
+                           Author="tsgsOFFICIAL"
+                           ShowMaximizeButton="False">
+            <controls:TitleBar.Icon>
+                <Image Source="/Assets/App/logo.ico"/>
+            </controls:TitleBar.Icon>
+        </controls:TitleBar>
+
+        <ScrollViewer Grid.Row="1" IsVisible="{Binding IsConfiguring}">
+            <StackPanel Margin="20" Spacing="16">
+
+                <TextBlock Text="{Binding Localization[SmartOptimizationDialogIntro]}" TextWrapping="Wrap"
+                           FontSize="12" Foreground="{DynamicResource TextColor}"/>
+
+                <Border Background="{DynamicResource BorderColorTransparent}" CornerRadius="8" Padding="10"
+                        IsVisible="{Binding RequiresClosingRust}">
+                    <TextBlock Text="{Binding Localization[SmartOptimizationRustRunningNotice]}" FontSize="12"
+                               TextWrapping="Wrap" Foreground="{StaticResource AccentColor}" FontWeight="SemiBold"/>
+                </Border>
+
+                <StackPanel Spacing="6" IsVisible="{Binding HasSystemChanges}">
+                    <TextBlock Text="{Binding Localization[SystemLabel]}" FontWeight="Bold" FontSize="12" Foreground="{DynamicResource TextColor}"/>
+                    <TextBlock Text="{Binding SystemChangesText}" FontSize="12" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
+                </StackPanel>
+
+                <StackPanel Spacing="6" IsVisible="{Binding HasNetworkChanges}">
+                    <TextBlock Text="{Binding Localization[NetworkLabel]}" FontWeight="Bold" FontSize="12" Foreground="{DynamicResource TextColor}"/>
+                    <TextBlock Text="{Binding NetworkChangesText}" FontSize="12" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
+                    <TextBlock Text="{Binding Localization[SmartOptimizationElevationNotice]}" Classes="muted" FontSize="11"
+                               TextWrapping="Wrap" IsVisible="{Binding RequiresElevation}"/>
+                </StackPanel>
+
+                <StackPanel Spacing="6" IsVisible="{Binding HasGameplayChanges}">
+                    <TextBlock Text="{Binding Localization[GameplayLabel]}" FontWeight="Bold" FontSize="12" Foreground="{DynamicResource TextColor}"/>
+                    <TextBlock Text="{Binding GameplayChangesText}" FontSize="12" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
+                </StackPanel>
+
+                <StackPanel Spacing="6" IsVisible="{Binding HasGraphicsChange}">
+                    <TextBlock Text="{Binding Localization[GraphicsLabel]}" FontWeight="Bold" FontSize="12" Foreground="{DynamicResource TextColor}"/>
+                    <TextBlock Text="{Binding GraphicsChangeText}" FontSize="12" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
+                    <TextBlock Text="{Binding GraphicsReasonText}" Classes="muted" FontSize="11" TextWrapping="Wrap"/>
+                </StackPanel>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <StackPanel Grid.Row="1" Margin="20" Spacing="12" VerticalAlignment="Center" IsVisible="{Binding IsApplying}">
+            <TextBlock Text="{Binding Localization[SmartOptimizationApplyingText]}" FontSize="12" Foreground="{DynamicResource TextColor}"/>
+            <ProgressBar IsIndeterminate="True" Height="6"/>
+        </StackPanel>
+
+        <Border Grid.Row="2"
+                Padding="16"
+                BorderBrush="{DynamicResource BorderColor}"
+                BorderThickness="0,1,0,0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+                <Button Content="{Binding Localization[Cancel]}" Command="{Binding CancelCommand}" Classes="secondaryButton"
+                        IsVisible="{Binding IsConfiguring}"/>
+                <Button Content="{Binding ApplyButtonText}" Command="{Binding ApplyCommand}" Classes="accentButton"
+                        IsVisible="{Binding IsConfiguring}"/>
+            </StackPanel>
+        </Border>
+
+    </Grid>
+
+</Window>

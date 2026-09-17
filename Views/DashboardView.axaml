@@ -33,19 +33,19 @@
                             <Run Text="{Binding Localization[HeroDescriptionAccent]}" Foreground="{StaticResource AccentColor}" FontWeight="Bold"/>
                         </TextBlock>
                         <StackPanel Orientation="Horizontal" Spacing="16" VerticalAlignment="Center">
-                            <Button Classes="accentButton outOfOrder" Command="{Binding RunSmartOptimizationCommand}"
-                                    ToolTip.Tip="{Binding Localization[ComingSoon]}">
+                            <Button Classes="accentButton" Command="{Binding RunSmartOptimizationCommand}">
                                 <StackPanel Orientation="Horizontal" Spacing="8">
                                     <iconPacks:PackIconPhosphorIcons Kind="RocketLaunch" Width="16" Height="16"/>
                                     <TextBlock Text="{Binding Localization[RunSmartOptimization]}" FontWeight="Bold"/>
-                                    <iconPacks:PackIconPhosphorIcons Kind="Barricade" Width="14" Height="14"/>
                                 </StackPanel>
                             </Button>
                             <StackPanel Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
                                 <TextBlock Text="{Binding Localization[LastScan]}" Classes="muted" FontSize="12"/>
-                                <TextBlock Text="{Binding Localization[LastScanNever]}" Classes="muted" FontSize="12"/>
+                                <TextBlock Text="{Binding LastScanText}" Classes="muted" FontSize="12"/>
                             </StackPanel>
                         </StackPanel>
+                        <TextBlock Text="{Binding SmartOptimizationStatusText}" Classes="muted" FontSize="11" TextWrapping="Wrap"
+                                   IsVisible="{Binding SmartOptimizationStatusText, Converter={x:Static avconverters:StringConverters.IsNotNullOrEmpty}}"/>
                     </StackPanel>
                 </Border>
 
@@ -54,19 +54,28 @@
                     <TextBlock Text="{Binding Localization[OptimizationOverviewTitle]}" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource TextColor}"/>
                     <Grid ColumnDefinitions="*,*,*,*">
 
-                        <Border Grid.Column="0" Classes="card outOfOrder" Margin="0,0,6,0" ToolTip.Tip="{Binding Localization[ComingSoon]}">
+                        <Button Grid.Column="0" Classes="card" Padding="16" Margin="0,0,6,0" MinHeight="170" Command="{Binding ViewGameplayDetailsCommand}">
                             <StackPanel Spacing="10">
-                                <iconPacks:PackIconPhosphorIcons Kind="Gauge" Width="24" Height="24" Foreground="{StaticResource AccentColor}"/>
+                                <iconPacks:PackIconPhosphorIcons Kind="CrosshairSimple" Width="24" Height="24"
+                                                                  Foreground="{Binding GameplayScore.Status, Converter={x:Static converters:OptimizationStatusColorConverter.Instance}}"/>
                                 <StackPanel Spacing="0">
-                                    <TextBlock Text="{Binding Localization[PerformanceLabel]}" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
-                                    <TextBlock Text="{Binding Localization[StatusNotOptimized]}" FontSize="12" Foreground="{StaticResource AccentColor}"/>
+                                    <TextBlock Text="{Binding Localization[GameplayLabel]}" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
+                                    <TextBlock Text="{Binding Localization[StatusGood]}" FontSize="12" Foreground="{StaticResource SuccessColor}"
+                                               IsVisible="{Binding GameplayScore.Status, Converter={x:Static avconverters:ObjectConverters.Equal}, ConverterParameter={x:Static vm:OptimizationStatus.Optimized}}"/>
+                                    <TextBlock Text="{Binding Localization[StatusPartiallyOptimized]}" FontSize="12" Foreground="{StaticResource AccentColor}"
+                                               IsVisible="{Binding GameplayScore.Status, Converter={x:Static avconverters:ObjectConverters.Equal}, ConverterParameter={x:Static vm:OptimizationStatus.PartiallyOptimized}}"/>
+                                    <TextBlock Text="{Binding Localization[StatusNotOptimized]}" FontSize="12" Foreground="{StaticResource DangerColor}"
+                                               IsVisible="{Binding GameplayScore.Status, Converter={x:Static avconverters:ObjectConverters.Equal}, ConverterParameter={x:Static vm:OptimizationStatus.NotOptimized}}"/>
                                 </StackPanel>
-                                <TextBlock Text="0 / 23 settings" Classes="muted" FontSize="11"/>
-                                <ProgressBar Classes="thinBar" Minimum="0" Maximum="23" Value="0" Foreground="{StaticResource AccentColor}"/>
+                                <TextBlock Text="{Binding GameplayScore.SettingsText}" Classes="muted" FontSize="11"/>
+                                <ProgressBar Classes="thinBar" Minimum="0" Maximum="{Binding GameplayScore.Total}" Value="{Binding GameplayScore.Optimized}"
+                                             Foreground="{Binding GameplayScore.Status, Converter={x:Static converters:OptimizationStatusColorConverter.Instance}}"/>
+                                <TextBlock Text="{Binding GameplayIssuesSummaryText}" Classes="muted" FontSize="11" TextWrapping="Wrap"
+                                           IsVisible="{Binding GameplayIssuesSummaryText, Converter={x:Static avconverters:StringConverters.IsNotNullOrEmpty}}"/>
                             </StackPanel>
-                        </Border>
+                        </Button>
 
-                        <Button Grid.Column="1" Classes="card" Padding="16" Margin="6,0,6,0" Command="{Binding ViewSystemDetailsCommand}">
+                        <Button Grid.Column="1" Classes="card" Padding="16" Margin="6,0,6,0" MinHeight="170" Command="{Binding ViewSystemDetailsCommand}">
                             <StackPanel Spacing="10">
                                 <iconPacks:PackIconPhosphorIcons Kind="ShieldCheck" Width="24" Height="24"
                                                                   Foreground="{Binding SystemScore.Status, Converter={x:Static converters:OptimizationStatusColorConverter.Instance}}"/>
@@ -87,7 +96,7 @@
                             </StackPanel>
                         </Button>
 
-                        <Button Grid.Column="2" Classes="card" Padding="16" Margin="6,0,6,0" Command="{Binding ViewNetworkDetailsCommand}">
+                        <Button Grid.Column="2" Classes="card" Padding="16" Margin="6,0,6,0" MinHeight="170" Command="{Binding ViewNetworkDetailsCommand}">
                             <StackPanel Spacing="10">
                                 <iconPacks:PackIconPhosphorIcons Kind="WifiHigh" Width="24" Height="24"
                                                                   Foreground="{Binding NetworkScore.Status, Converter={x:Static converters:OptimizationStatusColorConverter.Instance}}"/>
@@ -108,17 +117,19 @@
                             </StackPanel>
                         </Button>
 
-                        <Border Grid.Column="3" Classes="card outOfOrder" Margin="6,0,0,0" ToolTip.Tip="{Binding Localization[ComingSoon]}">
+                        <Button Grid.Column="3" Classes="card" Padding="16" Margin="6,0,0,0" MinHeight="170" Command="{Binding ManageProfilesCommand}">
                             <StackPanel Spacing="10">
                                 <iconPacks:PackIconPhosphorIcons Kind="Monitor" Width="24" Height="24" Foreground="{StaticResource GraphicsColor}"/>
                                 <StackPanel Spacing="0">
                                     <TextBlock Text="{Binding Localization[GraphicsLabel]}" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}"/>
-                                    <TextBlock Text="{Binding Localization[StatusNotOptimized]}" FontSize="12" Foreground="{StaticResource AccentColor}"/>
+                                    <TextBlock Text="{Binding GraphicsProfileStatusText}" FontSize="12" Foreground="{StaticResource GraphicsColor}"/>
                                 </StackPanel>
-                                <TextBlock Text="0 / 15 settings" Classes="muted" FontSize="11"/>
-                                <ProgressBar Classes="thinBar" Minimum="0" Maximum="15" Value="0" Foreground="{StaticResource GraphicsColor}"/>
+                                <Border Classes="pill" HorizontalAlignment="Left"
+                                        IsVisible="{Binding GraphicsProfileTagText, Converter={x:Static avconverters:StringConverters.IsNotNullOrEmpty}}">
+                                    <TextBlock Text="{Binding GraphicsProfileTagText}"/>
+                                </Border>
                             </StackPanel>
-                        </Border>
+                        </Button>
 
                     </Grid>
                 </StackPanel>

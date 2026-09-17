@@ -43,14 +43,31 @@
   "LastScanNever": "Aldrig",
 
   "OptimizationOverviewTitle": "Optimeringsoversigt",
-  "PerformanceLabel": "Ydeevne",
+  "GameplayLabel": "Gameplay",
   "SystemLabel": "System",
   "NetworkLabel": "Netværk",
   "GraphicsLabel": "Grafik",
+  "GraphicsProfileCustom": "Brugerdefineret",
   "StatusNotOptimized": "Ikke optimeret",
   "StatusPartiallyOptimized": "Delvist optimeret",
   "StatusGood": "God",
   "IssuesMoreFormat": "{0} +{1} mere",
+
+  "OptimizerPageSubtitle": "Alle anbefalede tilpasninger på ét sted, eller lad Smart Optimering anvende dem alle på én gang.",
+  "OptimizerAlreadyOptimizedText": "Alt er allerede optimeret. Intet udestår lige nu.",
+
+  "SmartOptimizationDialogIntro": "Her er, hvad Smart Optimering er ved at ændre:",
+  "SmartOptimizationApplyFormat": "Anvend {0} ændringer",
+  "SmartOptimizationApplyOneFormat": "Anvend {0} ændring",
+  "SmartOptimizationApplyingText": "Anvender...",
+  "SmartOptimizationElevationNotice": "Disse kræver administratorrettigheder - Windows spørger én gang for dem alle samlet.",
+  "SmartOptimizationRustRunningNotice": "Luk Rust for også at anvende Grafik-/Gameplay-ændringerne nedenfor.",
+  "SmartOptimizationGraphicsChangeFormat": "Grafikprofil → {0}",
+  "SmartOptimizationAppliedText": "Smart Optimering anvendt.",
+  "SmartOptimizationPartialText": "Smart Optimering anvendt - nogle ændringer kunne ikke gennemføres.",
+  "PresetRecommendationReasonLowEndPc": "Dit system har {0:0.#} GB RAM, under de anbefalede 16 GB, så Low-End PC holder tingene glidende.",
+  "PresetRecommendationReasonCompetitive": "Dit system har {0:0.#} GB RAM og en skærm med {1} Hz, så Competitive holder billedhastigheden høj nok til at udnytte det.",
+  "PresetRecommendationReasonCinematic": "Dit system overstiger komfortabelt den anbefalede spec, så Cinematic giver dig mest muligt visuel kvalitet.",
 
   "SystemPageSubtitle": "Detaljerede hardware- og OS-oplysninger.",
 

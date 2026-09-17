@@ -68,6 +68,16 @@ public sealed class DialogService : IDialogService
         await window.ShowDialog(owner);
     }
 
+    public async Task<SmartOptimizationOutcome?> ShowSmartOptimizationAsync(ILocalizationService localization, ISmartOptimizationService smartOptimization, SmartOptimizationPlan plan)
+    {
+        if (GetOwner() is not { } owner)
+            return null;
+
+        SmartOptimizationDialogViewModel viewModel = new(localization, smartOptimization, plan);
+        SmartOptimizationDialogWindow window = new(viewModel);
+        return await window.ShowDialog<SmartOptimizationOutcome?>(owner);
+    }
+
     private static Window? GetOwner()
         => Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
             ? desktop.MainWindow

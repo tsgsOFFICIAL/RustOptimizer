@@ -17,6 +17,15 @@ public sealed class ConfigService(IRustProcessService rustProcess, IConfigBackup
     public bool ApplyPreset(ConfigPreset preset, bool createBackup = true) => SetConvars(RustConfigPresets.GetConvars(preset), createBackup);
 
     /// <inheritdoc />
+    public bool CurrentConfigMatchesPreset(ConfigPreset preset)
+    {
+        IReadOnlyDictionary<string, string> presetConvars = RustConfigPresets.GetConvars(preset);
+        IReadOnlyDictionary<string, string> current = ReadConvars(presetConvars.Keys.ToList());
+
+        return presetConvars.All(kv => current.TryGetValue(kv.Key, out string? value) && string.Equals(value, kv.Value, StringComparison.OrdinalIgnoreCase));
+    }
+
+    /// <inheritdoc />
     public IReadOnlyDictionary<string, string> GetPresetProfile(ConfigPreset preset)
     {
         IReadOnlyDictionary<string, string> convars = RustConfigPresets.GetConvars(preset);
