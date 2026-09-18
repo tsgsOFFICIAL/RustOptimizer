@@ -2,6 +2,23 @@
 
 Alle væsentlige ændringer i Rust Optimizer er dokumenteret her.
 
+## 0.3.0
+
+### Tastebindinger
+
+En ny side til **Tastebindinger**: alle aktuelt bundne taster i `keys.cfg`, grupperet i sammenklappelige kategorier (skjult som standard, så siden åbner kort i stedet for som én lang rulleliste) med øjeblikkelig søgning, der udfolder resultater på tværs af alle kategorier.
+
+- **Vælg fra liste** - et gennemsøgeligt katalog over alle rigtige Rust-handlinger, verificeret mod spillets egne standardbindinger, med en beskrivelse og den præcise konsolkommando vist, før du forpligter dig til den.
+- **Opret manuelt** - en byggefunktion til flertrins-makroer til cyklus-toggle-bindinger (som spillets egne lyd-/synsfelt-toggles), med skydere, kontakter og tekstfelter til de få convars, der understøtter det, eller et rå kommandofelt til alt andet. "Indlæs et eksempel" udfylder byggefunktionen med håndfuld rigtige, fungerende makroer, du kan tilpasse i stedet for at skrive fra bunden.
+- En visuel tastatur- og musevælger til at vælge en tast - klik på en tast, eller tryk den (eller tastekombinationen) på dit rigtige tastatur - med live status for ledig/optaget, samt en advarsel når en kombinations bare tast allerede har sin egen separate binding, da Rust udløser begge.
+
+### Rettelser
+
+- Rettet at alle knapper i tastevælgeren - inklusive Annuller og "Brug alligevel" på konfliktprompten - ikke gjorde noget. En håndtering på vinduesniveau, der skulle lade dig trykke en fysisk tast for at vælge den, opsnappede alle museklik først og fortolkede dem som "museknap 1 trykket", da et almindeligt klik og et fysisk museknaptryk er den samme hændelse. Museknapper opsnappes ikke længere på denne måde - hver enkelt har allerede sin egen klikbare tast på vælgerens musediagram.
+- Rettet at tastevælgerens numpad-taster ("Numpad 7" osv.) blev afkortet til nogle få bogstaver, og at musediagrammet blev klippet helt af ved vinduets kant. Tastaturets samlede bredde var hardkodet og tog ikke højde for dets egen bredeste række, hvilket stille og roligt spiste af pladsen beregnet til musepanelet.
+- Rettet at en manuelt bygget makro med to eller flere kommandoer i samme cyklusfase producerede en ødelagt kommandostreng, når en af disse kommandoer (som en skærmbesked) allerede indeholdt anførselstegn - anførselstegnene blev ikke escaped, når de blev indlejret i grupperingssyntaksen.
+- Rettet at den manuelle byggefunktions "fjern denne kommando"-ikon blev vist fastgjort til knappens øverste venstre hjørne i stedet for centreret - den fik aldrig sin egen justering og faldt derfor tilbage til en standard i stedet for reelt at centrere. Rettet også at en skyders egen værdikontrol blev vist synligt for lavt i forhold til resten af sin række, adskilt fra ikon-problemet - skyderens standardhøjde efterlod plads i dens egen skabelon ud over det, dens spor og håndtag rent faktisk tegner.
+
 ## 0.12.1
 
 ### Rettelser

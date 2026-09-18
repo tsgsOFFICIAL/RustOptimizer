@@ -9,13 +9,17 @@ using Avalonia;
 namespace RustOptimizer.Windows;
 
 /// <summary>
-/// A small window shell for the key-capture dialog: a modifier picker, a scrollable list of every
-/// known key with live free/used status, and a Cancel footer. Physically pressing a key or mouse
-/// button/wheel has the same effect as clicking its row - both go through
-/// <see cref="KeyCaptureDialogViewModel.HandleModifierKey"/>/<see cref="KeyCaptureDialogViewModel.HandleKeyToken"/>.
-/// Input is captured at the tunnelling (preview) stage on the window itself so a focused child
-/// control (e.g. the modifier ComboBox) never swallows a key press meant to be captured. Closes with
-/// the chosen <see cref="KeyToken"/>, or <see langword="null"/> if the user cancelled.
+/// A small window shell for the key-capture dialog: a visual keyboard/mouse picker with live free/used
+/// status, and a Cancel footer. Physically pressing a keyboard key has the same effect as clicking its
+/// on-screen chip, routed via <see cref="KeyCaptureDialogViewModel.HandleModifierKey"/>/
+/// <see cref="KeyCaptureDialogViewModel.HandleKeyToken"/>. Mouse buttons are deliberately NOT captured
+/// this way - a physical mouse click and a click on this window's own UI (the Cancel/Use Anyway
+/// buttons, a key chip) are the same hardware event, so a window-level "physical mouse press"
+/// handler can't tell them apart; it previously intercepted every click as "mouse0 pressed" before
+/// the real target ever saw it, silently breaking every button in this dialog. Every mouse button and
+/// wheel direction already has its own correctly-wired chip in the on-screen Mouse panel, so nothing
+/// is lost by not also capturing raw pointer presses. Closes with the chosen <see cref="KeyToken"/>,
+/// or <see langword="null"/> if the user cancelled.
 /// </summary>
 public partial class KeyCaptureDialogWindow : Window
 {
@@ -39,8 +43,6 @@ public partial class KeyCaptureDialogWindow : Window
         viewModel.CloseRequested += token => Close(token);
 
         AddHandler(KeyDownEvent, OnPreviewKeyDown, Avalonia.Interactivity.RoutingStrategies.Tunnel);
-        AddHandler(PointerPressedEvent, OnPreviewPointerPressed, Avalonia.Interactivity.RoutingStrategies.Tunnel);
-        AddHandler(PointerWheelChangedEvent, OnPreviewPointerWheelChanged, Avalonia.Interactivity.RoutingStrategies.Tunnel);
 
         Opened += (_, _) => Focus();
     }
@@ -52,6 +54,11 @@ public partial class KeyCaptureDialogWindow : Window
             return;
 
         if (e.Key == Key.Escape)
+            return;
+
+        // Not while a conflict prompt (or anything else modal-ish within the dialog) is up - a
+        // physical key press here should never silently re-arm key selection underneath it.
+        if (viewModel.IsConfirmingConflict)
             return;
 
         if (KeyTokenCatalog.ModifierFromAvaloniaKey(e.Key) is { } modifierToken)
@@ -66,28 +73,5 @@ public partial class KeyCaptureDialogWindow : Window
             viewModel.HandleKeyToken(keyToken);
             e.Handled = true;
         }
-    }
-
-    /// <summary>Routes a physical mouse button press to the view model, same as a key press.</summary>
-    private void OnPreviewPointerPressed(object? sender, PointerPressedEventArgs e)
-    {
-        if (DataContext is not KeyCaptureDialogViewModel viewModel)
-            return;
-
-        if (KeyTokenCatalog.FromPointerUpdateKind(e.GetCurrentPoint(this).Properties.PointerUpdateKind) is { } token)
-        {
-            viewModel.HandleKeyToken(token);
-            e.Handled = true;
-        }
-    }
-
-    /// <summary>Routes a mouse wheel scroll to the view model as mousewheelup/mousewheeldown.</summary>
-    private void OnPreviewPointerWheelChanged(object? sender, PointerWheelEventArgs e)
-    {
-        if (DataContext is not KeyCaptureDialogViewModel viewModel)
-            return;
-
-        viewModel.HandleKeyToken(e.Delta.Y > 0 ? "mousewheelup" : "mousewheeldown");
-        e.Handled = true;
     }
 }

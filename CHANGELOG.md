@@ -2,7 +2,24 @@
 
 All notable changes to Rust Optimizer are documented here.
 
-## 0.12.1
+## 0.3.0
+
+### Keybinds
+
+A new **Keybinds** page: every key currently bound in `keys.cfg`, grouped into collapsible categories (collapsed by default, so the page opens short instead of as one long scroll) with instant search that flattens results across all categories.
+
+- **Choose from list** - a searchable catalog of every real Rust action, verified against the game's own default bindings, with a description and the exact console command shown before you commit to it.
+- **Create manually** - a multi-stage macro builder for toggle-cycle binds (like the game's own audio/FOV toggles), with sliders, switches, and text fields for the handful of convars that support it, or a raw command field for anything else. "Load an example" seeds the builder from a handful of real, working macros to edit rather than write from scratch.
+- A visual keyboard and mouse picker for choosing a key - click a key, or just press it (or the key combo) on your actual keyboard - with live free/used status and a warning when a combo's bare key already has its own separate binding, since Rust fires both.
+
+### Fixes
+
+- Fixed every button in the key picker - including Cancel and "Use Anyway" on the conflict prompt - silently doing nothing. A window-level handler meant to let you press a physical key to select it was intercepting every mouse click first and reinterpreting it as "mouse button 1 pressed," since a normal click and a physical mouse-button press are the same event. Mouse buttons are no longer captured this way - every one already has its own clickable key on the picker's mouse diagram.
+- Fixed the key picker's Numpad keys ("Numpad 7", etc.) truncating to a few letters, and the mouse diagram getting clipped off the edge of the window entirely. The keyboard's overall width was hardcoded and didn't account for its own widest row, silently eating into space meant for the mouse panel.
+- Fixed a manually-built macro with two or more commands in the same cycle stage producing a broken command string when one of those commands (like an on-screen message) already contained quotes - the quotes weren't escaped when nested inside the grouping syntax.
+- Fixed the manual builder's "remove this command" icon rendering pinned to the button's top-left corner instead of centered - it was never given an alignment of its own, so it fell back to a default rather than actually centering. Also fixed a slider row's own value control rendering visibly low relative to the rest of its row, separately from the icon issue - the slider's default height left room in its own template beyond what its track and thumb actually draw.
+
+
 
 ### Fixes
 

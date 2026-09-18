@@ -407,6 +407,7 @@
   "KeyCaptureNoModifier": "Нет",
   "KeyCaptureSearchWatermark": "Поиск клавиш...",
   "KeyCaptureMouseLabel": "Мышь",
+  "KeyCaptureNumpadLabel": "Цифровой блок",
   "KeyCaptureConflictFormat": "Это уже привязано к: {0}",
   "KeyCaptureAlsoTriggersFormat": "Также срабатывает: {0} (оба сработают вместе)",
   "KeyCaptureConflictQuestion": "Всё равно использовать? Существующая привязка будет заменена.",

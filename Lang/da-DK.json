@@ -407,6 +407,7 @@
   "KeyCaptureNoModifier": "Ingen",
   "KeyCaptureSearchWatermark": "Søg efter taster...",
   "KeyCaptureMouseLabel": "Mus",
+  "KeyCaptureNumpadLabel": "Numpad",
   "KeyCaptureConflictFormat": "Denne er allerede bundet til: {0}",
   "KeyCaptureAlsoTriggersFormat": "Udløser også: {0} (begge udløses sammen)",
   "KeyCaptureConflictQuestion": "Brug den alligevel? Den eksisterende binding bliver erstattet.",

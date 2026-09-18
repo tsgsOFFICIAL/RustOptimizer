@@ -131,17 +131,6 @@ internal static class KeyTokenCatalog
         _ => null
     };
 
-    /// <summary>Maps a pointer press's <see cref="PointerUpdateKind"/> to its keys.cfg token, or <see langword="null"/> for anything that isn't a button press (e.g. plain movement).</summary>
-    public static string? FromPointerUpdateKind(PointerUpdateKind kind) => kind switch
-    {
-        PointerUpdateKind.LeftButtonPressed => "mouse0",
-        PointerUpdateKind.RightButtonPressed => "mouse1",
-        PointerUpdateKind.MiddleButtonPressed => "mouse2",
-        PointerUpdateKind.XButton1Pressed => "mouse3",
-        PointerUpdateKind.XButton2Pressed => "mouse4",
-        _ => null
-    };
-
     /// <summary>The display name for a token, falling back to the token itself (uppercased) if it's not in <see cref="AllKeys"/> - e.g. a modifier token used standalone.</summary>
     public static string DisplayNameFor(string token)
     {

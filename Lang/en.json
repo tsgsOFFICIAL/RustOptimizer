@@ -408,6 +408,7 @@
   "KeyCaptureNoModifier": "None",
   "KeyCaptureSearchWatermark": "Search keys...",
   "KeyCaptureMouseLabel": "Mouse",
+  "KeyCaptureNumpadLabel": "Numpad",
   "KeyCaptureConflictFormat": "This is already bound to: {0}",
   "KeyCaptureAlsoTriggersFormat": "Also triggers: {0} (both fire together)",
   "KeyCaptureConflictQuestion": "Use it anyway? The existing binding will be replaced.",
