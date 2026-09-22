@@ -2,7 +2,7 @@
 
 All notable changes to Rust Optimizer are documented here.
 
-## 0.3.0
+## 0.14.0
 
 ### Keybinds
 
@@ -19,7 +19,23 @@ A new **Keybinds** page: every key currently bound in `keys.cfg`, grouped into c
 - Fixed a manually-built macro with two or more commands in the same cycle stage producing a broken command string when one of those commands (like an on-screen message) already contained quotes - the quotes weren't escaped when nested inside the grouping syntax.
 - Fixed the manual builder's "remove this command" icon rendering pinned to the button's top-left corner instead of centered - it was never given an alignment of its own, so it fell back to a default rather than actually centering. Also fixed a slider row's own value control rendering visibly low relative to the rest of its row, separately from the icon issue - the slider's default height left room in its own template beyond what its track and thumb actually draw.
 
+## 0.13.0
 
+### Smart Optimization
+
+The Dashboard's **Run Smart Optimization** button, previously a disabled placeholder, now does something: it checks every System, Network, and Gameplay tweak plus your Graphics preset against their recommended values, then offers to apply whatever's outstanding in one step instead of hunting through each page individually. The same button and logic are also available from the Optimizer page.
+
+- Recommends a Graphics preset based on your installed RAM and monitor's refresh rate, but only when your current settings don't already match one of the three built-in presets - a preset you've deliberately chosen is left alone rather than silently overridden.
+- Skips Gameplay and Graphics changes while Rust is running (System and Network tweaks still apply), and takes a single backup covering everything it writes in one run rather than one per change.
+- The Dashboard's Gameplay tile is wired up like System and Network already were, replacing its "coming soon" placeholder with a real optimized/partial/not-optimized status and settings count.
+- "Last scan" now reflects when the system was last checked rather than when something was last applied, persists across restarts instead of resetting to "Never" on every launch, and shows "Yesterday, [time]" instead of a full date for a scan within the last day.
+
+### Fixes
+
+- **Optimize Startup** now opens Windows' Startup Apps settings directly instead of Task Manager.
+- Renamed "Max Memory Speed" to **Rated Memory Speed** and added a tooltip explaining that some motherboard firmware only reports a module's true rated speed once XMP/EXPO is enabled - so the number can appear to rise after turning a profile on, rather than staying fixed as the label implied.
+
+## 0.12.1
 
 ### Fixes
 

@@ -2,7 +2,7 @@
 
 Alle væsentlige ændringer i Rust Optimizer er dokumenteret her.
 
-## 0.3.0
+## 0.14.0
 
 ### Tastebindinger
 
