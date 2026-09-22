@@ -2,6 +2,12 @@
 
 All notable changes to Rust Optimizer are documented here.
 
+## 0.14.1
+
+### Fixes
+
+- Fixed installer-based updates not reopening the app after installing. The updater relied on Inno Setup's Restart Manager to relaunch the app once the new version finished installing, but that only restarts processes it saw as still running at the moment it scanned for locked files - since the app already exited itself right after handing off to the installer, it was almost never still running by then. The updater now waits for the installer to finish and relaunches the app itself instead.
+
 ## 0.14.0
 
 ### Keybinds

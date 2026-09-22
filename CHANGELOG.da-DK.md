@@ -2,6 +2,12 @@
 
 Alle væsentlige ændringer i Rust Optimizer er dokumenteret her.
 
+## 0.14.1
+
+### Rettelser
+
+- Rettet at installatørbaserede opdateringer ikke genåbnede appen efter installation. Opdateringen var afhængig af Inno Setups Restart Manager til at genstarte appen, når den nye version var installeret, men den genstarter kun processer, den så som stadig kørende, da den scannede for låste filer - og da appen selv afsluttede sig lige efter at have overdraget til installationsprogrammet, var den næsten aldrig stadig i gang på det tidspunkt. Opdateringen venter nu selv på, at installationsprogrammet er færdigt, og genstarter appen selv.
+
 ## 0.14.0
 
 ### Tastebindinger

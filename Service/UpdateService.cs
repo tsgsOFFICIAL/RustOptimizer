@@ -16,7 +16,8 @@ namespace RustOptimizer.Service;
 /// Checks GitHub Releases for a newer version and applies it once downloaded. Installer-managed
 /// installs (detected via the uninstaller Inno Setup always drops next to the exe) are updated by
 /// silently re-running the new Setup.exe, which keeps the registered Add/Remove Programs version in
-/// sync. Portable zip installs are updated by swapping the extracted files in over the running app.
+/// sync, then relaunching the app once Setup exits. Portable zip installs are updated by swapping the
+/// extracted files in over the running app.
 /// </summary>
 public sealed class UpdateService : IUpdateService
 {
@@ -68,18 +69,35 @@ public sealed class UpdateService : IUpdateService
             : ApplyPortableUpdateAsync(update, ct);
 
     /// <summary>
-    /// Downloads the new Setup.exe and re-runs it silently. Inno Setup's Restart Manager integration
-    /// (CloseApplications/RestartApplications) closes the running app, replaces its files, updates the
-    /// registered uninstall entry's version, and relaunches - all without a UAC prompt since the install
-    /// itself is per-user.
+    /// Downloads the new Setup.exe and re-runs it silently, then relaunches the app ourselves once Setup
+    /// exits. We used to pass /RESTARTAPPLICATIONS and let Inno Setup's Restart Manager integration relaunch
+    /// the app, but that only restarts processes Restart Manager saw as still running (holding the target
+    /// files locked) at scan time - since we call Environment.Exit(0) right after starting Setup, this
+    /// process has almost always already exited by then, so nothing gets registered to restart. Waiting on
+    /// Setup's PID and relaunching explicitly avoids depending on that timing.
     /// </summary>
     private async Task ApplyInstallerUpdateAsync(UpdateInfo update, CancellationToken ct)
     {
+        string exePath = Utility.GetExePath();
         string installerPath = Path.Combine(Path.GetTempPath(), update.AssetName);
         await DownloadToFileAsync(update.DownloadUrl, installerPath, ct);
 
-        Process.Start(new ProcessStartInfo(installerPath,
-            "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /CLOSEAPPLICATIONS /RESTARTAPPLICATIONS")
+        Process installerProcess = Process.Start(new ProcessStartInfo(installerPath,
+            "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /CLOSEAPPLICATIONS")
+        {
+            UseShellExecute = false
+        })!;
+
+        string scriptPath = Path.Combine(Path.GetTempPath(), $"RustOptimizer-Update-{update.Version}.ps1");
+        string script = $"""
+            Wait-Process -Id {installerProcess.Id} -ErrorAction SilentlyContinue
+            Start-Process -FilePath "{exePath}"
+            Remove-Item -Path "{scriptPath}" -Force
+            """;
+        await File.WriteAllTextAsync(scriptPath, script, ct);
+
+        Process.Start(new ProcessStartInfo("powershell.exe",
+            $"-NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File \"{scriptPath}\"")
         {
             UseShellExecute = false
         });
