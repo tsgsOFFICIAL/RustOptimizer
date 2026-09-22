@@ -34,7 +34,7 @@
 - **Optimization Overview**: Real-time status for Performance, System, Network, and Graphics
 - **Quick Actions**: Verify Game Files, Clear Cache, Optimize Startup, Update Drivers
 - **Direct Rust Launch**: Start the game with optimized settings from the app
-- **Modern Dark UI**: Clean, responsive WPF interface with live hardware info
+- **Modern Dark UI**: Clean, responsive Avalonia interface with live hardware info
 - **Safe & Reversible**: All changes are non-destructive and easy to revert
 
 ## Screenshots
