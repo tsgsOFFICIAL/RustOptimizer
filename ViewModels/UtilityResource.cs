@@ -20,6 +20,7 @@ public static class UtilityResourceCatalog
 {
     public static IReadOnlyList<UtilityResource> All { get; } =
     [
+        new("Rust Skin Archives", "UtilityRustSkinArchiveDescription", "https://tsgsofficial.github.io/rust-skin-archives/", PackIconPhosphorIconsKind.Archive),
         new("RustHelp", "UtilityRustHelpDescription", "https://rusthelp.com", PackIconPhosphorIconsKind.BookOpen),
         new("RustBreeder", "UtilityRustBreederDescription", "https://rustbreeder.com", PackIconPhosphorIconsKind.Dna),
         new("BattleMetrics", "UtilityBattleMetricsDescription", "https://www.battlemetrics.com", PackIconPhosphorIconsKind.ChartBar),
