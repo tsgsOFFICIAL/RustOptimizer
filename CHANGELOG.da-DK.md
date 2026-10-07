@@ -2,6 +2,12 @@
 
 Alle væsentlige ændringer i Rust Optimizer er dokumenteret her.
 
+## 0.15.0
+
+### Værktøjer
+
+- Tilføjet **Rust Skin Archives** til siden Værktøjer - et søgbart arkiv over Rust-skins - med beskrivelsen oversat til alle understøttede sprog.
+
 ## 0.14.1
 
 ### Rettelser

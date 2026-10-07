@@ -2,6 +2,12 @@
 
 All notable changes to Rust Optimizer are documented here.
 
+## 0.15.0
+
+### Utilities
+
+- Added **Rust Skin Archives** to the Utilities page - a searchable archive of Rust skins - with its description translated in all supported languages.
+
 ## 0.14.1
 
 ### Fixes
