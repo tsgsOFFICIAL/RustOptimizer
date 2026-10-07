@@ -2,6 +2,12 @@
 
 All notable changes to Rust Optimizer are documented here.
 
+## 0.15.1
+
+### Elsewhere
+
+- Added a **last build** badge to the README that shows the most recent nightly or release build.
+
 ## 0.15.0
 
 ### Utilities
