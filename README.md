@@ -6,6 +6,7 @@
 
 [![Issues](https://img.shields.io/github/issues/tsgsOFFICIAL/RustOptimizer)](https://github.com/tsgsOFFICIAL/RustOptimizer/issues)
 [![Last Commit](https://img.shields.io/github/last-commit/tsgsOFFICIAL/RustOptimizer)](https://github.com/tsgsOFFICIAL/RustOptimizer/commits/master)
+[![Last Build](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FtsgsOFFICIAL%2FRustOptimizer%2Fbadges%2Flatest-build.json)](https://github.com/tsgsOFFICIAL/RustOptimizer/releases)
 [![Nightly Build](https://github.com/tsgsOFFICIAL/RustOptimizer/actions/workflows/nightly.yml/badge.svg)](https://github.com/tsgsOFFICIAL/RustOptimizer/actions/workflows/nightly.yml)
 [![Release Build](https://github.com/tsgsOFFICIAL/RustOptimizer/actions/workflows/release.yml/badge.svg)](https://github.com/tsgsOFFICIAL/RustOptimizer/actions/workflows/release.yml)
 [![GitHub license](https://img.shields.io/github/license/tsgsOFFICIAL/RustOptimizer)](https://github.com/tsgsOFFICIAL/RustOptimizer/blob/master/LICENSE)
