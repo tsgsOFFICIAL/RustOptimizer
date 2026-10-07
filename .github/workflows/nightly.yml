@@ -115,7 +115,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          $message = "${{ steps.vars.outputs.nightly_version }} · $(Get-Date -AsUTC -Format 'yyyy-MM-dd')"
+          $message = "${{ steps.vars.outputs.nightly_version }} · $(Get-Date -AsUTC -Format 'yyyy-MM-dd HH:mm') UTC"
           $json = @{ schemaVersion = 1; label = "last build"; message = $message; color = "orange" } | ConvertTo-Json -Compress
           $url = "https://x-access-token:$env:GH_TOKEN@github.com/${{ github.repository }}.git"
           git clone --depth 1 --branch badges $url badges-branch
