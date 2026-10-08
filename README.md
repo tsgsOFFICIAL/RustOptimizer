@@ -1,11 +1,11 @@
-﻿# Rust Optimizer
+﻿# RustOptimizer
 
-**Optimize your system and Rust for maximum performance.**
+**RustOptimizer helps your optimize your system and Rust for maximum performance, while the game still looks good.**
 
 > Get the best performance out of your system so you can focus on what matters: **winning.**
 
 [![Issues](https://img.shields.io/github/issues/tsgsOFFICIAL/RustOptimizer)](https://github.com/tsgsOFFICIAL/RustOptimizer/issues)
-[![Last Commit](https://img.shields.io/github/last-commit/tsgsOFFICIAL/RustOptimizer)](https://github.com/tsgsOFFICIAL/RustOptimizer/commits/master)
+[![Downloads](https://img.shields.io/github/downloads/tsgsOFFICIAL/RustOptimizer/total)](https://github.com/tsgsOFFICIAL/RustOptimizer/releases)
 [![Last Build](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FtsgsOFFICIAL%2FRustOptimizer%2Fbadges%2Flatest-build.json)](https://github.com/tsgsOFFICIAL/RustOptimizer/releases)
 [![Nightly Build](https://github.com/tsgsOFFICIAL/RustOptimizer/actions/workflows/nightly.yml/badge.svg)](https://github.com/tsgsOFFICIAL/RustOptimizer/actions/workflows/nightly.yml)
 [![Release Build](https://github.com/tsgsOFFICIAL/RustOptimizer/actions/workflows/release.yml/badge.svg)](https://github.com/tsgsOFFICIAL/RustOptimizer/actions/workflows/release.yml)
